@@ -1,0 +1,11 @@
+# Python libraries for the experiments (Paper 1 + Paper 2). The miner is Java (not needed here).
+# Install once on a new machine:
+#   python -m venv %USERPROFILE%\.venvs\huflit2027
+#   "%USERPROFILE%\.venvs\huflit2027\Scripts\python.exe" -m pip install -r requirements.txt
+# This list = ALL non-standard imports across scripts/ + src/ (scanned).
+numpy
+pandas
+scikit-learn      # imported as sklearn - E0/E4 RF-gate
+scipy             # bootstrap CI (E0); also needed by sklearn
+matplotlib        # figures for Paper 1 + Paper 2
+networkx          # VF2 subgraph-isomorphism baseline (E3 baselines) - without this package E3 baselines crash in 0.6s

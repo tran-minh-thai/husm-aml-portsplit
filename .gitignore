@@ -1,0 +1,33 @@
+# Datasets are public benchmarks obtained separately; see docs/reproduce/paper3.md
+datasets/
+tools/
+
+# Result artefacts: the small result tables are committed so the paper's numbers can be
+# checked without re-running anything. The bulky intermediates are regenerable and are not.
+experiments/results/*
+!experiments/results/*.csv
+experiments/results/*.images.csv
+experiments/results/*.lg
+experiments/results/*.jsonl
+experiments/results/*.tsv
+experiments/results/*.txt
+experiments/results/snapshots/
+experiments/results/e9_snapshots*/
+
+# Build output
+inchusm-miner/target/
+*.class
+*.jar
+
+# Editors and environments
+.idea/
+*.iml
+.vscode/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

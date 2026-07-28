@@ -1,0 +1,9 @@
+type,n_attempts,n_recovered,recovery_rate,timed_out,hub_cap,max_edges,attempts_present
+BIPARTITE,0,0,,1,0,4,370
+CYCLE,0,0,,1,0,4,370
+FAN-IN,0,0,,1,0,4,370
+FAN-OUT,0,0,,1,0,4,370
+GATHER-SCATTER,0,0,,1,0,4,370
+RANDOM,0,0,,1,0,4,370
+SCATTER-GATHER,0,0,,1,0,4,370
+STACK,0,0,,1,0,4,370

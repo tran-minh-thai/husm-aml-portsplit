@@ -1,0 +1,9 @@
+type,n_attempts,covered,recovered,recovery_rate
+BIPARTITE,16,True,16,1.0
+CYCLE,12,True,6,0.5
+FAN-IN,12,True,12,1.0
+FAN-OUT,19,True,19,1.0
+GATHER-SCATTER,12,True,12,1.0
+RANDOM,15,True,15,1.0
+SCATTER-GATHER,13,True,8,0.6153846153846154
+STACK,18,True,18,1.0

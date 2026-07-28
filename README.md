@@ -1,0 +1,104 @@
+# husm-aml-portsplit
+
+Code and experiment pipeline for the paper *High-Utility Subgraph Mining for
+Anti-Money Laundering: The Utility-Table Ceiling and Port-Splitting*.
+
+The paper asks whether high-utility subgraph mining actually helps on transaction
+graphs, and answers it in three parts:
+
+1. **The utility-table ceiling.** With `R = e_max / e_min` the spread of the external
+   utility table, any two patterns whose supports differ by more than a factor of `R`
+   are ordered by support alone, whatever the utility values are. Under the Gaussian
+   tables used in published evaluations `R` sits between 2 and 5, and the mined set
+   overlaps plain frequent mining at Jaccard 0.825. Real transaction value widens the
+   table and restores the utility dimension.
+2. **Port-splitting.** Splitting each account into an in-port and an out-port lifts
+   money-flow direction into vertex labels, so an undirected miner can tell gathering
+   from scattering without any change to the engine. Flow-defined typologies are then
+   recovered at 0.81 to 1.00.
+3. **What tractability costs.** The transforms that make mining feasible on a
+   million-vertex graph (degree cap, size cap, period cut) are measured against the
+   signal they remove.
+
+Everything reported in the paper is produced by the scripts below and is deterministic:
+utility buckets are fixed quantiles, the miner is deterministic, and every learned
+baseline runs under a fixed seed.
+
+## Requirements
+
+- Python 3.11 or newer, and the packages in `requirements.txt`
+- JDK 17 and Maven, for the mining engine
+- 16 GB of RAM for the standard experiments; 64 GB for the full-graph runs
+
+PyTorch and PyTorch Geometric are needed only by the graph-neural-network baselines;
+every mining and recovery experiment runs without them.
+
+## Quick start
+
+```bash
+python -m venv ~/.venvs/husm-aml-portsplit        # keep it outside any synced folder
+source ~/.venvs/husm-aml-portsplit/bin/activate
+pip install -r requirements.txt
+mvn -f inchusm-miner/pom.xml package            # builds the engine and runs its tests
+```
+
+Then place the three public benchmarks under `datasets/` as described in
+[docs/reproduce/paper3.md](docs/reproduce/paper3.md) and run the experiments from
+`experiments/`.
+
+## Which script produces which result
+
+| Paper artifact | Script | Result file |
+|---|---|---|
+| Utility dimension vs frequent mining | `e8_utility_contrast.py` | `e8_utility_contrast.csv`, `e8_citeseer_seeds.csv` |
+| Port-split recovery by degree cap | `e9_portsplit_recovery.py` | `e9_portsplit_recovery_*_raw.csv` |
+| Recovery on the full graph | `e9_portsplit_recovery.py --mode full` | `e9_portsplit_recovery_HI-Small_full_raw.csv` |
+| Bottleneck measure | `e9_flow_recovery.py` | `e9_flow_recovery_*.csv` |
+| Recovery over eight typologies | `e3plus_recovery8.py` | `e3plus_recovery8_*.csv` |
+| Detection under strict induction | `e4plus_gnn_drift.py` | `e4plus_gnn_drift.csv` |
+| Account-level detection | `e7_actor_hus_detection.py` | `e7_actor_hus_detection.csv` |
+| Figures | `make_figures_paper3.py` | PDF files, written outside the repo |
+
+`e9_portsplit_smoke.py` is a four-case check that the transform does what it claims:
+without port-splitting, gathering, scattering and pass-through all collapse to one
+single-edge pattern; with it, they separate. It needs no dataset and runs in seconds.
+
+`run_all_paper3.py` runs everything in order and then grades the deterministic values
+with `check_results.py`. A step can exit successfully and still produce wrong numbers,
+so `check_results.py` is the real verdict.
+
+## Repository layout
+
+```
+inchusm-miner/                     Java mining engine (edu.huflit.inchusm)
+  mining/                          HUSM.java static miner, upper bounds, utility tables
+                                   IncHUSM.java incremental maintenance
+  csp/                             subgraph matching; BottleneckSolver for the flow measure
+  dfs/                             DFS codes and minimum-code canonical form
+  graph/                           labelled graph and.lg loader
+  cli/Main.java                    command line: mine, stream, match
+experiments/
+  src/inchusm_aml/
+    data/                          dataset loaders; portsplit.py holds the transform
+    utility/monetary.py            monetary utility buckets, fit on train and frozen
+    baselines/                     motif join, random forest gate, GNN, isomorphism
+    eval/                          recovery and detection metrics
+    miner_bridge.py                calls the Java engine over.lg files
+  scripts/                         one entry point per experiment
+  results/                         result tables (the small CSVs are committed)
+docs/reproduce/paper3.md           data sources, commands, reference numbers
+datasets/                          not committed; see the reproduction guide
+```
+
+## A note on scope
+
+The engine also carries incremental and sliding-window mining, exercised by
+`e5b_bhus_incremental.py`, `e5c_inchusm_mu.py` and `e6_sliding_window.py`. Those belong
+to a separate line of work on incremental maintenance and are not used by any result in
+this paper. They are kept because the static miner shares their code path.
+
+## License
+
+The source code is released under the MIT License; see `LICENSE`. Elliptic,
+Elliptic++ and IBM AMLworld are public benchmarks distributed under their own terms and
+are not part of this repository.

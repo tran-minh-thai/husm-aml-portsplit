@@ -1,0 +1,4 @@
+method,f1_illicit,f1_stable_35_42,f1_collapse_43_49,drift_retention,environment
+"RF (raw, 165-d)",0.8263,0.9133,0.0323,0.0353,torch 2.13.0+cpu on CPU
+GCN,0.5308,0.5988,0.0,0.0,torch 2.13.0+cpu on CPU
+SAGE,0.6917,0.7693,0.0112,0.0145,torch 2.13.0+cpu on CPU
