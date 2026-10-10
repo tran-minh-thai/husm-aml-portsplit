@@ -10,6 +10,8 @@ experiments/results/*.images.csv
 experiments/results/*.lg
 experiments/results/*.jsonl
 experiments/results/*.tsv
+# input of the Elliptic++ re-scoring arm of e8 (the monetary utility table), needed without re-mining
+!experiments/results/e5a_ellipticpp.util.tsv
 experiments/results/*.txt
 experiments/results/snapshots/
 experiments/results/e9_snapshots*/

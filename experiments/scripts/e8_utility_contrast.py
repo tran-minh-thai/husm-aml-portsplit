@@ -257,7 +257,8 @@ def ellipticpp_arm(gauss_minutil: float | None, bound: str, max_edges: int,
                    skip_mine: bool) -> pd.DataFrame:
     hus_csv, graph_lg = RESULTS / "e5a_ellipticpp_hus.csv", RESULTS / "e5a_ellipticpp.lg"
     util_tsv = RESULTS / "e5a_ellipticpp.util.tsv"
-    for p in (hus_csv, graph_lg, util_tsv):
+    # the graph itself is read only by the mining arms; re-scoring needs the pattern set and table
+    for p in (hus_csv, util_tsv) + (() if skip_mine else (graph_lg,)):
         if not p.exists():
             raise SystemExit(f"missing {p} -- run scripts/e5a_ellipticpp_utility.py first")
     # export_utilities writes "label value" separated by a SPACE despite the .tsv name, and a
