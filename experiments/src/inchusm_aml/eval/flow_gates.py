@@ -330,3 +330,121 @@ def conservation_gate(edges: pd.DataFrame, ptx: pd.DataFrame, n_background: int,
     out = pd.DataFrame(rows)
     out.attrs.update(bg.attrs)
     return out
+
+
+# ------------------------------------------------------------------- fourth round
+#
+# Conservation by the role an account plays inside an attempt (counting only that attempt's
+# transactions): a chain node has exactly one incoming and one outgoing transaction; a split/merge
+# node has at least one of each and two or more on one side. Chain nodes are judged by the pair
+# deviation |ln(a_out / a_in)| against the third-round background pairs; split/merge nodes by the
+# total deviation |ln(sum_out / sum_in)| against background replicates drawn with the same numbers of
+# incoming and outgoing transactions (capped at MATCH_CAP).
+
+MATCH_CAP = 50
+
+
+def node_roles(ptx: pd.DataFrame) -> pd.DataFrame:
+    """One row per (attempt, account) that both receives and sends within the attempt."""
+    p = _no_self(ptx)
+    inc = p.groupby(["attempt", "dst"])["amount"].agg(k_in="size", sum_in="sum")
+    inc.index = inc.index.set_names(["attempt", "account"])
+    out = p.groupby(["attempt", "src"])["amount"].agg(k_out="size", sum_out="sum")
+    out.index = out.index.set_names(["attempt", "account"])
+    acc = inc.join(out, how="inner").reset_index()
+    acc["type"] = acc["attempt"].map(p.groupby("attempt")["type"].first())
+    acc["role"] = np.where((acc["k_in"] == 1) & (acc["k_out"] == 1), "chain", "split_merge")
+    return acc
+
+
+def chain_pairs(ptx: pd.DataFrame) -> pd.DataFrame:
+    """The (incoming, outgoing) pair of every chain node, back-and-forth pairs skipped."""
+    roles = node_roles(ptx)
+    chain = roles.loc[roles["role"] == "chain", ["attempt", "account"]].rename(columns={"account": "v"})
+    pairs = head_to_tail_pairs(ptx).merge(chain, on=["attempt", "v"])
+    return pairs[~pairs["back_and_forth"]].reset_index(drop=True)
+
+
+def _background_lists(edges: pd.DataFrame):
+    e = _no_self(edges)
+    e = e[e["laundering"] == 0]
+    src, dst = e["src"].to_numpy(), e["dst"].to_numpy()
+    amount = e["amount"].to_numpy(dtype=float)
+    n = int(max(src.max(), dst.max())) + 1
+    by_dst, by_src = np.argsort(dst, kind="stable"), np.argsort(src, kind="stable")
+    in_start = np.concatenate([[0], np.cumsum(np.bincount(dst, minlength=n))])
+    out_start = np.concatenate([[0], np.cumsum(np.bincount(src, minlength=n))])
+    return {"src": src, "dst": dst, "amount": amount, "by_dst": by_dst, "by_src": by_src,
+            "in_start": in_start, "out_start": out_start,
+            "indeg": np.diff(in_start), "outdeg": np.diff(out_start)}
+
+
+def matched_background_deviations(edges: pd.DataFrame, shapes, replicates: int, seed: int):
+    """For each (k_in, k_out) in shapes, `replicates` background deviations |ln(sum_out / sum_in)|.
+
+    Returns (list of arrays aligned with shapes, number of shapes with no eligible account)."""
+    b = _background_lists(edges)
+    rng = np.random.default_rng(seed)
+    cache: dict[tuple[int, int], np.ndarray] = {}
+    out, unmatched = [], 0
+    for k_in, k_out in shapes:
+        k_in, k_out = min(int(k_in), MATCH_CAP), min(int(k_out), MATCH_CAP)
+        key = (k_in, k_out)
+        if key not in cache:
+            cache[key] = np.flatnonzero((b["indeg"] >= k_in) & (b["outdeg"] >= k_out))
+        eligible = cache[key]
+        if len(eligible) == 0:
+            unmatched += 1
+            out.append(np.empty(0))
+            continue
+        devs = np.empty(replicates)
+        for r in range(replicates):
+            v = eligible[rng.integers(len(eligible))]
+            ins = b["by_dst"][b["in_start"][v] + rng.choice(b["indeg"][v], k_in, replace=False)]
+            outs = b["by_src"][b["out_start"][v] + rng.choice(b["outdeg"][v], k_out, replace=False)]
+            s_in, s_out = b["amount"][ins].sum(), b["amount"][outs].sum()
+            devs[r] = abs(np.log(s_out / s_in)) if s_in > 0 and s_out > 0 else np.nan
+        out.append(devs[~np.isnan(devs)])
+    return out, unmatched
+
+
+def role_gate(edges: pd.DataFrame, ptx: pd.DataFrame, n_background: int, seed_pairs: int,
+              replicates: int, seed_matched: int) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """(chain-node table, split/merge-node table), one row per typology."""
+    bg = sample_background_pairs(edges, n_background, seed_pairs)
+    bok = (bg["a1"] > 0) & (bg["a2"] > 0)
+    ref = np.sort(deviation(bg.loc[bok, "a1"], bg.loc[bok, "a2"]))
+    # secondary control: background accounts with exactly one background transaction in and one out
+    b = _background_lists(edges)
+    one = np.flatnonzero((b["indeg"] == 1) & (b["outdeg"] == 1))
+    e_in = b["by_dst"][b["in_start"][one]]
+    e_out = b["by_src"][b["out_start"][one]]
+    keep = b["src"][e_in] != b["dst"][e_out]
+    alt = deviation(b["amount"][e_in[keep]], b["amount"][e_out[keep]])
+    alt = np.sort(alt[np.isfinite(alt)])
+
+    cp = chain_pairs(ptx)
+    cp = cp[(cp["a1"] > 0) & (cp["a2"] > 0)]
+    rows_i = []
+    for typ, g in cp.groupby("type", sort=True):
+        d = deviation(g["a1"], g["a2"])
+        rows_i.append({"type": typ, "n_chain_pairs": len(g), "auc_i": auc_lower(d, ref),
+                       "auc_i_one_in_one_out_control": auc_lower(d, alt) if len(alt) >= 1000 else np.nan,
+                       "within_0.1": float(((g["a2"] / g["a1"] >= 0.9) & (g["a2"] / g["a1"] <= 1.1)).mean())})
+    tab_i = pd.DataFrame(rows_i)
+    tab_i.attrs.update(n_one_in_one_out_background_accounts=int(len(alt)), **bg.attrs)
+
+    roles = node_roles(ptx)
+    sm = roles[(roles["role"] == "split_merge") & (roles["sum_in"] > 0) & (roles["sum_out"] > 0)].reset_index(drop=True)
+    devs, unmatched = matched_background_deviations(edges, list(zip(sm["k_in"], sm["k_out"])), replicates, seed_matched)
+    sm["d"] = np.abs(np.log(sm["sum_out"] / sm["sum_in"]))
+    rows_ii = []
+    for typ, g in sm.groupby("type", sort=True):
+        refs = [devs[i] for i in g.index if len(devs[i])]
+        r = np.sort(np.concatenate(refs)) if refs else np.empty(0)
+        rows_ii.append({"type": typ, "n_split_merge_nodes": len(g), "n_background_replicates": len(r),
+                        "auc_ii": auc_lower(g["d"], r) if len(r) else np.nan,
+                        "ratio_median": float((g["sum_out"] / g["sum_in"]).median())})
+    tab_ii = pd.DataFrame(rows_ii)
+    tab_ii.attrs.update(unmatched_nodes=unmatched)
+    return tab_i, tab_ii

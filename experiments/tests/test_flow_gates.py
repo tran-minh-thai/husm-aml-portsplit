@@ -299,3 +299,67 @@ def test_conservation_gate_skips_back_and_forth():
     g = fg.conservation_gate(_bg_graph(), ptx, 1000, seed=1).set_index("group")
     assert g.loc["STACK", "n_pairs"] == 2 and "GATHER-SCATTER" not in g.index
     assert g.loc[fg.ALL_PAIRS_LABEL, "n_pairs"] == 2 and g.loc[fg.BACKGROUND_LABEL, "n_pairs"] == 1000
+
+
+# ------------------------------------------------------------------- fourth round
+
+ROLE_PTX = ptx_frame([
+    # attempt 0 (STACK): a->v 100, v->c 100: v is a chain node (ratio 1)
+    (0, "STACK", 1, 2, 0, 100.0), (0, "STACK", 2, 3, 1, 100.0),
+    # attempt 1 (GATHER-SCATTER): x->h 50, y->h 50, h->z 80: h merges (k_in 2, k_out 1, ratio 0.8);
+    # h->s 30, h->t 30 from attempt 2 must not count here
+    (1, "GATHER-SCATTER", 10, 12, 0, 50.0), (1, "GATHER-SCATTER", 11, 12, 0, 50.0), (1, "GATHER-SCATTER", 12, 13, 1, 80.0),
+    # attempt 2 (SCATTER-GATHER): g->h 60, h->s 30, h->t 30: h splits (k_in 1, k_out 2, ratio 1.0)
+    (2, "SCATTER-GATHER", 20, 12, 0, 60.0), (2, "SCATTER-GATHER", 12, 21, 1, 30.0), (2, "SCATTER-GATHER", 12, 22, 1, 30.0),
+    # attempt 3 (CYCLE): p->q 10, q->p 10: both chain nodes, both pairs back-and-forth -> no chain pair
+    (3, "CYCLE", 30, 31, 0, 10.0), (3, "CYCLE", 31, 30, 1, 10.0),
+])
+
+
+def test_node_roles_hand_case():
+    r = fg.node_roles(ROLE_PTX).set_index(["attempt", "account"])
+    assert r.loc[(0, 2), "role"] == "chain"
+    h1 = r.loc[(1, 12)]
+    assert h1.role == "split_merge" and h1.k_in == 2 and h1.k_out == 1 and h1.sum_out / h1.sum_in == pytest.approx(0.8)
+    h2 = r.loc[(2, 12)]
+    assert h2.role == "split_merge" and h2.k_in == 1 and h2.k_out == 2 and h2.sum_out == 60
+    assert r.loc[(3, 30), "role"] == "chain" and r.loc[(3, 31), "role"] == "chain"
+    assert (1, 10) not in r.index                                   # a pure sender is no role
+
+
+def test_chain_pairs_skip_back_and_forth():
+    cp = fg.chain_pairs(ROLE_PTX)
+    assert len(cp) == 1 and cp.iloc[0]["v"] == 2 and cp.iloc[0]["a1"] == 100 and cp.iloc[0]["a2"] == 100
+
+
+def _matched_graph():
+    # account 5: background in 1, 2, 3 (amounts 10, 20, 30), out 4 (40), 6 (60); laundering in from 9
+    # account 7: background in 1 (5), out 8 (5) -> one in, one out
+    return edges_frame([(1, 5, 10.0, 0), (2, 5, 20.0, 0), (3, 5, 30.0, 0), (9, 5, 999.0, 1),
+                        (5, 4, 40.0, 0), (5, 6, 60.0, 0), (1, 7, 5.0, 0), (7, 8, 5.0, 0)])
+
+
+def test_matched_background_deviations():
+    devs, unmatched = fg.matched_background_deviations(_matched_graph(), [(3, 2), (2, 2), (4, 1)], 200, seed=5)
+    # (3, 2): only account 5 qualifies, all its background transactions: |ln(100 / 60)|
+    assert len(devs[0]) == 200 and np.allclose(devs[0], abs(np.log(100 / 60)))
+    # (2, 2): account 5, any 2 of {10, 20, 30} in: sums 30, 40, 50 vs out 100
+    assert set(np.round(devs[1], 6)) <= {round(abs(np.log(100 / s)), 6) for s in (30, 40, 50)}
+    assert len(set(np.round(devs[1], 6))) == 3
+    # (4, 1): no account has 4 background incoming transactions (the laundering one does not count)
+    assert unmatched == 1 and len(devs[2]) == 0
+    again, _ = fg.matched_background_deviations(_matched_graph(), [(2, 2)], 50, seed=5)
+    again2, _ = fg.matched_background_deviations(_matched_graph(), [(2, 2)], 50, seed=5)
+    assert np.array_equal(again[0], again2[0])
+
+
+def test_role_gate_tables():
+    tab_i, tab_ii = fg.role_gate(_matched_graph(), ROLE_PTX, 500, seed_pairs=1, replicates=20, seed_matched=2)
+    ti = tab_i.set_index("type")
+    assert list(ti.index) == ["STACK"] and ti.loc["STACK", "n_chain_pairs"] == 1
+    assert tab_i.attrs["n_one_in_one_out_background_accounts"] == 1   # account 7 only
+    tii = tab_ii.set_index("type")
+    assert tii.loc["GATHER-SCATTER", "n_split_merge_nodes"] == 1 and tii.loc["GATHER-SCATTER", "ratio_median"] == pytest.approx(0.8)
+    assert tii.loc["SCATTER-GATHER", "ratio_median"] == pytest.approx(1.0)
+    # the split node (ratio 1, deviation 0) beats every matched replicate of account 5 -> AUC 1
+    assert tii.loc["SCATTER-GATHER", "auc_ii"] == pytest.approx(1.0)
