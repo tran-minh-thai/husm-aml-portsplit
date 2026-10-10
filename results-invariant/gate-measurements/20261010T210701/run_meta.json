@@ -1,0 +1,55 @@
+{
+  "run_id": "20261010T210701",
+  "note": "pre-registered gate measurements (paper/DANG_KY_TRUOC_3_PHEP_DO.md) on AMLworld LI-Medium",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/gate_measurements.py",
+    "--dataset",
+    "LI-Medium"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-10T21:07:01",
+  "git_commit": "45d208cf114cc064e3e45de518b0eae53cc54690",
+  "git_tree": "clean (21 untracked result records)",
+  "code_sha256": "803e6e4750e082c70434de14da58ddba3257d77098a64bcd8834468b789cb3c1",
+  "code_files": 74,
+  "engine_jar_sha256": "90a50c4c4f2f1472e1ea080449d49c8fc1ea27758fde82291a4107791aa6b9f8",
+  "data": [
+    {
+      "path": "datasets/amlworld/LI-Medium_Trans.csv",
+      "bytes": 2976436978,
+      "sha256": "0fc89584453c97472b1bfde7ca746e21d7167140c22a6c4875272b197a4a3910"
+    },
+    {
+      "path": "datasets/amlworld/LI-Medium_Patterns.txt",
+      "bytes": 390893,
+      "sha256": "6aa4c4041894eb272339ed10c862a4ee1ac53a469326ed9dd3dd9e35da0e625c"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (25 untracked result records)"
+}

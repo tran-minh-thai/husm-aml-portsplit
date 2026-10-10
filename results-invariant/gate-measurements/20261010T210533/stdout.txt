@@ -1,0 +1,49 @@
+HI-Small: 5,078,345 transactions (591,212 self-transfers dropped), 370 attempts with 3,209 transactions (11 self-transfers dropped, 0 with an account absent from the transactions)
+
+[1] amounts vs 4,481,967 background transactions
+                   type  n_transactions  n_attempts  auc_vs_background  bottleneck_pct_q1  bottleneck_pct_median  bottleneck_pct_q3
+              BIPARTITE             263      49.000              0.779              0.520                  0.653              0.767
+                  CYCLE             287      54.000              0.755              0.716                  0.803              0.852
+                 FAN-IN             318      40.000              0.783              0.424                  0.592              0.736
+                FAN-OUT             342      48.000              0.787              0.529                  0.639              0.786
+         GATHER-SCATTER             705      51.000              0.783              0.367                  0.510              0.664
+                 RANDOM             191      41.000              0.773              0.712                  0.805              0.840
+         SCATTER-GATHER             626      44.000              0.800              0.573                  0.670              0.777
+                  STACK             466      43.000              0.788              0.530                  0.682              0.804
+ALL (Is Laundering = 1)            5166         NaN              0.715                NaN                    NaN                NaN
+    H1 on this set: 8 of 8 typologies with |AUC - 0.5| >= 0.10 (BIPARTITE 0.779, CYCLE 0.755, FAN-IN 0.783, FAN-OUT 0.787, GATHER-SCATTER 0.783, RANDOM 0.773, SCATTER-GATHER 0.800, STACK 0.788); holds here: True
+    typologies whose amounts sit BELOW background (AUC < 0.5): none
+
+[2] order at pass-through accounts (times in minutes)
+          type  n_attempts  n_with_passthrough  n_passthrough_accounts  frac_attempts_all_in_before_out_le  frac_attempts_all_in_before_out_lt  frac_attempts_some_in_before_out_le  frac_accounts_tie  gap_min_q1  gap_min_median  gap_min_q3  span_min_q1  span_min_median  span_min_q3
+     BIPARTITE          49                   0                       0                                 NaN                                 NaN                                  NaN                NaN         NaN             NaN         NaN          NaN              NaN          NaN
+         CYCLE          54                  54                     287                               0.000                               0.000                                0.000              0.000      42.000         363.000    1059.000       42.000          363.000     1059.000
+        FAN-IN          40                   0                       0                                 NaN                                 NaN                                  NaN                NaN         NaN             NaN         NaN          NaN              NaN          NaN
+       FAN-OUT          48                   0                       0                                 NaN                                 NaN                                  NaN                NaN         NaN             NaN         NaN          NaN              NaN          NaN
+GATHER-SCATTER          51                  47                      72                               0.277                               0.277                                0.702              0.000    -953.000        -250.000     261.500     -639.250         6601.000     9696.250
+        RANDOM          41                  28                     150                               0.964                               0.964                                0.964              0.000     230.500         472.000    1040.250      230.500          472.000     1040.250
+SCATTER-GATHER          44                  44                     326                               0.568                               0.568                                0.568              0.000    1930.500        2821.500    3305.250     1930.500         2821.500     3305.250
+         STACK          43                  43                     248                               0.674                               0.674                                0.674              0.000     853.750        1819.500    2983.500      853.750         1819.500     2983.500
+    H2 on this set (all-in-before-out, ties allowed, >= 0.90 each): GATHER-SCATTER: 0.277 of 47; SCATTER-GATHER: 0.568 of 44; STACK: 0.674 of 43; RANDOM: 0.964 of 28; holds here: False
+
+[3] graph reductions on the whole graph
+       reduction  parameter  removed_fraction  n_transactions  n_accounts  max_degree  n_attempts  frac_attempts_intact  frac_laundering_transactions_kept
+            none          0                 0         4487133      422734      169756         370                     1                                  1
+      degree_cap         50             0.696         1363948      339847          50         370                0.1027                             0.5575
+      degree_cap        200            0.1095         3995750      418823         200         370                0.9595                             0.8657
+amount_threshold      879.5               0.5         2243569      306207       89228         370                0.7595                             0.8664
+amount_threshold       4681              0.75         1121784      204726       46622         370                0.3865                             0.5521
+amount_threshold  2.675e+04               0.9          448723      124593       18945         370              0.005405                            0.04762
+amount_threshold  1.372e+05              0.95          224363       70405        9717         370              0.005405                            0.02807
+amount_threshold  2.736e+06              0.99           44874       20777        1910         370              0.005405                            0.01955
+       reduction   parameter  intact_BIPARTITE  intact_CYCLE  intact_FAN-IN  intact_FAN-OUT  intact_GATHER-SCATTER  intact_RANDOM  intact_SCATTER-GATHER  intact_STACK
+            none       0.000             1.000         1.000          1.000           1.000                  1.000          1.000                  1.000         1.000
+      degree_cap      50.000             0.020         0.241          0.150           0.125                  0.020          0.195                  0.023         0.047
+      degree_cap     200.000             0.980         0.981          0.950           0.958                  0.941          1.000                  0.977         0.884
+amount_threshold     879.517             0.755         0.852          0.650           0.771                  0.549          0.951                  0.818         0.744
+amount_threshold    4681.370             0.327         0.722          0.250           0.354                  0.098          0.659                  0.295         0.372
+amount_threshold   26747.343             0.000         0.019          0.000           0.000                  0.000          0.024                  0.000         0.000
+amount_threshold  137249.120             0.000         0.019          0.000           0.000                  0.000          0.024                  0.000         0.000
+amount_threshold 2735592.910             0.000         0.019          0.000           0.000                  0.000          0.024                  0.000         0.000
+    degree cap 50: 1,363,948 transactions, 0.103 of 370 attempts intact
+    H3 on this set: thresholds at most that size with at least that many intact attempts: 1 (tau 4681); holds here: True

@@ -1,0 +1,9 @@
+type,n_attempts,n_with_passthrough,n_passthrough_accounts,frac_attempts_all_in_before_out_le,frac_attempts_all_in_before_out_lt,frac_attempts_some_in_before_out_le,frac_accounts_tie,gap_min_q1,gap_min_median,gap_min_q3,span_min_q1,span_min_median,span_min_q3
+BIPARTITE,72,0,0,,,,,,,,,,
+CYCLE,46,46,283,0.0,0.0,0.0,0.0,64.5,569.0,1445.0,64.5,569.0,1445.0
+FAN-IN,47,0,0,,,,,,,,,,
+FAN-OUT,69,0,0,,,,,,,,,,
+GATHER-SCATTER,43,41,67,0.3170731707317073,0.3170731707317073,0.6341463414634146,0.0,-3408.0,-192.0,365.5,-3408.0,3168.0,14202.0
+RANDOM,49,40,229,0.925,0.925,0.925,0.0,271.0,706.0,1354.0,271.0,706.0,1354.0
+SCATTER-GATHER,63,63,457,0.7142857142857143,0.7142857142857143,0.7142857142857143,0.0,3377.0,4219.0,4871.0,3377.0,4219.0,4871.0
+STACK,67,66,338,0.6363636363636364,0.6363636363636364,0.6363636363636364,0.0,1054.75,2610.5,4062.75,1054.75,2610.5,4062.75
