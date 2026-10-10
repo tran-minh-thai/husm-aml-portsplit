@@ -100,6 +100,10 @@ inchusm-miner/                     Java mining engine (edu.huflit.inchusm)
   dfs/                             DFS codes and minimum-code canonical form
   graph/                           labelled graph and.lg loader
   cli/Main.java                    command line: mine, stream, match
+  chain/                           conserved flow chain miner (directed transaction graphs)
+    ChainMiner.java                level-wise miner, two-sided join, exact image sets
+    ChainMain.java                 command line for the chain miner
+  mutation/chain_mutations.py      fault injection: every injected fault must fail the chain tests
 experiments/
   src/inchusm_aml/
     data/                          dataset loaders; portsplit.py holds the transform
@@ -115,6 +119,31 @@ results-invariant/                 recorded runs whose values do not depend on t
 docs/reproduce/paper3.md           data sources, commands, reference numbers
 datasets/                          not committed; see the reproduction guide
 ```
+
+## Conserved flow chain miner
+
+`edu.huflit.inchusm.chain` mines a directed transaction multigraph (accounts with labels,
+transactions with a label and a positive amount) for flow chains: directed paths, and directed
+cycles with a marked origin, whose occurrences keep the amount at every intermediate account,
+`(1 - theta) a_in <= a_out <= (1 + theta) a_in`. The pair at the origin of a cycle (the money that
+returns against the money that left) is not constrained. The support of a chain is the size of its
+smallest image set over valid occurrences; the miner reports every chain up to a maximum length
+whose support reaches a threshold, with exact image-set sizes.
+
+Input format (`.tg`): `v ID LABEL` per account and `e SOURCE TARGET LABEL AMOUNT` per transaction.
+
+```
+mvn -f inchusm-miner/pom.xml package
+java -cp inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar edu.huflit.inchusm.chain.ChainMain \
+     --graph G.tg --theta 0.2 --min-support 10 --max-length 6 --out patterns.tsv
+```
+
+Tests: `ChainMinerTest` compares the miner with an independent enumerator of all occurrences
+(`ChainBruteForce`) on random small graphs and checks hand-computed cases; `ChainTheoryTest`
+checks, with the enumerator alone, that support never exceeds that of a chain's prefix or suffix
+under the pairwise rule, and that the same check fails for a rule anchored on the first
+transaction. `python inchusm-miner/mutation/chain_mutations.py` injects faults one at a time and
+exits non-zero unless every one is caught.
 
 ## A note on scope
 
