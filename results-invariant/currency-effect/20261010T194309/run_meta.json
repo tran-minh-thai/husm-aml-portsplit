@@ -1,0 +1,54 @@
+{
+  "run_id": "20261010T194309",
+  "note": "AMLworld HI-Small: effect of US Dollar conversion on the recovery utility table and vertex labels",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/currency_effect.py",
+    "--dataset",
+    "HI-Small"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-10T19:43:09",
+  "git_commit": "f41bde93b97c154d3793d1c8bc15b29bb04c9978",
+  "git_tree": "clean",
+  "code_sha256": "7b331847f704ca0c597d5ce3fae346f33c3eba958bdd1f20e9c2da7b9b456e47",
+  "code_files": 67,
+  "engine_jar_sha256": "90a50c4c4f2f1472e1ea080449d49c8fc1ea27758fde82291a4107791aa6b9f8",
+  "data": [
+    {
+      "path": "datasets/amlworld/HI-Small_Trans.csv",
+      "bytes": 475664283,
+      "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040"
+    },
+    {
+      "path": "datasets/amlworld/HI-Small_Patterns.txt",
+      "bytes": 323844,
+      "sha256": "2c546b5ce6009e73851f0139af053cf845f08bf92f3bc82fe1eb937dec2ef39b"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}
