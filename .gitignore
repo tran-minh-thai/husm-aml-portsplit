@@ -31,3 +31,6 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Figures drawn by make_figures_paper3.py outside the recording wrapper
+experiments/figures/

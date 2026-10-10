@@ -1,4 +1,7 @@
-"""Probe: is CMNI x bottleneck-flow downward closed, and does it escape the R-ceiling?
+"""Probe: is CMNI x bottleneck-flow downward closed?
+
+(It does not escape the support-dominance ceiling: B(P) lies between the smallest and
+largest edge amounts, so the ceiling applies with R the spread of the amounts.)
 
 The claim under test (the bottleneck measure). With w(e) the money on a transaction edge,
 

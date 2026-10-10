@@ -1,0 +1,13 @@
+# Source files are stored and checked out with LF on every platform, so the code hash recorded
+# with every run is the same for one commit on macOS, Linux and Windows.
+*.py   text eol=lf
+*.java text eol=lf
+*.md   text eol=lf
+*.xml  text eol=lf
+
+# Result artifacts keep their bytes exactly as the producing machine wrote them: line endings
+# are evidence of which platform produced a file.
+experiments/results/** -text
+results/**            -text
+results-invariant/**  -text
+results-probe/**      -text

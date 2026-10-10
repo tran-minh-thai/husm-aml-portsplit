@@ -12,15 +12,19 @@ fan had two possible causes at once: the pattern was not representable at all, a
 degree cap needed for tractability had dropped the fan centre. Port-splitting removes the
 first, so the recovery-against-cap curve measures the second alone.
 
-Utility is real money: a per-account signal (total amount in and out), bucketed by
-quantile. Both ports of an account carry that bucket, so the mean utility of a pattern is
+Utility is money: a per-account signal (total amount in and out, in US Dollar), bucketed
+by quantile. Both ports of an account carry that bucket, so the mean utility of a pattern is
 unchanged by the transform and the utility-table ceiling still applies unchanged.
 
-  --utility-scale raw   uses amounts directly. This is what the paper reports.
+  --utility-scale raw   uses amounts directly.
   --utility-scale log   buckets log(1 + amount). It is monotone, so the labels and the
-                        graph are identical, but it compresses the table until support
-                        alone decides most pattern pairs. The driver prints the table
-                        spread and the utility share on every run, and warns below 10%.
+                        graph are identical, but it narrows the table and with it the
+                        share of pattern pairs whose order utility can change.
+
+Every mine reports the table spread R, the share of pattern pairs the ceiling locks, the
+share utility actually reverses relative to CMNI, and the variance decomposition of the
+score with its covariance (see inchusm_aml.eval.score_decomposition). It stops if a locked
+pair is reversed, and warns if utility reverses no pair at all.
 
 Scale. The full port-split HI-Small graph holds about 1.03M vertices and 5.48M edges and
 needs 64 GB of RAM. --mode truth-neighborhood mines the subgraph of every edge touching a
@@ -43,6 +47,7 @@ Output: results/e9_portsplit_recovery_{dataset}_{mode}[_raw].csv
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -59,9 +64,14 @@ from inchusm_aml import miner_bridge                                  # noqa: E4
 from inchusm_aml.data.amlworld import load_patterns, load_transactions  # noqa: E402
 from inchusm_aml.data.portsplit import port_split, split_utility     # noqa: E402
 from inchusm_aml.utility.monetary import assign_bucket               # noqa: E402
+from inchusm_aml.eval.score_decomposition import order_statistics, variance_decomposition  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = Path(__file__).resolve().parents[1] / "results"
+# Everything this script writes goes to OUT: the record directory when run through
+# experiments/provenance/run_and_record.py, so a new run never overwrites a committed
+# artifact; RESULTS otherwise.
+OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else RESULTS
 DATA = ROOT / "datasets" / "amlworld"
 JAR = ROOT / "inchusm-miner" / "target" / "inchusm-miner-0.1.0-SNAPSHOT.jar"
 
@@ -72,11 +82,9 @@ def account_signal(edges: pd.DataFrame, scale: str = "log") -> pd.Series:
     scale='log' applies log1p, scale='raw' does not. The choice does NOT move any account
     between buckets -- log1p is monotone and the buckets are quantiles -- so labels, graph
     and every structural result are identical either way. What it changes is the SPREAD of
-    the utility table, and by Proposition 4 that spread is the whole utility dimension:
-    log1p compresses AMLworld's accounts into roughly [5.8, 15.8], i.e. R ~ 2.7, which is
-    the degenerate regime this project's own Proposition 4 warns about, and measurement
-    confirms the utility term then carries only ~2-3% of the score variance. Raw totals
-    keep the heavy tail (R ~ 77 on the same data) and the utility term carries ~56%.
+    the utility table, which bounds how many pattern pairs utility can reorder at all (the
+    support-dominance ceiling): the log scale narrows it to a ratio of a few, the raw scale
+    keeps the heavy tail of the amounts.
     """
     paid = edges.groupby("src")["amount"].sum()
     recv = edges.groupby("dst")["amount"].sum()
@@ -90,23 +98,26 @@ def utility_diagnostics(hus: pd.DataFrame) -> dict[str, float]:
 
     A miner called 'high-utility' can silently be doing frequent mining: u = CMNI * ubar, and
     when the utility table is narrow, ubar is nearly constant so u is a monotone function of
-    CMNI. Proposition 4 makes that precise -- pattern pairs further apart in support than
+    CMNI. The support-dominance ceiling makes that precise -- pattern pairs further apart in support than
     R = max(ubar)/min(ubar) are order-locked whatever the utilities are. This is reported on
     EVERY mine so the claim can never again rest on an unmeasured assumption.
     """
     d = hus[(hus["cmni"] > 0) & (hus["utility"] > 0)].copy()
     if len(d) < 3:
-        return {"R": float("nan"), "utility_share": float("nan"), "locked_pairs": float("nan")}
+        return {"R": float("nan"), "utility_share": float("nan"), "locked_pairs": float("nan"),
+                "reversed_pairs": float("nan"), "order_violations": 0, "n_patterns": len(d)}
     d["ubar"] = d["utility"] / d["cmni"]
-    ls, lu = np.log(d["cmni"].to_numpy()), np.log(d["ubar"].to_numpy())
-    total = float(np.var(ls + lu))
     R = float(d["ubar"].max() / d["ubar"].min())
-    c = d["cmni"].to_numpy(dtype=float)
-    ratio = np.maximum.outer(c, c) / np.minimum.outer(c, c)
-    iu = np.triu_indices(len(c), 1)
-    return {"R": R,
-            "utility_share": float(np.var(lu) / total) if total > 0 else float("nan"),
-            "locked_pairs": float((ratio[iu] > R).mean())}
+    dec = variance_decomposition(d["cmni"], d["ubar"])
+    order = order_statistics(d["cmni"], d["ubar"], R)
+    # utility_share is the Shapley share (with the covariance); locked/reversed are over the
+    # pairs with different CMNI. Earlier versions wrote Var(log ubar)/Var(log u) here and the
+    # locked share over ALL pairs, including equal-CMNI pairs.
+    return {"R": R, "utility_share": dec["share_weight"], "cov_log": dec["cov_log"],
+            "ratio_utility_no_cov": dec["ratio_weight_no_cov"],
+            "locked_pairs": order["locked_frac"], "reversed_pairs": order["reversed_frac"],
+            "comparable_pairs": order["comparable_pairs"],
+            "order_violations": order["violations"], "n_patterns": len(d)}
 
 
 def fit_buckets(signal: pd.Series, n_buckets: int) -> tuple[list[float], dict[int, float]]:
@@ -154,8 +165,8 @@ def mine_and_match(edges: pd.DataFrame, labels: pd.Series, util: dict[int, float
     this threshold is itself a reportable cost, not a failure to hide."""
     node_labels, split_edges = port_split(edges, labels)
     split_util = split_utility(util)
-    lg = RESULTS / f"e9_{tag}.lg"
-    tsv = RESULTS / f"e9_{tag}.util.tsv"
+    lg = OUT / f"e9_{tag}.lg"
+    tsv = OUT / f"e9_{tag}.util.tsv"
     miner_bridge.export_lg(node_labels, split_edges, lg)
     miner_bridge.export_utilities(split_util, tsv)
 
@@ -174,21 +185,26 @@ def mine_and_match(edges: pd.DataFrame, labels: pd.Series, util: dict[int, float
     t0 = time.time()
     try:
         hus, _ = miner_bridge.run_husm(lg, tsv, min_util=min_util, mer=mer, max_edges=max_edges,
-                                       out_jsonl=RESULTS / f"e9_{tag}.hus.jsonl", timeout_s=timeout_s,
+                                       out_jsonl=OUT / f"e9_{tag}.hus.jsonl", timeout_s=timeout_s,
                                        heap=heap)
     except subprocess.TimeoutExpired:
         print(f"  [{tag}] TIMED OUT after {timeout_s}s -- pattern space too large at this "
               f"(max_edges, min_util); recorded as timed out.")
         return None, {"R": float("nan"), "utility_share": float("nan"),
-                      "locked_pairs": float("nan")}
+                      "locked_pairs": float("nan"), "reversed_pairs": float("nan"),
+                      "order_violations": 0, "n_patterns": 0}
     diag = utility_diagnostics(hus)
     print(f"  [{tag}] {len(hus)} patterns ({time.time()-t0:.0f}s mine); "
-          f"R={diag['R']:.2f}, utility carries {diag['utility_share']:.1%}, "
-          f"{diag['locked_pairs']:.1%} of pairs order-locked", flush=True)
-    if diag["utility_share"] < 0.10:
-        print(f"  [{tag}] WARNING: the utility dimension carries <10% of the score variance, so "
-              f"this mine is close to FREQUENT subgraph mining and must not be reported as "
-              f"'high-utility'. Widen the utility table (see --utility-scale).", flush=True)
+          f"R={diag['R']:.2f}, utility share {diag['utility_share']:.1%} (Shapley), "
+          f"{diag['locked_pairs']:.1%} of pairs locked, {diag['reversed_pairs']:.1%} reversed "
+          f"by utility", flush=True)
+    if diag["order_violations"]:
+        raise RuntimeError(f"[{tag}] {diag['order_violations']} pair(s) are locked by the ceiling "
+                           f"yet reversed by utility: the score is not CMNI x mean utility, or R "
+                           f"is wrong. Do not use this mine.")
+    if diag["reversed_pairs"] == 0:
+        print(f"  [{tag}] WARNING: utility reverses no pair relative to CMNI, so this mine ranks "
+              f"exactly as FREQUENT subgraph mining would.", flush=True)
     return (list(hus.code) if len(hus) else []), diag
 
 
@@ -284,7 +300,7 @@ def main() -> None:
 
     if not JAR.exists():
         raise SystemExit(f"missing {JAR} -- build it: mvn -f inchusm-miner/pom.xml package")
-    RESULTS.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
 
     t0 = time.time()
     print(f"Loading AMLworld {args.dataset}...", flush=True)
@@ -346,9 +362,9 @@ def main() -> None:
                 print(tbl[["type", "recovery_rate"]].to_string(index=False))
 
     out = pd.concat(rows, ignore_index=True)
-    out.to_csv(RESULTS / f"e9_portsplit_recovery_{args.dataset}_{args.mode}_{args.utility_scale}{args.out_suffix}.csv", index=False)
+    out.to_csv(OUT / f"e9_portsplit_recovery_{args.dataset}_{args.mode}_{args.utility_scale}{args.out_suffix}.csv", index=False)
     print(f"\nDone ({time.time()-t0:.0f}s) -> "
-          f"{RESULTS / f'e9_portsplit_recovery_{args.dataset}_{args.mode}_{args.utility_scale}{args.out_suffix}.csv'}")
+          f"{OUT / f'e9_portsplit_recovery_{args.dataset}_{args.mode}_{args.utility_scale}{args.out_suffix}.csv'}")
 
 
 if __name__ == "__main__":

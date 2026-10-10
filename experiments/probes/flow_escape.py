@@ -1,14 +1,16 @@
-"""Does the bottleneck-flow measure escape the support domination that Proposition 4 predicts?
+"""How differently does the bottleneck-flow measure rank patterns from support alone?
 
-Proposition 4 says HUSM's utility is bounded by the utility TABLE's spread R, because
-u = CMNI x MEAN of a few bucket values, and a mean of four numbers cannot vary much.
-The paper measures the consequence: even with real money, support keeps 67% of the
-score variance. u_flow replaces that mean with B(P), the best-funded occurrence's
-weakest edge -- a raw amount, so it inherits the full heavy tail of the money.
+HUSM's utility u = CMNI x MEAN of a few bucket values is confined by the support-dominance
+ceiling to the bucket table's spread R. u_flow replaces that mean with B(P), the
+best-funded occurrence's weakest edge -- an amount, so it inherits the heavy tail of the
+money. B(P) is still confined between the smallest and largest edge amounts, so the same
+ceiling applies with R the spread of the amounts; the measure does not escape the ceiling,
+it widens R.
 
-This measures, on real AMLworld transactions with real amounts, how the variance of
-each score splits between its support term and its utility term, and whether ranking
-by u_flow picks different patterns than ranking by frequency alone.
+This measures, on AMLworld transactions, how the variance of each score splits between its
+support term and its weight term, and whether ranking by u_flow picks different patterns
+than ranking by frequency alone. Note: the split below is Var(term)/Var(score), which
+ignores the covariance; inchusm_aml.eval.score_decomposition reports it with the covariance.
 
 Edge weights on the port-split graph:
   transaction edge a->b : the amount moved

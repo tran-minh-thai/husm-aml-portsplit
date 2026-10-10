@@ -13,9 +13,9 @@ REM (about 16k vertices each, two minutes). Step 3 runs the full HI-Small graph
 REM (about 915k vertices) and needs 64 GB of RAM and one to two hours.
 REM
 REM --utility-scale raw uses transaction amounts directly. The log setting
-REM compresses the utility table until support alone decides most pattern pairs,
-REM which turns the run into frequent mining in disguise; the driver prints the
-REM table spread and the utility share on every run and warns below 10 percent.
+REM narrows the utility table and with it the share of pattern pairs utility can
+REM reorder; the driver prints the table spread and the locked and reversed pair
+REM shares on every run, and warns if utility reverses no pair at all.
 REM
 REM --min-util is absolute while pattern utility grows with graph size, so it is
 REM scaled with the graph: 12000 on the full graph corresponds to 200 on the

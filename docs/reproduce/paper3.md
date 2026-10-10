@@ -1,9 +1,12 @@
 # Reproducing the results
 
-Every number in the paper comes from a script in `experiments/scripts/` and is written
-to a CSV under `experiments/results/`. Those CSVs are committed, so the tables can be
-checked without running anything. This guide covers the environment, the data, the
-command behind each result, and the values to expect.
+Every number comes from a script in `experiments/scripts/`. Run through the recording
+wrapper (section 3), a script writes into its own record directory under
+`results-invariant/<question>/<run id>/` together with `run_meta.json` (command, commit,
+working-tree state, source hash, engine-jar hash, data checksums, library versions,
+machine), and never overwrites an earlier result. The CSVs under `experiments/results/`
+are the earlier results and are kept unchanged. This guide covers the environment, the
+data, the command behind each result, and the values to expect.
 
 ## 1. Environment
 
@@ -52,8 +55,18 @@ python experiments/scripts/run_all_paper3.py          # any OS
 run_paper3.bat                                        # Windows convenience wrapper
 ```
 
-This runs each step in order, times it, continues past a failure, prints a summary, and
-finally grades the deterministic values with `check_results.py`. A step can exit
+To record a single run (recommended for every run, including quick checks):
+
+```bash
+python experiments/provenance/run_and_record.py --into results-invariant/<question> \
+    --data <input files> -- python experiments/scripts/<script>.py <arguments>
+```
+
+The wrapper refuses to run when the engine jar is older than any Java source. The tests
+of the Python side run with `python -m pytest experiments/tests`.
+
+`run_all_paper3.py` runs each step in order, times it, continues past a failure, prints a
+summary, and finally grades the deterministic values with `check_results.py`. A step can exit
 successfully and still produce wrong numbers, so `check_results.py` is the real verdict:
 it checks only values that must reproduce on any machine and never checks timing.
 
@@ -79,18 +92,26 @@ python scripts/e8_utility_contrast.py --skip-mine     # seconds; re-scoring only
 
 The utility seed of the original protocol was never published, so the script sweeps ten
 seeds and reports the median. Per-seed rows land in `e8_citeseer_seeds.csv`. Do not
-quote seed 42 alone: it gives the lowest variance share of the ten and overstates the
-effect.
+quote seed 42 alone: it gives the smallest share of reversed pairs of the ten and
+overstates the effect.
 
-| Graph and table | R | forced pairs | variance from utility | Jaccard vs frequent |
-|---|---|---|---|---|
-| Citeseer, `N(3, 1)`, 6 labels | 2.26 | 51.1% | 8.0% | 0.825 |
-| Elliptic++, `N(3, 1)`, 4 labels | 2.19 | 69.6% | 1.0% | - |
-| Elliptic++, monetary, 4 buckets | 4456 | 0.0% | 33.4% | - |
+Over the pattern pairs with different support:
 
-"Forced pairs" is the share of pattern pairs whose order no utility table can change,
-because the mean utility is trapped between the smallest and largest table entries. It
-is computed for each graph from its own support distribution, and it is a lower bound.
+| Graph and table | R | locked pairs | reversed pairs | utility share | Jaccard vs frequent |
+|---|---|---|---|---|---|
+| Citeseer, `N(3, 1)`, 6 labels (median of 10 seeds) | 2.26 | 52.7% | 9.0% | 3.1% | 0.825 |
+| Elliptic++, `N(3, 1)`, 4 labels | 2.19 | 70.2% | 3.9% | 2.4% | - |
+| Elliptic++, monetary, 4 buckets | 4456 | 0.0% | 14.8% | 2.2% | - |
+
+"Locked pairs" are those whose support ratio exceeds R, so no utility table of that
+spread can change their order (the mean utility is trapped between the smallest and
+largest table entries). "Reversed pairs" are those the utility score actually orders the
+other way round from support; every reversed pair is unlocked, and the script stops if a
+locked pair is reversed. "Utility share" is the Shapley share of Var(log u) carried by the
+utility term, (Var(log ubar) + Cov(log CMNI, log ubar)) / Var(log u); it is not a measure
+of reordering: on Elliptic++ the monetary table reverses almost four times as many pairs
+as the Gaussian one while both shares are near 2%, because log ubar and log CMNI are
+strongly negatively correlated under the monetary table.
 
 ### Port-splitting and typology recovery
 
@@ -112,27 +133,19 @@ scaled with the graph: 12,000 on the full graph corresponds to 200 on the
 truth-neighbourhood subgraph, which is 57 times smaller. The driver warns when the
 threshold is out of scale for the graph it was given.
 
-`--utility-scale raw` uses transaction amounts directly. The `log` setting compresses
-them until the table spread falls to about 2.7, at which point the utility dimension
-carries only 2% of the score variance and the run is frequent mining in disguise. The
-driver prints the spread and the variance share on every run and warns below 10%.
+`--utility-scale raw` uses transaction amounts directly. The `log` setting narrows the
+table spread and with it the share of pattern pairs utility can reorder. The driver
+prints the spread, the locked and reversed pair shares and the variance decomposition on
+every run, stops if a locked pair is reversed, and warns if utility reverses no pair.
 
-Recovery on HI-Small, truth-neighbourhood, raw utilities:
+AMLworld amounts are converted to US Dollar when loaded (see
+`experiments/src/inchusm_aml/data/amlworld.py`); the recovery tables reported for the
+submitted manuscript (commit `aed079e`) were computed from amounts summed across
+currencies and are superseded. Reference values for this section will be listed once
+regenerated.
 
-| Typology | no cap | cap 200 | cap 50 |
-|---|---|---|---|
-| gather-scatter | 1.00 | 1.00 | 0.33 |
-| scatter-gather | 1.00 | 1.00 | 0.73 |
-| fan-in | 0.90 | 0.88 | 0.55 |
-| fan-out | 0.81 | 0.81 | 0.38 |
-| stack | 0.81 | 0.79 | 0.16 |
-| cycle | 0.76 | 0.76 | 0.13 |
-| random | 0.54 | 0.54 | 0.05 |
-| bipartite | 0.00 | 0.00 | 0.00 |
-
-Bipartite recovery is zero at every setting because a bipartite core needs more than
-three edges to be told apart from a fan, and `--max-edges 4` does not finish within an
-hour even on 64 GB. That is a limit of the pattern space, not of the machine.
+A bipartite core needs more than three edges to be told apart from a fan, and
+`--max-edges 4` did not finish within an hour even on 64 GB.
 
 The degree cap column isolates one cost. On the small neighbourhood graph the labelled
 attempt is nearly the only source of its own star patterns, so capping degree removes
@@ -143,16 +156,16 @@ by other structures below the cap, and recovery holds up better.
 
 Scores a structure by the weakest link of its best-funded occurrence instead of by mean
 label utility. This measure is borrowed from the weighted subgraph mining literature,
-not proposed here; it is included because its form escapes the ceiling.
+not proposed here. It is subject to the same support-dominance ceiling, with R the spread
+of the edge amounts, which is far wider than any bucket table.
 
 ```bash
 python scripts/e9_flow_recovery.py --dataset HI-Small --mode truth-neighborhood
 python scripts/e9_flow_recovery.py --dataset HI-Small --mode full --heap 32g
 ```
 
-On the full graph it recovers gather-scatter and scatter-gather at 1.00, fan-in at 0.90
-and fan-out at 0.83, and carries 47.6% of the score variance in the money dimension
-against 12.9% for mean utility on raw amounts.
+Its edge weights are transaction amounts, so it depends directly on the US Dollar
+conversion; reference values will be listed once regenerated.
 
 ### Recovery over eight typologies
 
@@ -164,7 +177,9 @@ python scripts/e3plus_recovery8.py --dataset HI-Medium \
 
 The path miners need a search budget matched to graph size. The default budget
 underreports the random and stack typologies on the larger graphs, which is a budget
-artefact rather than a mining limit.
+artefact rather than a mining limit. These detectors are implemented in this repository
+(`baselines/motif_join.py`, `baselines/motif_ext.py`); the scatter-gather detector filters
+on the in/out amount ratio, so its results depend on the US Dollar conversion.
 
 ### Detection under strict induction
 
@@ -206,16 +221,21 @@ of the edges, and a laundering hub is by definition high degree.
 ### Figures
 
 ```bash
-python scripts/make_figures_paper3.py
+python scripts/make_figures_paper3.py --results <dir with e9 CSVs> --e8 <e8_utility_contrast.csv>
 ```
 
-Writes vector PDFs next to the manuscript, outside this repository.
+Draws every value from the result files and refuses files written before the order
+statistics existed. Writes vector PDFs to `--out` (the record directory under the
+wrapper, else `experiments/figures/`).
 
 ## 5. Determinism
 
 Utility buckets are fixed quantiles fitted on the training window and frozen; the miner
 is deterministic; every learned baseline runs under a fixed seed on CPU. The recovery
-rates, pattern counts, variance shares and F1 values reproduce exactly. Only wall-clock
+rates, pattern counts, variance decompositions and F1 values reproduce exactly: the
+utility-contrast experiment, re-run on an Apple M5 under JDK 26, matched every one of the
+159 values of its committed CSVs (the environment that produced those CSVs was not
+recorded). Only wall-clock
 timing varies, so no timing figure should be read as a claim.
 
 The reference timings in the paper were measured on an Intel Core i7-10750H with 64 GB

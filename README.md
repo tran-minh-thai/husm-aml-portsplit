@@ -10,12 +10,13 @@ graphs, and answers it in three parts:
    utility table, any two patterns whose supports differ by more than a factor of `R`
    are ordered by support alone, whatever the utility values are. Under the Gaussian
    tables used in published evaluations `R` sits between 2 and 5, and the mined set
-   overlaps plain frequent mining at Jaccard 0.825. Real transaction value widens the
-   table and restores the utility dimension.
+   overlaps plain frequent mining at Jaccard 0.825. Transaction amounts widen the table,
+   so utility reverses the support order of many more pattern pairs than a Gaussian
+   table does.
 2. **Port-splitting.** Splitting each account into an in-port and an out-port lifts
    money-flow direction into vertex labels, so an undirected miner can tell gathering
-   from scattering without any change to the engine. Flow-defined typologies are then
-   recovered at 0.81 to 1.00.
+   from scattering without any change to the engine. Typology recovery is then measured
+   on the labelled laundering attempts of AMLworld.
 3. **What tractability costs.** The transforms that make mining feasible on a
    million-vertex graph (degree cap, size cap, period cut) are measured against the
    signal they remove.
@@ -57,7 +58,7 @@ Then place the three public benchmarks under `datasets/` as described in
 | Recovery over eight typologies | `e3plus_recovery8.py` | `e3plus_recovery8_*.csv` |
 | Detection under strict induction | `e4plus_gnn_drift.py` | `e4plus_gnn_drift.csv` |
 | Account-level detection | `e7_actor_hus_detection.py` | `e7_actor_hus_detection.csv` |
-| Figures | `make_figures_paper3.py` | PDF files, written outside the repo |
+| Figures | `make_figures_paper3.py` | PDF files, drawn only from result files |
 
 `e9_portsplit_smoke.py` is a four-case check that the transform does what it claims:
 without port-splitting, gathering, scattering and pass-through all collapse to one
@@ -66,6 +67,25 @@ single-edge pattern; with it, they separate. It needs no dataset and runs in sec
 `run_all_paper3.py` runs everything in order and then grades the deterministic values
 with `check_results.py`. A step can exit successfully and still produce wrong numbers,
 so `check_results.py` is the real verdict.
+
+## Recording runs and testing
+
+Run every experiment through the recording wrapper, so that each result can be traced to
+the code and data that produced it:
+
+```bash
+python experiments/provenance/run_and_record.py --into results-invariant/<question> \
+    --data <input files> -- python experiments/scripts/<script>.py <arguments>
+```
+
+The scripts then write into the run's record directory, next to a `run_meta.json` holding
+the command, commit, working-tree state, a hash of the sources, the engine jar's hash, the
+data checksums, library versions and the machine; nothing earlier is overwritten. The
+wrapper refuses to run when the engine jar is older than a Java source. Python tests:
+
+```bash
+python -m pytest experiments/tests
+```
 
 ## Repository layout
 
@@ -85,7 +105,10 @@ experiments/
     eval/                          recovery and detection metrics
     miner_bridge.py                calls the Java engine over.lg files
   scripts/                         one entry point per experiment
-  results/                         result tables (the small CSVs are committed)
+  provenance/run_and_record.py     recording wrapper for every run
+  tests/                           tests of the Python side
+  results/                         earlier result tables (the small CSVs are committed)
+results-invariant/                 recorded runs whose values do not depend on the machine
 docs/reproduce/paper3.md           data sources, commands, reference numbers
 datasets/                          not committed; see the reproduction guide
 ```

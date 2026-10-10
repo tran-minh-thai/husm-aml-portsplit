@@ -104,22 +104,22 @@ def main() -> None:
     plain = mine("plain", labels, edges.assign(elabel=0), BUCKET_UTILITY)
     t_plain = edge_types(plain)
     cross = {t for t in t_plain if t[0] != t[2]}
-    checks.append(("A unsplit: gather/scatter/hop = MOT mau 1-canh",
-                   cross == {(0, 0, 1)}, f"cac kieu canh cheo-bucket: {sorted(cross)}"))
+    checks.append(("A unsplit: gather, scatter and hop are ONE single-edge pattern",
+                   cross == {(0, 0, 1)}, f"cross-bucket edge types: {sorted(cross)}"))
 
     nl, ed = port_split(edges, labels)
     util2 = split_utility(BUCKET_UTILITY)
     split = mine("split", nl, ed, util2, max_edges=3)
     t_split = edge_types(split)
-    # nhan: in0=0, out0=1, in1=2, out1=3
+    # labels: in0=0, out0=1, in1=2, out1=3
     fan_in_edge, fan_out_edge = (1, 0, 2), (0, 0, 3)
-    checks.append(("B split: fan-in va fan-out la HAI kieu canh khac nhau",
+    checks.append(("B split: fan-in and fan-out are TWO different edge types",
                    fan_in_edge in t_split and fan_out_edge in t_split,
-                   f"kieu canh giao dich: {sorted(t for t in t_split if t[1] == 0)}"))
+                   f"transaction edge types: {sorted(t for t in t_split if t[1] == 0)}"))
 
     centres = star_centres(split)
-    checks.append(("C split: sao 3-canh tam IN-port va tam OUT-port la hai mau rieng",
-                   2 in centres and 3 in centres, f"tam sao tim thay: {sorted(centres)}"))
+    checks.append(("C split: 3-edge stars centred on an in-port and on an out-port are two patterns",
+                   2 in centres and 3 in centres, f"star centres found: {sorted(centres)}"))
 
     def crosses_account(frame: pd.DataFrame) -> bool:
         """A pattern that really passes THROUGH an account: >=2 edges mixing a transaction
@@ -131,10 +131,10 @@ def main() -> None:
         return False
 
     no_int = mine("split_noint", *port_split(edges, labels, internal_edges=False), util2)
-    checks.append(("D pass-through: canh noi bo cho phep vuot QUA tai khoan",
+    checks.append(("D pass-through: the internal edge lets a pattern pass THROUGH an account",
                    crosses_account(split) and not crosses_account(no_int),
-                   f"mau xuyen tai khoan khi bat canh noi bo: {crosses_account(split)}; "
-                   f"khi tat: {crosses_account(no_int)}"))
+                   f"pattern through an account with internal edges: {crosses_account(split)}; "
+                   f"without: {crosses_account(no_int)}"))
 
     print("\n" + "=" * 74)
     ok_all = True
@@ -142,7 +142,7 @@ def main() -> None:
         ok_all &= ok
         print(f"{'PASS' if ok else 'FAIL'}  {name}\n      {detail}")
     print("=" * 74)
-    print(f"{'4/4: port-splitting hoat dong voi engine hien tai, KHONG sua Java' if ok_all else 'CO KIEM TRA FAIL'}")
+    print(f"{'4/4: port-splitting works with the current engine, no Java change' if ok_all else 'A CHECK FAILED'}")
     sys.exit(0 if ok_all else 1)
 
 

@@ -73,6 +73,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import os
 import re
 import sys
 from pathlib import Path
@@ -84,9 +85,14 @@ from scipy.stats import kendalltau, spearmanr
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from inchusm_aml import miner_bridge  # noqa: E402
+from inchusm_aml.eval.score_decomposition import order_statistics, variance_decomposition  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = Path(__file__).resolve().parents[1] / "results"
+# Inputs produced by earlier steps (e5a) are read from RESULTS. Everything this script writes goes
+# to OUT: the record directory when run through experiments/provenance/run_and_record.py, so a
+# new run never overwrites a committed artifact; RESULTS otherwise.
+OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else RESULTS
 CITESEER = ROOT / "datasets" / "citeseer" / "citeseer.lg"
 
 GAUSS_MU, GAUSS_SIGMA = 3.0, 1.0        # the protocol HUSM uses on four of its six datasets
@@ -180,8 +186,14 @@ def stats_of(u: pd.Series, cmni: pd.Series, code: pd.Series, R: float) -> dict:
         "cmni_span": float(cmni.max() / cmni.min()),
         "ubar_span": float(ubar.max() / ubar.min()),
         "forced_pairs": forced_fraction(cmni.to_numpy(float), R),
-        # log u = log CMNI + log ubar: which factor carries the score's variance?
-        "var_share_ubar": float(np.log(ubar).var() / np.log(u).var()),
+        # log u = log CMNI + log ubar: which factor carries the score's variance? Reported with
+        # the covariance (see inchusm_aml.eval.score_decomposition); the earlier column
+        # var_share_ubar = Var(log ubar)/Var(log u) ignored it and is no longer written.
+        **{f"{k}_ubar" if k in ("share_weight", "ratio_weight_no_cov") else k: v
+           for k, v in variance_decomposition(cmni, ubar).items()},
+        # pairs the utility term actually reverses relative to support, against the pairs the
+        # ceiling locks; "order_violations" must be 0 (the support-dominance ceiling checked on this set)
+        **{f"order_{k}": v for k, v in order_statistics(cmni, ubar, R).items()},
         "spearman_u_cmni": float(spearmanr(u, cmni).statistic),
         "kendall_u_cmni": float(kendalltau(u, cmni).statistic),
         "top10_vs_cmni": len(set(code[u.nlargest(10).index]) & set(code[cmni.nlargest(10).index])),
@@ -207,15 +219,15 @@ def citeseer_arm(min_util: float, bound: str, max_edges: int) -> pd.DataFrame:
     for seed in SEEDS:
         table = gaussian_table(seed, n_labels)
         g, _ = miner_bridge.run_husm(CITESEER, CITESEER, util_gauss=f"{GAUSS_MU},{GAUSS_SIGMA},{seed}",
-                                     out_jsonl=RESULTS / f"e8_citeseer_gauss_{seed}.jsonl", **kw)
+                                     out_jsonl=OUT / f"e8_citeseer_gauss_{seed}.jsonl", **kw)
         check_table(g, table, f"Citeseer Gaussian seed={seed}")
-        const_tsv = RESULTS / f"e8_citeseer_const_{seed}.util.tsv"
+        const_tsv = OUT / f"e8_citeseer_const_{seed}.util.tsv"
         mean = float(np.mean(list(table.values())))
         # same "label value" layout export_utilities writes
         const_tsv.write_text("".join(f"{l} {mean:.12f}\n" for l in range(n_labels)),
                              encoding="ascii")
         k, _ = miner_bridge.run_husm(CITESEER, const_tsv,
-                                     out_jsonl=RESULTS / f"e8_citeseer_const_{seed}.jsonl", **kw)
+                                     out_jsonl=OUT / f"e8_citeseer_const_{seed}.jsonl", **kw)
         G, K = set(g.code), set(k.code)
         row = stats_of(g.utility, g.cmni, g.code, max(table.values()) / min(table.values()))
         row.update({"seed": seed, "fsm_patterns": len(K), "shared_vs_fsm": len(G & K),
@@ -224,17 +236,17 @@ def citeseer_arm(min_util: float, bound: str, max_edges: int) -> pd.DataFrame:
         rows.append(row)
         print(f"  seed {seed:>5}: HUSM {len(G):>3} vs frequent {len(K):>3} patterns, "
               f"shared {len(G & K):>3}, Jaccard {row['jaccard_vs_fsm']:.3f}, "
-              f"utility carries {row['var_share_ubar']:.1%}")
+              f"utility share {row['share_weight_ubar']:.1%} (cov {row['cov_log']:+.3f})")
     per_seed = pd.DataFrame(rows)
-    per_seed.to_csv(RESULTS / "e8_citeseer_seeds.csv", index=False)
+    per_seed.to_csv(OUT / "e8_citeseer_seeds.csv", index=False)
     med = per_seed.median(numeric_only=True)
     # .1f, not .0f: the top-20 median is 17.5 and rounding it to 18 would overstate the
     # overlap, which is the direction that flatters this script's own conclusion.
     print(f"  median over {len(SEEDS)} seeds: Jaccard vs frequent mining "
           f"{med.jaccard_vs_fsm:.3f} (range {per_seed.jaccard_vs_fsm.min():.3f}"
           f"-{per_seed.jaccard_vs_fsm.max():.3f}), top-20 {med.top20_vs_fsm:.1f}/20, "
-          f"utility carries {med.var_share_ubar:.1%} "
-          f"({per_seed.var_share_ubar.min():.1%}-{per_seed.var_share_ubar.max():.1%})")
+          f"utility share {med.share_weight_ubar:.1%} "
+          f"({per_seed.share_weight_ubar.min():.1%}-{per_seed.share_weight_ubar.max():.1%})")
     print("  -> the published protocol returns nearly the answer that frequency alone gives")
     out = med.to_dict()
     out["arm"] = "citeseer/gaussian"
@@ -268,7 +280,9 @@ def ellipticpp_arm(gauss_minutil: float | None, bound: str, max_edges: int,
         r["arm"] = arm
         rows.append(r)
         print(f"  {arm:32} R={R:8.1f}  forced {r['forced_pairs']:5.1%}  "
-              f"utility carries {r['var_share_ubar']:5.1%}  rho={r['spearman_u_cmni']:.3f}")
+              f"utility share {r['share_weight_ubar']:5.1%} (cov {r['cov_log']:+.3f})  "
+              f"reversed {r['order_reversed_frac']:5.1%}  violations {r['order_violations']}  "
+              f"rho={r['spearman_u_cmni']:.3f}")
 
     if not skip_mine:
         # The re-scored set was SELECTED by monetary utility. Mining the other tables for real
@@ -279,14 +293,14 @@ def ellipticpp_arm(gauss_minutil: float | None, bound: str, max_edges: int,
               f"(slow: this graph takes ~15 min per run)", flush=True)
         g, _ = miner_bridge.run_husm(graph_lg, util_tsv, min_util=theta,
                                      util_gauss=f"{GAUSS_MU},{GAUSS_SIGMA},42",
-                                     out_jsonl=RESULTS / "e8_ellipticpp_gauss.jsonl",
+                                     out_jsonl=OUT / "e8_ellipticpp_gauss.jsonl",
                                      bound=bound, max_edges=max_edges)
         check_table(g, gau_table, "Elliptic++ Gaussian")
-        const_tsv = RESULTS / "e8_ellipticpp_const.util.tsv"
+        const_tsv = OUT / "e8_ellipticpp_const.util.tsv"
         const_tsv.write_text("".join(f"{l} {mean_gau:.12f}\n" for l in sorted(gau_table)),
                              encoding="ascii")
         k, _ = miner_bridge.run_husm(graph_lg, const_tsv, min_util=theta,
-                                     out_jsonl=RESULTS / "e8_ellipticpp_const.jsonl",
+                                     out_jsonl=OUT / "e8_ellipticpp_const.jsonl",
                                      bound=bound, max_edges=max_edges)
         mon = pd.DataFrame({"code": d.code, "utility": u_mon, "cmni": d.cmni})
         n = min(len(g), len(k), len(mon))
@@ -312,10 +326,12 @@ def main() -> None:
     ap.add_argument("--bound", default="ceu", choices=["ivu", "eu", "ceu"])
     args = ap.parse_args()
 
-    RESULTS.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     cite = citeseer_arm(args.citeseer_minutil, args.bound, args.max_edges)
     ell = ellipticpp_arm(args.gauss_minutil, args.bound, args.max_edges, args.skip_mine)
-    cols = ["arm", "R", "patterns", "cmni_span", "forced_pairs", "var_share_ubar",
+    cols = ["arm", "R", "patterns", "cmni_span", "forced_pairs", "var_log_support",
+            "var_log_weight", "cov_log", "var_log_score", "share_weight_ubar", "share_support",
+            "ratio_weight_no_cov_ubar",
             "spearman_u_cmni", "jaccard_vs_fsm", "top20_vs_fsm"]
     stats = pd.concat([cite, ell], ignore_index=True)
     stats = stats[[c for c in cols if c in stats.columns]
@@ -325,11 +341,12 @@ def main() -> None:
     print("Does the utility dimension carry the answer, or does support?")
     print("=" * 78)
     print(stats.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
-    print("\n  var_share_ubar: share of Var(log u) carried by the utility factor.")
+    print("\n  share_weight_ubar: Shapley share of Var(log u) carried by the utility factor,")
+    print("                     (Var(log ubar) + Cov(log CMNI, log ubar)) / Var(log u).")
     print("  forced_pairs:   share of pairs no utility table could reorder (this graph's CMNI).")
     print("  jaccard_vs_fsm: overlap with the answer that frequent subgraph mining returns.")
 
-    out = RESULTS / "e8_utility_contrast.csv"
+    out = OUT / "e8_utility_contrast.csv"
     stats.to_csv(out, index=False)
     print(f"\nDone -> {out}")
 
