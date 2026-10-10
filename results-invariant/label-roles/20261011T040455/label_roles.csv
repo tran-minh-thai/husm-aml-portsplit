@@ -1,0 +1,3 @@
+attribute,level,values,effective_number,eta2_log_amount,single_valued_share,nmi_laundering,lift_min,lift_max,K1,K2,K3,passes
+format,transaction,6,4.221112430962574,0.020488662284412318,,0.1913267237409866,0.0,7.336541571365284,True,True,True,True
+bank,account,23432,3137.6519425671872,0.03578968396400236,1.0,0.08159565877798207,0.0,4.233743902630652,True,True,False,False

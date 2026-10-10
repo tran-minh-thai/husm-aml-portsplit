@@ -1,0 +1,7 @@
+amlworld LI-Medium: 31,251,483 transactions, 2,499,351 self-transactions and 0 non-positive amounts dropped, 28,752,132 kept
+attribute       level  values  effective_number  eta2_log_amount  single_valued_share  nmi_laundering  lift_min  lift_max   K1   K2    K3  passes
+   format transaction       6            4.1151           0.0211                  NaN          0.1224    0.0000    6.3176 True True  True    True
+     bank     account   91983        11742.0763           0.0275               1.0000          0.0730    0.0000    4.6086 True True False   False
+(lift over values with >= 100 rows; nmi = I(attribute; laundering flag) / H(flag))
+labeling A, account label: none passes -> one shared label
+labeling A, transaction label: format

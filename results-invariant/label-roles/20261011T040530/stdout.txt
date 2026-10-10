@@ -1,0 +1,7 @@
+amlgentex us_100K_difficult: 1,766,449 transactions, 0 self-transactions and 0 non-positive amounts dropped, 1,766,449 kept
+attribute       level  values  effective_number  eta2_log_amount  single_valued_share  nmi_laundering  lift_min  lift_max   K1   K2   K3  passes
+     type transaction       1            1.0000           0.0000                  NaN          0.0000    1.0000    1.0000 True True True    True
+     bank     account      10           10.0000           0.0000               1.0000          0.0007    0.8845    1.1963 True True True    True
+(lift over values with >= 100 rows; nmi = I(attribute; laundering flag) / H(flag))
+labeling A, account label: bank
+labeling A, transaction label: type
