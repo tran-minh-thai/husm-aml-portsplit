@@ -76,6 +76,9 @@ def main() -> None:
     holds4 = bool(counted) and all(h4.loc[t, "in_order_a2"] >= 0.90 for t in counted)
     print("    H4 on this set (a2 pair-level in-order >= 0.90 each): " + "; ".join(parts) + f"; holds here: {holds4}")
     for t in h4.index:
+        if h4.loc[t, "n_attempts_with_pair"] == 0:
+            print(f"    {t}: no head-to-tail pair in any attempt")
+            continue
         ks = [k for k in fg.KS if h4.loc[t, f"attempts_V_le_{k}_a2"] >= 0.90]
         print(f"    {t}: smallest k with >= 90% of attempts at V <= k (a2): {ks[0] if ks else '> 3'}")
 
