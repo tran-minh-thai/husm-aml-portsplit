@@ -1,0 +1,7 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy (exploratory): sent / received at pass-through accounts
+          type  n_accounts  ratio_q1  ratio_median  ratio_q3  within_0.8_1.0  within_0.85_0.95
+         CYCLE        3725     0.900         0.900     0.900           0.867             0.867
+GATHER-SCATTER         497     0.374         0.429     0.478           0.002             0.000
+SCATTER-GATHER        3706     1.000         1.000     1.000           0.998             0.000
+         STACK        1090     1.459         2.162     3.142           0.044             0.024

@@ -1,0 +1,7 @@
+amlworld HI-Small (exploratory): sent / received at pass-through accounts
+          type  n_accounts  ratio_q1  ratio_median  ratio_q3  within_0.8_1.0  within_0.85_0.95
+         CYCLE         287     0.951         1.000     1.038           0.557             0.223
+GATHER-SCATTER          72     0.373         0.978     1.841           0.042             0.028
+        RANDOM         150     0.963         1.000     1.029           0.553             0.193
+SCATTER-GATHER         326     0.899         0.996     1.016           0.629             0.218
+         STACK         248     0.967         0.994     1.011           0.633             0.141

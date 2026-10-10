@@ -1,0 +1,15 @@
+amlgentex sweden_100K_difficult
+  rows 7,748,933; dropped 6,752,598 rows with the income source or spending sink; 0 flagged rows outside any attempt
+  background: 993,561 transactions; 200,000 pairs from 400,000 draws (80,309 without an incoming transaction, 32,333 back-and-forth)
+                     group  n_pairs  n_nonpositive_excluded  auc_conservation  frac_decreasing  within_0.05  within_0.1  within_0.2  within_0.5  ratio_q1  ratio_median  ratio_q3
+                     CYCLE      215                       0             0.785            0.860        0.000       0.400       0.860       0.860     0.900         0.900     0.900
+            GATHER-SCATTER     1479                       0             0.345            0.935        0.022       0.043       0.097       0.460     0.330         0.483     0.654
+            SCATTER-GATHER      227                       0             0.991            1.000        1.000       1.000       1.000       1.000     1.000         1.000     1.000
+                     STACK      942                       0             0.528            0.485        0.063       0.131       0.285       0.632     0.693         1.028     1.552
+      ALL laundering pairs     2863                       0             0.490            0.787        0.111       0.174       0.287       0.589     0.446         0.706     1.000
+BACKGROUND (sampled pairs)   200000                       0               NaN            0.513        0.079       0.140       0.258       0.574     0.633         1.000     1.534
+    H6 on this set (pooled AUC >= 0.70): 0.490 over 2863 laundering pairs; holds here: False
+    theta 0.05: laundering pairs within 0.111, background 0.079
+    theta 0.1: laundering pairs within 0.174, background 0.140
+    theta 0.2: laundering pairs within 0.287, background 0.258
+    theta 0.5: laundering pairs within 0.589, background 0.574

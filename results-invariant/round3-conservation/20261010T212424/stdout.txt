@@ -1,0 +1,15 @@
+amlworld LI-Medium
+  background: 28,736,101 transactions; 200,000 pairs from 400,000 draws (38,949 without an incoming transaction, 203 back-and-forth)
+                     group  n_pairs  n_nonpositive_excluded  auc_conservation  frac_decreasing  within_0.05  within_0.1  within_0.2  within_0.5  ratio_q1  ratio_median  ratio_q3
+                     CYCLE      261                       0             0.981            0.602        0.579       0.877       0.958       0.981     0.960         1.000     1.028
+            GATHER-SCATTER     1953                       0             0.787            0.508        0.042       0.086       0.166       0.389     0.464         0.975     2.083
+                    RANDOM      229                       0             0.993            0.642        0.664       0.952       1.000       1.000     0.956         1.000     1.000
+            SCATTER-GATHER      451                       0             0.965            0.645        0.386       0.534       0.889       0.962     0.891         0.999     1.037
+                     STACK      294                       0             0.983            0.660        0.793       0.976       0.976       0.980     0.966         1.000     1.006
+      ALL laundering pairs     3188                       0             0.861            0.559        0.249       0.359       0.468       0.617     0.776         1.000     1.272
+BACKGROUND (sampled pairs)   200000                       0               NaN            0.509        0.010       0.021       0.043       0.115     0.059         0.912    10.793
+    H6 on this set (pooled AUC >= 0.70): 0.861 over 3188 laundering pairs; holds here: True
+    theta 0.05: laundering pairs within 0.249, background 0.010
+    theta 0.1: laundering pairs within 0.359, background 0.021
+    theta 0.2: laundering pairs within 0.468, background 0.043
+    theta 0.5: laundering pairs within 0.617, background 0.115
