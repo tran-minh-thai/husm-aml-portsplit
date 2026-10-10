@@ -1,5 +1,6 @@
 # Datasets are public benchmarks obtained separately; see docs/reproduce/paper3.md
-datasets/
+# a directory, a file or a symbolic link: a link to a shared copy must be ignored too
+/datasets
 tools/
 
 # Result artefacts: the small result tables are committed so the paper's numbers can be
