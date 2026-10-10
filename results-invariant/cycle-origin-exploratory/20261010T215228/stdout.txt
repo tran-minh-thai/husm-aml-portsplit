@@ -1,0 +1,17 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy: 500 CYCLE attempts, 3725 chain-node pairs, 23 attempts whose earliest time is shared by more than one transaction
+ at_origin  cycle_length  n_pairs  n_attempts  median_ratio  n_origin_time_ties  within_0.1  within_0.2  within_0.5
+     False             5      368          93         0.900                   4       0.473       0.997       1.000
+     False             6      358          72         0.900                   4       0.447       1.000       1.000
+     False             7      480          81         0.900                  24       0.452       0.998       1.000
+     False             8      628          90         0.900                  28       0.479       1.000       1.000
+     False             9      605          76         0.900                  40       0.456       1.000       1.000
+     False            10      792          88         0.900                  72       0.466       1.000       1.000
+      True             5       92          92         1.524                   1       0.000       0.000       0.000
+      True             6       71          71         1.694                   1       0.000       0.000       0.000
+      True             7       78          78         1.882                   3       0.000       0.000       0.000
+      True             8       90          90         2.091                   4       0.000       0.000       0.000
+      True             9       75          75         2.323                   5       0.000       0.000       0.000
+      True            10       88          88         2.581                   8       0.000       0.000       0.000
+  origin pairs: 494, within 0.2: 0.000, quartiles of ratio: [1.694, 2.091, 2.323]
+  interior pairs: 3231, within 0.2: 0.999, quartiles of ratio: [0.9, 0.9, 0.9]

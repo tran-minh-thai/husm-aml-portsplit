@@ -1,0 +1,22 @@
+amlworld HI-Small: 54 CYCLE attempts, 259 chain-node pairs, 0 attempts whose earliest time is shared by more than one transaction
+ at_origin  cycle_length  n_pairs  n_attempts  median_ratio  n_origin_time_ties  within_0.1  within_0.2  within_0.5
+     False             3       18           9         0.947                   0       0.944       1.000       1.000
+     False             4       21           7         1.000                   0       0.952       1.000       1.000
+     False             5       12           3         1.000                   0       1.000       1.000       1.000
+     False             6        5           1         1.000                   0       1.000       1.000       1.000
+     False             7       30           5         1.000                   0       0.900       1.000       1.000
+     False             8       28           4         0.995                   0       0.929       1.000       1.000
+     False            10       54           6         1.000                   0       0.907       1.000       1.000
+     False            11       40           4         1.000                   0       0.875       0.925       0.975
+     False            12       11           1         1.000                   0       1.000       1.000       1.000
+      True             3        9           9         1.051                   0       0.444       1.000       1.000
+      True             4        7           7         1.024                   0       0.286       0.857       1.000
+      True             5        3           3         1.000                   0       0.667       0.667       1.000
+      True             6        1           1         1.074                   0       1.000       1.000       1.000
+      True             7        5           5         0.939                   0       0.600       0.800       1.000
+      True             8        4           4         1.055                   0       0.750       0.750       1.000
+      True            10        6           6         1.055                   0       0.167       0.667       1.000
+      True            11        4           4         0.917                   0       0.500       0.500       0.750
+      True            12        1           1         0.979                   0       1.000       1.000       1.000
+  origin pairs: 40, within 0.2: 0.800, quartiles of ratio: [0.933, 1.029, 1.127]
+  interior pairs: 219, within 0.2: 0.986, quartiles of ratio: [0.96, 1.0, 1.02]
