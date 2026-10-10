@@ -241,3 +241,61 @@ def test_load_amlgentex_refuses_unknown_code(tmp_path):
                  "1,TRANSFER,1,1,2,1,0,42\n", encoding="utf-8")
     with pytest.raises(ValueError, match="42"):
         load_amlgentex(f)
+
+
+# ------------------------------------------------------------------- third round
+
+def test_deviation_and_auc_lower_hand_case():
+    assert fg.deviation([100, 100], [100, 50]) == pytest.approx([0.0, np.log(2)])
+    ref = np.sort(np.array([0.0, 1.0, 2.0, 3.0]))
+    # 0.0 vs ref: below 0 of 4, equal 1 -> P(x < ref) + 1/2 P(=) = 3/4 + 1/8 = 0.875
+    # 2.5 vs ref: greater refs: 3.0 -> 1/4
+    assert fg.auc_lower([0.0], ref) == pytest.approx(0.875)
+    assert fg.auc_lower([2.5], ref) == pytest.approx(0.25)
+    assert fg.auc_lower([0.0, 2.5], ref) == pytest.approx((0.875 + 0.25) / 2)
+
+
+def test_conservation_row_hand_case():
+    # ratios 1.0, 0.5, 1.15, and one non-positive amount excluded
+    row = fg._conservation_row("X", [100, 100, 100, 0], [100, 50, 115, 10], np.sort(np.array([0.1, 1.0])))
+    assert row["n_pairs"] == 3 and row["n_nonpositive_excluded"] == 1
+    assert row["within_0.05"] == pytest.approx(1 / 3) and row["within_0.2"] == pytest.approx(2 / 3)
+    assert row["within_0.5"] == pytest.approx(1.0)                 # 0.5 is the boundary, included
+    assert row["frac_decreasing"] == pytest.approx(2 / 3)          # 1.0 (equal) and 0.5
+    assert row["ratio_median"] == pytest.approx(1.0)
+    # deviations 0, ln2 = 0.693, ln1.15 = 0.140 vs ref 0.1, 1.0: P(<) = 1, 1/2, 1/2 -> 2/3
+    assert row["auc_conservation"] == pytest.approx(2 / 3)
+
+
+def _bg_graph():
+    # v = 10 receives from 1, 2, 3 (background) and from 9 (laundering: must never be used);
+    # v sends to 20 (background) and back to 1 (background): pairs (1->10, 10->1) are back-and-forth
+    return edges_frame([(1, 10, 1.0, 0), (2, 10, 2.0, 0), (3, 10, 3.0, 0), (9, 10, 9.0, 1),
+                        (10, 20, 5.0, 0), (10, 1, 7.0, 0), (30, 31, 1.0, 0)])
+
+
+def test_background_sampler_pairs_are_valid_and_uniform():
+    s = fg.sample_background_pairs(_bg_graph(), 30000, seed=7)
+    assert len(s) == 30000
+    assert (s["v"] != s["u"]).all() and (s["w"] != s["u"]).all()       # no back-and-forth
+    assert set(s["u"]) <= {1, 2, 3} and 9 not in set(s["u"])          # laundering never sampled
+    assert set(s["v"]) == {10}
+    to20 = s[s["w"] == 20]["u"].value_counts(normalize=True)
+    assert set(to20.index) == {1, 2, 3} and (to20 - 1 / 3).abs().max() < 0.02
+    to1 = s[s["w"] == 1]["u"].value_counts(normalize=True)          # 1 is excluded as sender here
+    assert set(to1.index) == {2, 3} and (to1 - 1 / 2).abs().max() < 0.02
+    assert s.attrs["rejected_no_incoming"] > 0 and s.attrs["rejected_back_and_forth"] > 0
+
+
+def test_background_sampler_is_reproducible():
+    a = fg.sample_background_pairs(_bg_graph(), 500, seed=3)
+    b = fg.sample_background_pairs(_bg_graph(), 500, seed=3)
+    assert a.equals(b)
+
+
+def test_conservation_gate_skips_back_and_forth():
+    ptx = ptx_frame([(0, "STACK", 1, 2, 0, 100.0), (0, "STACK", 2, 3, 1, 100.0), (0, "STACK", 3, 4, 2, 50.0),
+                     (1, "GATHER-SCATTER", 5, 6, 0, 10.0), (1, "GATHER-SCATTER", 6, 5, 1, 10.0)])
+    g = fg.conservation_gate(_bg_graph(), ptx, 1000, seed=1).set_index("group")
+    assert g.loc["STACK", "n_pairs"] == 2 and "GATHER-SCATTER" not in g.index
+    assert g.loc[fg.ALL_PAIRS_LABEL, "n_pairs"] == 2 and g.loc[fg.BACKGROUND_LABEL, "n_pairs"] == 1000

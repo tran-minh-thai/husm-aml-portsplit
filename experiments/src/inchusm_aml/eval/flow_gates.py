@@ -171,10 +171,10 @@ def head_to_tail_pairs(ptx: pd.DataFrame) -> pd.DataFrame:
     """Every ordered pair of distinct transactions of one attempt where the first ends where the second starts."""
     p = _no_self(ptx).reset_index(drop=True)
     p = p.assign(tx=np.arange(len(p)))
-    first = p[["attempt", "type", "tx", "src", "dst", "time"]].rename(
-        columns={"tx": "tx1", "src": "u", "dst": "v", "time": "t1"})
-    second = p[["attempt", "tx", "src", "dst", "time"]].rename(
-        columns={"tx": "tx2", "src": "v", "dst": "w", "time": "t2"})
+    first = p[["attempt", "type", "tx", "src", "dst", "time", "amount"]].rename(
+        columns={"tx": "tx1", "src": "u", "dst": "v", "time": "t1", "amount": "a1"})
+    second = p[["attempt", "tx", "src", "dst", "time", "amount"]].rename(
+        columns={"tx": "tx2", "src": "v", "dst": "w", "time": "t2", "amount": "a2"})
     pairs = first.merge(second, on=["attempt", "v"])
     pairs = pairs[pairs["tx1"] != pairs["tx2"]].reset_index(drop=True)
     pairs["back_and_forth"] = pairs["w"] == pairs["u"]
@@ -235,3 +235,98 @@ def window_gate(ptx: pd.DataFrame, deltas, unit: float) -> pd.DataFrame:
             row[f"within_{delta}d"] = float((d <= delta).mean())
         rows.append(row)
     return pd.DataFrame(rows)
+
+
+# ------------------------------------------------------------------- third round
+#
+# Amount conservation along a head-to-tail pair (u->v of a1, v->w of a2, w != u): the deviation
+# l = |ln(a2 / a1)| is 0 when the amount passes on unchanged. A pair keeps the amount within theta when
+# (1 - theta) <= a2 / a1 <= (1 + theta). A per-pair predicate, so requiring it of every pair of an
+# occurrence is hereditary. Background pairs are sampled: a uniformly random background transaction
+# e2 = v->w, then a uniformly random background transaction e1 entering v, redrawn when v has none or
+# when e1 = w->v (back-and-forth).
+
+THETAS = (0.05, 0.10, 0.20, 0.50)
+BACKGROUND_LABEL = "BACKGROUND (sampled pairs)"
+ALL_PAIRS_LABEL = "ALL laundering pairs"
+
+
+def deviation(a1, a2) -> np.ndarray:
+    return np.abs(np.log(np.asarray(a2, dtype=float) / np.asarray(a1, dtype=float)))
+
+
+def auc_lower(values, reference_sorted: np.ndarray) -> float:
+    """P(value < reference) + 1/2 P(value = reference), averaged over values."""
+    return float(np.mean(1.0 - percentile_in(values, reference_sorted)))
+
+
+def sample_background_pairs(edges: pd.DataFrame, n: int, seed: int) -> pd.DataFrame:
+    """n head-to-tail pairs of background transactions; attrs report draws and rejections."""
+    e = _no_self(edges)
+    e = e[e["laundering"] == 0].reset_index(drop=True)
+    src, dst = e["src"].to_numpy(), e["dst"].to_numpy()
+    amount = e["amount"].to_numpy(dtype=float)
+    by_dst = np.argsort(dst, kind="stable")
+    dst_sorted = dst[by_dst]
+    rng = np.random.default_rng(seed)
+    first, second = [], []
+    draws = no_incoming = back = 0
+    got = 0
+    while got < n:
+        batch = max(2 * (n - got), 1024)
+        e2 = rng.integers(0, len(e), size=batch)
+        v = src[e2]
+        lo = np.searchsorted(dst_sorted, v, side="left")
+        hi = np.searchsorted(dst_sorted, v, side="right")
+        cnt = hi - lo
+        has = cnt > 0
+        e1 = np.full(batch, -1)
+        e1[has] = by_dst[lo[has] + np.floor(rng.random(has.sum()) * cnt[has]).astype(np.int64)]
+        bf = has & (src[np.where(has, e1, 0)] == dst[e2])
+        ok = has & ~bf
+        draws += batch
+        no_incoming += int((~has).sum())
+        back += int(bf.sum())
+        take = np.flatnonzero(ok)[: n - got]
+        first.append(e1[take])
+        second.append(e2[take])
+        got += len(take)
+    i1, i2 = np.concatenate(first), np.concatenate(second)
+    out = pd.DataFrame({"u": src[i1], "v": dst[i1], "w": dst[i2], "a1": amount[i1], "a2": amount[i2],
+                        "tx1": i1, "tx2": i2})
+    out.attrs.update(draws=draws, rejected_no_incoming=no_incoming, rejected_back_and_forth=back,
+                     n_background_transactions=len(e))
+    return out
+
+
+def _conservation_row(label, a1, a2, background_dev_sorted=None):
+    a1, a2 = np.asarray(a1, dtype=float), np.asarray(a2, dtype=float)
+    ok = (a1 > 0) & (a2 > 0)
+    a1, a2 = a1[ok], a2[ok]
+    r = a2 / a1
+    d = np.abs(np.log(r))
+    row = {"group": label, "n_pairs": int(len(r)), "n_nonpositive_excluded": int((~ok).sum()),
+           "auc_conservation": auc_lower(d, background_dev_sorted)
+           if background_dev_sorted is not None and len(d) else np.nan,
+           "frac_decreasing": float((a2 <= a1).mean()) if len(r) else np.nan}
+    for th in THETAS:
+        row[f"within_{th:g}"] = float(((r >= 1 - th) & (r <= 1 + th)).mean()) if len(r) else np.nan
+    for q, tag in ((0.25, "q1"), (0.5, "median"), (0.75, "q3")):
+        row[f"ratio_{tag}"] = float(np.quantile(r, q)) if len(r) else np.nan
+    return row
+
+
+def conservation_gate(edges: pd.DataFrame, ptx: pd.DataFrame, n_background: int, seed: int) -> pd.DataFrame:
+    """Rows: every typology, all laundering pairs pooled, and the sampled background pairs."""
+    pairs = head_to_tail_pairs(ptx)
+    pairs = pairs[~pairs["back_and_forth"]]
+    bg = sample_background_pairs(edges, n_background, seed)
+    bga1, bga2 = bg["a1"].to_numpy(), bg["a2"].to_numpy()
+    bok = (bga1 > 0) & (bga2 > 0)
+    ref = np.sort(deviation(bga1[bok], bga2[bok]))
+    rows = [_conservation_row(t, g["a1"], g["a2"], ref) for t, g in pairs.groupby("type", sort=True)]
+    rows.append(_conservation_row(ALL_PAIRS_LABEL, pairs["a1"], pairs["a2"], ref))
+    rows.append(_conservation_row(BACKGROUND_LABEL, bga1, bga2))
+    out = pd.DataFrame(rows)
+    out.attrs.update(bg.attrs)
+    return out
