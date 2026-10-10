@@ -1,4 +1,6 @@
 # sha256  bytes  path  -- written by experiments/provenance/verify_datasets.py --write
+d87e9742d019242ab1075076219c4c536cc8d082ca844590d7359f14d58666cb  628949539  datasets/amlgentex/sweden_100K_difficult/tx_log.csv
+baade848ac187f2518a61b6cf02c1afa0a805e4940ada7f50a20803ee6dc8273  633864438  datasets/amlgentex/sweden_100K_easy/tx_log.csv
 d612cd7ed6f7761c0e36f3b788dfbae68aa0842c77145b192c777c22daba5c9f  2279574  datasets/amlworld/HI-Medium_Patterns.txt
 3126afb8155e7c8815d62bc5370549a7b5ae6bf7dfe872b3cd7813e66a3d7ff5  3031783420  datasets/amlworld/HI-Medium_Trans.csv
 2c546b5ce6009e73851f0139af053cf845f08bf92f3bc82fe1eb937dec2ef39b  323844  datasets/amlworld/HI-Small_Patterns.txt

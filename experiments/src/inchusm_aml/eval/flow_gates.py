@@ -156,3 +156,82 @@ def reduction_gate(edges: pd.DataFrame, ptx: pd.DataFrame, caps, removal_fractio
         row["target_removed_fraction"] = q
         rows.append(row)
     return pd.DataFrame(rows)
+
+
+# ------------------------------------------------------------------ second round
+#
+# Two hereditary time constraints on an occurrence (dropping transactions from a valid occurrence
+# leaves a valid one, so a support counted on valid occurrences stays anti-monotone):
+#   (a) order with tolerance k: at most k head-to-tail pairs (u->v at t1, v->w at t2) with t1 > t2;
+#       variant a1 counts every pair, a2 skips back-and-forth pairs (w = u);
+#   (b) window: max(t) - min(t) <= delta.
+# A directed cycle forces at least one reversed pair, so cycles are reported but judged apart.
+
+def head_to_tail_pairs(ptx: pd.DataFrame) -> pd.DataFrame:
+    """Every ordered pair of distinct transactions of one attempt where the first ends where the second starts."""
+    p = _no_self(ptx).reset_index(drop=True)
+    p = p.assign(tx=np.arange(len(p)))
+    first = p[["attempt", "type", "tx", "src", "dst", "time"]].rename(
+        columns={"tx": "tx1", "src": "u", "dst": "v", "time": "t1"})
+    second = p[["attempt", "tx", "src", "dst", "time"]].rename(
+        columns={"tx": "tx2", "src": "v", "dst": "w", "time": "t2"})
+    pairs = first.merge(second, on=["attempt", "v"])
+    pairs = pairs[pairs["tx1"] != pairs["tx2"]].reset_index(drop=True)
+    pairs["back_and_forth"] = pairs["w"] == pairs["u"]
+    pairs["in_order"] = pairs["t1"] <= pairs["t2"]
+    pairs["gap"] = pairs["t2"] - pairs["t1"]
+    return pairs
+
+
+KS = (0, 1, 2, 3)
+
+
+def order_tolerance_gate(ptx: pd.DataFrame) -> pd.DataFrame:
+    """Per typology: pair-level in-order rates (a1, a2) and attempt-level shares with at most k reversed pairs."""
+    p = _no_self(ptx)
+    pairs = head_to_tail_pairs(p)
+    pairs["reversed_a1"] = ~pairs["in_order"]
+    pairs["reversed_a2"] = ~pairs["in_order"] & ~pairs["back_and_forth"]
+    v = pairs.groupby("attempt")[["reversed_a1", "reversed_a2"]].sum()
+    attempts = p.groupby("attempt")["type"].first()
+    v = v.reindex(attempts.index, fill_value=0)          # attempts without any pair have V = 0
+    has_pair = pd.Series(attempts.index.isin(pairs["attempt"].unique()), index=attempts.index)
+    rows = []
+    for typ in sorted(attempts.unique()):
+        ids = attempts.index[attempts == typ]
+        pt = pairs[pairs["type"] == typ]
+        pt2 = pt[~pt["back_and_forth"]]
+        row = {"type": typ, "n_attempts": len(ids), "n_attempts_with_pair": int(has_pair[ids].sum()),
+               "n_pairs_a1": len(pt), "in_order_a1": float(pt["in_order"].mean()) if len(pt) else np.nan,
+               "n_pairs_a2": len(pt2), "in_order_a2": float(pt2["in_order"].mean()) if len(pt2) else np.nan,
+               "n_back_and_forth": int(pt["back_and_forth"].sum())}
+        sel = has_pair[ids]
+        for var in ("a1", "a2"):
+            vv = v.loc[ids[sel.to_numpy()], f"reversed_{var}"]
+            for k in KS:
+                row[f"attempts_V_le_{k}_{var}"] = float((vv <= k).mean()) if len(vv) else np.nan
+            row[f"attempts_V_max_{var}"] = int(vv.max()) if len(vv) else 0
+        rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def window_gate(ptx: pd.DataFrame, deltas, unit: float) -> pd.DataFrame:
+    """Per typology: attempt durations and the share of attempts no longer than each delta.
+
+    deltas are in days; unit is the number of time units per day (1440 for minutes, 1 for days)."""
+    p = _no_self(ptx)
+    dur = p.groupby("attempt")["time"].agg(lambda t: t.max() - t.min()) / unit
+    attempts = p.groupby("attempt")["type"].first()
+    pairs = head_to_tail_pairs(p)
+    rows = []
+    for typ in sorted(attempts.unique()):
+        d = dur[attempts == typ]
+        g = pairs.loc[pairs["type"] == typ, "gap"].abs() / unit
+        row = {"type": typ, "n_attempts": len(d),
+               "duration_days_q1": float(d.quantile(0.25)), "duration_days_median": float(d.median()),
+               "duration_days_q3": float(d.quantile(0.75)), "duration_days_max": float(d.max()),
+               "pair_gap_days_median": float(g.median()) if len(g) else np.nan}
+        for delta in deltas:
+            row[f"within_{delta}d"] = float((d <= delta).mean())
+        rows.append(row)
+    return pd.DataFrame(rows)

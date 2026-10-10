@@ -156,3 +156,88 @@ def test_load_pattern_transactions_refuses_unknown_currency(tmp_path):
                  "2022/09/01 00:10,001,A,002,B,1,Ruble,1,Ruble,ACH,1\nEND LAUNDERING ATTEMPT\n")
     with pytest.raises(ValueError, match="Ruble"):
         load_pattern_transactions(p, {}, {"US Dollar": 1.0})
+
+
+# ------------------------------------------------------------------ second round
+
+R2 = ptx_frame([
+    # 0 CYCLE o->p (1), p->q (2), q->o (3): pairs op-pq ok, pq-qo ok, qo-op reversed -> V = 1 (a1 and a2)
+    (0, "CYCLE", 1, 2, 1, 1.0), (0, "CYCLE", 2, 3, 2, 1.0), (0, "CYCLE", 3, 1, 3, 1.0),
+    # 1 GATHER-SCATTER leaf L->C (1), C->L (2): pair at C ok, pair at L reversed; both back-and-forth
+    (1, "GATHER-SCATTER", 10, 11, 1, 1.0), (1, "GATHER-SCATTER", 11, 10, 2, 1.0),
+    # 2 STACK a->b (5), b->c (5) tie ok, c->d (4) reversed -> V = 1
+    (2, "STACK", 20, 21, 5, 1.0), (2, "STACK", 21, 22, 5, 1.0), (2, "STACK", 22, 23, 4, 1.0),
+    # 3 FAN-IN: no head-to-tail pair; duration 3
+    (3, "FAN-IN", 30, 32, 0, 1.0), (3, "FAN-IN", 31, 32, 3, 1.0),
+    # 4 STACK e->f (1), f->g (2): V = 0
+    (4, "STACK", 40, 41, 1, 1.0), (4, "STACK", 41, 42, 2, 1.0),
+    # a self-transfer is ignored (it would add pairs at 41)
+    (4, "STACK", 41, 41, 0, 1.0),
+])
+
+
+def test_head_to_tail_pairs_hand_case():
+    p = fg.head_to_tail_pairs(R2)
+    assert len(p) == 3 + 2 + 2 + 0 + 1
+    gs = p[p["attempt"] == 1]
+    assert gs["back_and_forth"].all() and sorted(gs["in_order"]) == [False, True]
+    assert p.loc[(p["attempt"] == 2) & (p["t1"] == 5) & (p["t2"] == 5), "in_order"].item()
+
+
+def test_order_tolerance_gate_hand_case():
+    g = fg.order_tolerance_gate(R2).set_index("type")
+    c = g.loc["CYCLE"]
+    assert c.n_pairs_a1 == 3 and c.in_order_a1 == pytest.approx(2 / 3) and c.in_order_a2 == pytest.approx(2 / 3)
+    assert c.attempts_V_le_0_a1 == 0.0 and c.attempts_V_le_1_a1 == 1.0 and c.attempts_V_le_0_a2 == 0.0
+    gs = g.loc["GATHER-SCATTER"]
+    assert gs.n_pairs_a1 == 2 and gs.in_order_a1 == 0.5 and gs.n_pairs_a2 == 0 and np.isnan(gs.in_order_a2)
+    assert gs.attempts_V_le_0_a1 == 0.0 and gs.attempts_V_le_0_a2 == 1.0 and gs.n_back_and_forth == 2
+    s = g.loc["STACK"]
+    assert s.n_attempts == 2 and s.n_pairs_a1 == 3 and s.in_order_a1 == pytest.approx(2 / 3)
+    assert s.attempts_V_le_0_a1 == 0.5 and s.attempts_V_le_1_a1 == 1.0 and s.attempts_V_max_a1 == 1
+    f = g.loc["FAN-IN"]
+    assert f.n_attempts_with_pair == 0 and np.isnan(f.in_order_a1) and np.isnan(f.attempts_V_le_0_a1)
+
+
+def test_parallel_transactions_each_form_pairs():
+    p = ptx_frame([(0, "STACK", 1, 2, 1, 1.0), (0, "STACK", 1, 2, 3, 1.0), (0, "STACK", 2, 3, 2, 1.0)])
+    g = fg.order_tolerance_gate(p).set_index("type").loc["STACK"]
+    assert g.n_pairs_a1 == 2 and g.in_order_a1 == 0.5 and g.attempts_V_le_0_a1 == 0.0
+
+
+def test_window_gate_hand_case():
+    w = fg.window_gate(R2, deltas=(1, 2), unit=1).set_index("type")
+    assert w.loc["CYCLE", "duration_days_median"] == 2 and w.loc["CYCLE", "within_1d"] == 0.0
+    assert w.loc["CYCLE", "within_2d"] == 1.0 and w.loc["CYCLE", "pair_gap_days_median"] == 1
+    assert w.loc["STACK", "within_1d"] == 1.0 and w.loc["FAN-IN", "within_2d"] == 0.0
+    w2 = fg.window_gate(R2.assign(time=R2["time"] * 1440), deltas=(1,), unit=1440).set_index("type")
+    assert w2.loc["STACK", "within_1d"] == 1.0 and w2.loc["CYCLE", "duration_days_max"] == 2
+
+
+# ------------------------------------------------------------------ AMLGentex loader
+
+def test_load_amlgentex(tmp_path):
+    from inchusm_aml.data.amlgentex import load_amlgentex
+    f = tmp_path / "tx_log.csv"
+    f.write_text(
+        "step,type,amount,nameOrig,bankOrig,nameDest,isSAR,alertID,modelType\n"
+        "0,INITALBALANCE,10,-2,source,5,0,-1,11\n"      # from the income source: dropped
+        "1,TRANSFER,7,5,c0,-1,0,-1,0\n"                 # to the spending sink: dropped
+        "2,TRANSFER,3,5,c0,6,0,-1,0\n"                  # background
+        "3,TRANSFER,4,6,c0,7,1,-1,0\n"                  # flagged account, no attempt
+        "4,TRANSFER,9,7,c0,8,1,12,7\n"                  # attempt 12, scatter-gather
+        "5,TRANSFER,8,8,c0,9,1,12,7\n", encoding="utf-8")
+    edges, ptx = load_amlgentex(f)
+    assert len(edges) == 4 and edges.attrs["rows_special"] == 2 and edges.attrs["sar_without_alert"] == 1
+    assert list(edges["laundering"]) == [0, 1, 1, 1]
+    assert list(ptx["attempt"]) == [12, 12] and set(ptx["type"]) == {"SCATTER-GATHER"}
+    assert list(ptx["time"]) == [4, 5]
+
+
+def test_load_amlgentex_refuses_unknown_code(tmp_path):
+    from inchusm_aml.data.amlgentex import load_amlgentex
+    f = tmp_path / "tx_log.csv"
+    f.write_text("step,type,amount,nameOrig,nameDest,isSAR,alertID,modelType\n"
+                 "1,TRANSFER,1,1,2,1,0,42\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="42"):
+        load_amlgentex(f)
