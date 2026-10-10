@@ -21,7 +21,7 @@ import tempfile
 MODULE = pathlib.Path(__file__).resolve().parents[1]
 MINER = "src/main/java/edu/huflit/inchusm/chain/ChainMiner.java"
 GRAPH = "src/main/java/edu/huflit/inchusm/chain/TransactionGraph.java"
-TESTS = "Chain*Test"
+TESTS = "Chain*Test,TransactionGraphTest"
 
 # (file, text to replace, replacement, what the fault means)
 FAULTS = [
@@ -46,6 +46,15 @@ FAULTS = [
      "conservation skipped at the first intermediate account reached when extending to the right"),
     (GRAPH, "int c = Double.compare(amount[x], amount[y]);", "int c = Double.compare(amount[y], amount[x]);",
      "transactions sorted by decreasing amount, so the range search reads the wrong slots"),
+    (GRAPH, "while (i < mid && j < to) a[k++] = compareTx(buf[i], buf[j]) <= 0 ? buf[i++] : buf[j++];",
+     "while (i < mid && j < to) a[k++] = compareTx(buf[i], buf[j]) >= 0 ? buf[i++] : buf[j++];",
+     "merge step of the sort reversed, so accounts with many transactions are out of order"),
+    (MINER, "for (int i = 1; i < p.length(); i++) for (int v : img[i]) mid.set(v);",
+     "for (int i = 0; i < p.length(); i++) for (int v : img[i]) mid.set(v);",
+     "the first account of a chain reported as intermediate"),
+    (MINER, "for (int v : img[i]) if (marked[v]) markedCounts[i]++;",
+     "for (int v : img[i]) if (!marked[v]) markedCounts[i]++;",
+     "marked counts count the unmarked accounts"),
 ]
 
 

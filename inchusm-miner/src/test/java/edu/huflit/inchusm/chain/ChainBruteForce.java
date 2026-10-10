@@ -25,7 +25,7 @@ final class ChainBruteForce {
         ANCHORED_FIRST
     }
 
-    record Stat(int support, int[] imageCounts) {
+    record Stat(int support, int[] imageCounts, List<Set<Integer>> images) {
     }
 
     private final int[] vlab;
@@ -70,7 +70,7 @@ final class ChainBruteForce {
                 counts[i] = kv.getValue().get(i).size();
                 if (counts[i] < min) min = counts[i];
             }
-            out.put(kv.getKey(), new Stat(min, counts));
+            out.put(kv.getKey(), new Stat(min, counts, kv.getValue()));
         }
         return out;
     }

@@ -1,12 +1,12 @@
 package edu.huflit.inchusm.chain;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.DoublePredicate;
 
@@ -40,13 +40,24 @@ public final class TransactionGraph {
     private final int[] inStart;
     private final int[] inTx;
     private final int droppedSelfTransactions;
+    private final long[] originalIds;
 
     public TransactionGraph(int[] vlabel, int[] src, int[] dst, int[] elabel, double[] amount) {
+        this(vlabel, src, dst, elabel, amount, null);
+    }
+
+    /** @param originalIds the id each account had in the input, or null for 0..n-1 */
+    public TransactionGraph(int[] vlabel, int[] src, int[] dst, int[] elabel, double[] amount, long[] originalIds) {
         int m = src.length;
         if (dst.length != m || elabel.length != m || amount.length != m) {
             throw new IllegalArgumentException("transaction arrays differ in length");
         }
         this.vlabel = vlabel.clone();
+        if (originalIds != null && originalIds.length != vlabel.length) {
+            throw new IllegalArgumentException("one original id per account is needed");
+        }
+        this.originalIds = new long[vlabel.length];
+        for (int i = 0; i < vlabel.length; i++) this.originalIds[i] = originalIds == null ? i : originalIds[i];
         for (int i = 0; i < this.vlabel.length; i++) {
             if (this.vlabel[i] < 0) throw new IllegalArgumentException("account " + i + " has a negative label");
         }
@@ -93,71 +104,157 @@ public final class TransactionGraph {
         int m = key.length;
         for (int e = 0; e < m; e++) start[key[e] + 1]++;
         for (int v = 0; v < n; v++) start[v + 1] += start[v];
-        Integer[] order = new Integer[m];
-        for (int e = 0; e < m; e++) order[e] = e;
-        Arrays.sort(order, (x, y) -> {
-            if (key[x] != key[y]) return Integer.compare(key[x], key[y]);
-            if (elabel[x] != elabel[y]) return Integer.compare(elabel[x], elabel[y]);
-            int c = Double.compare(amount[x], amount[y]);
-            return c != 0 ? c : Integer.compare(x, y);
-        });
         int[] out = new int[m];
-        for (int i = 0; i < m; i++) out[i] = order[i];
+        int[] fill = Arrays.copyOf(start, n);
+        for (int e = 0; e < m; e++) out[fill[key[e]]++] = e;     // ids ascending within each group
+        int[] buf = new int[m];
+        for (int v = 0; v < n; v++) mergeSort(out, buf, start[v], start[v + 1]);
         return out;
     }
 
+    private int compareTx(int x, int y) {
+        if (elabel[x] != elabel[y]) return Integer.compare(elabel[x], elabel[y]);
+        int c = Double.compare(amount[x], amount[y]);
+        return c != 0 ? c : Integer.compare(x, y);
+    }
+
+    /** Stable merge sort of a[from, to) by (label, amount, id), using buf as scratch. */
+    private void mergeSort(int[] a, int[] buf, int from, int to) {
+        if (to - from < 2) return;
+        if (to - from <= 16) {
+            for (int i = from + 1; i < to; i++) {
+                int x = a[i];
+                int j = i - 1;
+                while (j >= from && compareTx(a[j], x) > 0) {
+                    a[j + 1] = a[j];
+                    j--;
+                }
+                a[j + 1] = x;
+            }
+            return;
+        }
+        int mid = (from + to) >>> 1;
+        mergeSort(a, buf, from, mid);
+        mergeSort(a, buf, mid, to);
+        if (compareTx(a[mid - 1], a[mid]) <= 0) return;
+        System.arraycopy(a, from, buf, from, to - from);
+        int i = from;
+        int j = mid;
+        int k = from;
+        while (i < mid && j < to) a[k++] = compareTx(buf[i], buf[j]) <= 0 ? buf[i++] : buf[j++];
+        while (i < mid) a[k++] = buf[i++];
+        while (j < to) a[k++] = buf[j++];
+    }
+
+    /** Reads a {@code .tg} file line by line into primitive arrays (files of tens of millions of lines). */
     public static TransactionGraph load(Path path) throws IOException {
         Map<Long, Integer> idMap = new HashMap<>();
-        List<Integer> labels = new ArrayList<>();
-        List<long[]> rawEdges = new ArrayList<>();
-        List<Integer> edgeLabels = new ArrayList<>();
-        List<Double> amounts = new ArrayList<>();
-        int lineNo = 0;
-        for (String raw : Files.readAllLines(path)) {
-            lineNo++;
-            String line = raw.trim();
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            String[] tok = line.split("\\s+");
-            String where = path.getFileName() + ":" + lineNo + ": ";
-            switch (tok[0]) {
-                case "v" -> {
-                    if (tok.length != 3) throw new IOException(where + "an account line needs 'v ID LABEL'");
-                    long id = Long.parseLong(tok[1]);
-                    if (idMap.putIfAbsent(id, labels.size()) != null) {
-                        throw new IOException(where + "account " + id + " is declared twice");
+        LongList ids = new LongList();
+        IntList labels = new IntList();
+        LongList rawSrc = new LongList();
+        LongList rawDst = new LongList();
+        IntList edgeLabels = new IntList();
+        DoubleList amounts = new DoubleList();
+        long lineNo = 0;
+        try (BufferedReader in = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            String raw;
+            while ((raw = in.readLine()) != null) {
+                lineNo++;
+                String line = raw.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                String[] tok = line.split("\\s+");
+                switch (tok[0]) {
+                    case "v" -> {
+                        if (tok.length != 3) throw bad(path, lineNo, "an account line needs 'v ID LABEL'");
+                        long id = Long.parseLong(tok[1]);
+                        if (idMap.putIfAbsent(id, labels.size()) != null) {
+                            throw bad(path, lineNo, "account " + id + " is declared twice");
+                        }
+                        ids.add(id);
+                        labels.add(Integer.parseInt(tok[2]));
                     }
-                    labels.add(Integer.parseInt(tok[2]));
-                }
-                case "e" -> {
-                    if (tok.length != 5) {
-                        throw new IOException(where + "a transaction line needs 'e SOURCE TARGET LABEL AMOUNT'");
+                    case "e" -> {
+                        if (tok.length != 5) throw bad(path, lineNo, "a transaction line needs 'e SOURCE TARGET LABEL AMOUNT'");
+                        rawSrc.add(Long.parseLong(tok[1]));
+                        rawDst.add(Long.parseLong(tok[2]));
+                        edgeLabels.add(Integer.parseInt(tok[3]));
+                        amounts.add(Double.parseDouble(tok[4]));
                     }
-                    rawEdges.add(new long[] {Long.parseLong(tok[1]), Long.parseLong(tok[2])});
-                    edgeLabels.add(Integer.parseInt(tok[3]));
-                    amounts.add(Double.parseDouble(tok[4]));
+                    default -> throw bad(path, lineNo, "unknown record '" + tok[0] + "'");
                 }
-                default -> throw new IOException(where + "unknown record '" + tok[0] + "'");
             }
         }
-        int m = rawEdges.size();
+        int m = rawSrc.size();
         int[] s = new int[m];
         int[] t = new int[m];
-        int[] lab = new int[m];
-        double[] a = new double[m];
         for (int i = 0; i < m; i++) {
-            Integer u = idMap.get(rawEdges.get(i)[0]);
-            Integer v = idMap.get(rawEdges.get(i)[1]);
+            Integer u = idMap.get(rawSrc.get(i));
+            Integer v = idMap.get(rawDst.get(i));
             if (u == null || v == null) {
                 throw new IOException(path.getFileName() + ": transaction " + i + " names an undeclared account");
             }
             s[i] = u;
             t[i] = v;
-            lab[i] = edgeLabels.get(i);
-            a[i] = amounts.get(i);
         }
-        int[] vl = new int[labels.size()];
-        for (int i = 0; i < vl.length; i++) vl[i] = labels.get(i);
-        return new TransactionGraph(vl, s, t, lab, a);
+        return new TransactionGraph(labels.toArray(), s, t, edgeLabels.toArray(), amounts.toArray(), ids.toArray());
+    }
+
+    private static IOException bad(Path path, long lineNo, String what) {
+        return new IOException(path.getFileName() + ":" + lineNo + ": " + what);
+    }
+
+    private static final class IntList {
+        private int[] a = new int[16];
+        private int n;
+
+        void add(int x) {
+            if (n == a.length) a = Arrays.copyOf(a, 2 * n);
+            a[n++] = x;
+        }
+
+        int size() {
+            return n;
+        }
+
+        int[] toArray() {
+            return Arrays.copyOf(a, n);
+        }
+    }
+
+    private static final class LongList {
+        private long[] a = new long[16];
+        private int n;
+
+        void add(long x) {
+            if (n == a.length) a = Arrays.copyOf(a, 2 * n);
+            a[n++] = x;
+        }
+
+        long get(int i) {
+            return a[i];
+        }
+
+        int size() {
+            return n;
+        }
+
+        long[] toArray() {
+            return Arrays.copyOf(a, n);
+        }
+    }
+
+    private static final class DoubleList {
+        private double[] a = new double[16];
+        private int n;
+
+        void add(double x) {
+            if (n == a.length) a = Arrays.copyOf(a, 2 * n);
+            a[n++] = x;
+        }
+
+        double[] toArray() {
+            return Arrays.copyOf(a, n);
+        }
     }
 
     public int numAccounts() {
@@ -170,6 +267,18 @@ public final class TransactionGraph {
 
     public int droppedSelfTransactions() {
         return droppedSelfTransactions;
+    }
+
+    /** The id account v had in the input file (or v itself when built from arrays). */
+    public long originalId(int v) {
+        return originalIds[v];
+    }
+
+    /** Account index of every original id. */
+    public Map<Long, Integer> indexByOriginalId() {
+        Map<Long, Integer> out = new HashMap<>();
+        for (int v = 0; v < originalIds.length; v++) out.put(originalIds[v], v);
+        return out;
     }
 
     public int accountLabel(int v) {

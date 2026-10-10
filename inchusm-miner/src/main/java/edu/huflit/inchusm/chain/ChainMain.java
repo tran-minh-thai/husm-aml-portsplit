@@ -16,7 +16,14 @@ import java.util.stream.Collectors;
  * <pre>
  * java -cp inchusm-miner.jar edu.huflit.inchusm.chain.ChainMain --graph G.tg --theta 0.2 \
  *      --min-support 10 --max-length 6 [--min-cycle 3] [--no-closed] --out patterns.tsv
+ *      [--mark accounts.txt] [--accounts-out roles.tsv]
  * </pre>
+ *
+ * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
+ * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
+ * output then also counts, for every image set, how many of its accounts are marked. Marking never
+ * changes what is mined. {@code --accounts-out} writes, for every kind and length, the accounts that
+ * occupy an intermediate position of some reported chain (and the origins of closed chains).
  *
  * The output table has one row per chain whose support reaches the threshold: kind (open or
  * closed), length, position labels, transaction labels, support and the size of every image set.
@@ -33,7 +40,7 @@ public final class ChainMain {
         Path graphPath = Path.of(required(opt, "--graph"));
         Path out = Path.of(required(opt, "--out"));
         ChainMiner.Params params = new ChainMiner.Params(
-                Double.parseDouble(required(opt, "--theta")),
+                parseTheta(required(opt, "--theta")),
                 Integer.parseInt(required(opt, "--min-support")),
                 Integer.parseInt(required(opt, "--max-length")),
                 Integer.parseInt(opt.getOrDefault("--min-cycle", "3")),
@@ -47,11 +54,19 @@ public final class ChainMain {
                 params.closedChains());
 
         ChainMiner miner = new ChainMiner(g, params);
+        if (opt.containsKey("--mark")) {
+            boolean[] marked = readMarked(Path.of(opt.get("--mark")), g);
+            int n = 0;
+            for (boolean b : marked) if (b) n++;
+            System.out.printf("marked accounts present in the graph: %d%n", n);
+            miner.marked(marked);
+        }
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();
         long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
 
         write(out, results);
+        if (opt.containsKey("--accounts-out")) writeAccounts(Path.of(opt.get("--accounts-out")), miner, g);
         ChainMiner.Counters c = miner.counters();
         System.out.printf("candidates=%d pruned_by_domain=%d searches=%d found=%d failed=%d early_stops=%d%n",
                 c.candidates, c.prunedByDomain, c.searches, c.searchesFound, c.searchesFailed, c.earlyStops);
@@ -64,13 +79,43 @@ public final class ChainMain {
 
     static void write(Path out, List<ChainMiner.Result> results) throws IOException {
         try (BufferedWriter w = Files.newBufferedWriter(out, StandardCharsets.UTF_8)) {
-            w.write("kind\tlength\taccount_labels\ttransaction_labels\tsupport\timage_counts\n");
+            w.write("kind\tlength\taccount_labels\ttransaction_labels\tsupport\timage_counts\tmarked_counts\n");
             for (ChainMiner.Result r : results) {
                 ChainPattern p = r.pattern();
                 w.write((p.closed() ? "closed" : "open") + "\t" + p.length() + "\t" + join(p.vlab()) + "\t"
-                        + join(p.elab()) + "\t" + r.support() + "\t" + join(r.imageCounts()) + "\n");
+                        + join(p.elab()) + "\t" + r.support() + "\t" + join(r.imageCounts()) + "\t"
+                        + (r.markedCounts() == null ? "" : join(r.markedCounts())) + "\n");
             }
         }
+    }
+
+    static void writeAccounts(Path out, ChainMiner miner, TransactionGraph g) throws IOException {
+        try (BufferedWriter w = Files.newBufferedWriter(out, StandardCharsets.UTF_8)) {
+            w.write("kind\tlength\trole\taccount\n");
+            for (Map.Entry<String, java.util.BitSet> e : miner.accountsByRole().entrySet()) {
+                String[] key = e.getKey().split(" ");
+                java.util.BitSet b = e.getValue();
+                for (int v = b.nextSetBit(0); v >= 0; v = b.nextSetBit(v + 1)) {
+                    w.write(key[0] + "\t" + key[1] + "\t" + key[2] + "\t" + g.originalId(v) + "\n");
+                }
+            }
+        }
+    }
+
+    static boolean[] readMarked(Path path, TransactionGraph g) throws IOException {
+        Map<Long, Integer> index = g.indexByOriginalId();
+        boolean[] marked = new boolean[g.numAccounts()];
+        for (String raw : Files.readAllLines(path, StandardCharsets.UTF_8)) {
+            String line = raw.trim();
+            if (line.isEmpty() || line.startsWith("#")) continue;
+            Integer v = index.get(Long.parseLong(line));
+            if (v != null) marked[v] = true;
+        }
+        return marked;
+    }
+
+    static double parseTheta(String text) {
+        return text.equalsIgnoreCase("inf") ? Double.POSITIVE_INFINITY : Double.parseDouble(text);
     }
 
     private static String join(int[] a) {

@@ -37,14 +37,20 @@ public final class ChainMiner {
 
     public record Params(double theta, int minSupport, int maxLength, int minCycleLength, boolean closedChains) {
         public Params {
-            if (!(theta >= 0 && theta < 1)) throw new IllegalArgumentException("theta must lie in [0, 1)");
+            if (!(theta >= 0 && (theta < 1 || theta == Double.POSITIVE_INFINITY))) {
+                throw new IllegalArgumentException("theta must lie in [0, 1), or be infinite for no conservation");
+            }
             if (minSupport < 1) throw new IllegalArgumentException("minimum support must be at least 1");
             if (maxLength < 1) throw new IllegalArgumentException("maximum length must be at least 1");
             if (minCycleLength < 2) throw new IllegalArgumentException("a closed chain has at least 2 transactions");
         }
     }
 
-    public record Result(ChainPattern pattern, int support, int[] imageCounts) {
+    /**
+     * One reported chain. markedCounts (accounts of each image set that are marked) is null unless
+     * marked accounts were given; images (account indices per position) is null unless kept.
+     */
+    public record Result(ChainPattern pattern, int support, int[] imageCounts, int[] markedCounts, int[][] images) {
     }
 
     /** Machine-independent work counters. */
@@ -73,10 +79,35 @@ public final class ChainMiner {
     private final TransactionGraph g;
     private final Params params;
     private final Counters counters = new Counters();
+    private boolean[] marked;
+    private boolean keepImages;
+    private final Map<String, BitSet> accounts = new TreeMap<>();
 
     public ChainMiner(TransactionGraph g, Params params) {
         this.g = g;
         this.params = params;
+    }
+
+    /** Accounts to count in every image set (for example accounts known to be laundering); mining ignores them. */
+    public ChainMiner marked(boolean[] marked) {
+        if (marked.length != g.numAccounts()) throw new IllegalArgumentException("one flag per account is needed");
+        this.marked = marked.clone();
+        return this;
+    }
+
+    /** Keep the image sets themselves in the results (memory grows with every reported chain). */
+    public ChainMiner keepImages(boolean keep) {
+        this.keepImages = keep;
+        return this;
+    }
+
+    /**
+     * After {@link #mine()}: for every kind and length, the accounts that occupy an intermediate
+     * position (1..m-1) of some reported chain, and for closed chains the accounts at the origin.
+     * Keys look like {@code open 3 intermediate} or {@code closed 4 origin}.
+     */
+    public Map<String, BitSet> accountsByRole() {
+        return accounts;
     }
 
     public Counters counters() {
@@ -118,14 +149,29 @@ public final class ChainMiner {
     }
 
     private Result result(Entry e) {
-        int[] counts = new int[e.images().length];
+        int[][] img = e.images();
+        int[] counts = new int[img.length];
+        int[] markedCounts = marked == null ? null : new int[img.length];
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < counts.length; i++) {
-            counts[i] = e.images()[i].length;
+            counts[i] = img[i].length;
             min = Math.min(min, counts[i]);
+            if (markedCounts != null) {
+                for (int v : img[i]) if (marked[v]) markedCounts[i]++;
+            }
         }
-        counters.frequent(e.pattern());
-        return new Result(e.pattern(), min, counts);
+        ChainPattern p = e.pattern();
+        String kind = p.closed() ? "closed " : "open ";
+        if (p.length() >= 2) {
+            BitSet mid = accounts.computeIfAbsent(kind + p.length() + " intermediate", k -> new BitSet());
+            for (int i = 1; i < p.length(); i++) for (int v : img[i]) mid.set(v);
+        }
+        if (p.closed()) {
+            BitSet origin = accounts.computeIfAbsent(kind + p.length() + " origin", k -> new BitSet());
+            for (int v : img[0]) origin.set(v);
+        }
+        counters.frequent(p);
+        return new Result(p, min, counts, markedCounts, keepImages ? img : null);
     }
 
     // ---------------------------------------------------------------- length one
