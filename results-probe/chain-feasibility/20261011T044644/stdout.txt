@@ -1,0 +1,10 @@
+graph HI-Small_A.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+candidates=3936 pruned_by_domain=18 pruned_by_consistency=0 searches=56844727 found=56827787 failed=16940 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 6 open, 0 closed
+length 2: 28 open, 0 closed
+length 3: 128 open, 0 closed
+length 4: 628 open, 0 closed
+length 5: 3128 open, 0 closed
+patterns written: 3918 -> patterns.tsv
+[timing redacted: machine-dependent, not kept in this tree]

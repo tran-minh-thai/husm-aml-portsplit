@@ -1,0 +1,10 @@
+graph sweden_100K_easy_A.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+candidates=356385 pruned_by_domain=300679 pruned_by_consistency=126 searches=2505660 found=2404087 failed=101573 budget_fallbacks=0 local_rejections=0 early_stops=4
+length 1: 144 open, 0 closed
+length 2: 1728 open, 0 closed
+length 3: 20736 open, 0 closed
+length 4: 32964 open, 0 closed
+length 5: 4 open, 0 closed
+patterns written: 55576 -> patterns.tsv
+[timing redacted: machine-dependent, not kept in this tree]

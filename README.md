@@ -103,6 +103,8 @@ inchusm-miner/                     Java mining engine (edu.huflit.inchusm)
   chain/                           conserved flow chain miner (directed transaction graphs)
     ChainMiner.java                level-wise miner, two-sided join, exact image sets
     ChainMain.java                 command line for the chain miner
+    Consistency.java               forward and backward slot consistency
+    ChainEnumerator.java           baseline: enumerate every valid occurrence, aggregate image sets
   mutation/chain_mutations.py      fault injection: every injected fault must fail the chain tests
 experiments/
   src/inchusm_aml/
@@ -137,6 +139,23 @@ mvn -f inchusm-miner/pom.xml package
 java -cp inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar edu.huflit.inchusm.chain.ChainMain \
      --graph G.tg --theta 0.2 --min-support 10 --max-length 6 --out patterns.tsv
 ```
+
+Before searching, every candidate's slots (the transactions that may stand at each pattern edge)
+are reduced by one forward and one backward consistency pass; for open chains this leaves exactly
+the transactions on a complete conserving walk, so the search only backtracks over repeated
+accounts. Closed chains first try a depth-first search with a step budget and fall back to local
+propagation from the pinned account. `--no-consistency` turns the passes off (same output),
+`--theta inf` turns conservation off, `--engine enumerate` runs the baseline that enumerates every
+valid occurrence and aggregates image sets (same output), `--mark FILE` counts listed accounts in
+every image set, `--accounts-out FILE` writes the accounts that occupy intermediate positions.
+
+Inputs for AMLworld and AMLGentex are built by
+`python experiments/scripts/export_chain_input.py --source amlworld --dataset HI-Small --labeling A`
+(labeling S: structure only; A: payment format as transaction label for AMLworld, bank as account
+label for AMLGentex), written under `datasets/chain/` with a JSON record of counts and sha256.
+`experiments/scripts/chain_planted_rules.py` measures which amount rule keeps the planted laundering
+chains; `experiments/scripts/chain_conservation_effect.py` mines with and without conservation and
+measures laundering accounts among the intermediate accounts of the mined chains.
 
 Tests: `ChainMinerTest` compares the miner with an independent enumerator of all occurrences
 (`ChainBruteForce`) on random small graphs and checks hand-computed cases; `ChainTheoryTest`
