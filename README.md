@@ -28,7 +28,7 @@ baseline runs under a fixed seed.
 ## Requirements
 
 - Python 3.11 or newer, and the packages in `requirements.txt`
-- JDK 17 and Maven, for the mining engine
+- JDK 17 or newer and Maven, for the mining engine (it is compiled for Java 17)
 - 16 GB of RAM for the standard experiments; 64 GB for the full-graph runs
 
 PyTorch and PyTorch Geometric are needed only by the graph-neural-network baselines;

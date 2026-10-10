@@ -14,7 +14,7 @@ data, the command behind each result, and the values to expect.
 python -m venv ~/.venvs/husm-aml-portsplit        # Windows: %USERPROFILE%\.venvs\husm-aml-portsplit
 source ~/.venvs/husm-aml-portsplit/bin/activate   # Windows:...\Scripts\activate
 pip install -r requirements.txt
-mvn -f inchusm-miner/pom.xml package            # JDK 17; builds the engine and runs its tests
+mvn -f inchusm-miner/pom.xml package            # JDK 17 or newer; builds the engine and runs its tests
 ```
 
 The build must finish with all tests passing before any experiment is run; the Python
