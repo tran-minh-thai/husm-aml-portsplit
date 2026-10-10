@@ -39,6 +39,13 @@ Place the three benchmarks under `datasets/`, which is not tracked by git.
 | `datasets/amlworld/{HI,LI}-{Small,Medium}_Trans.csv` and `_Patterns.txt` | typology recovery, port-splitting |
 | `datasets/citeseer/citeseer.lg` | the utility-dimension contrast |
 
+Every file is listed with its size and sha256 in `docs/reproduce/datasets.sha256`. Check a
+copy before running anything:
+
+```bash
+python experiments/provenance/verify_datasets.py      # must end: all 15 files match the manifest
+```
+
 Elliptic and Elliptic++ come from the Elliptic data set release; AMLworld is the IBM
 synthetic anti-money-laundering benchmark. Both are distributed on Kaggle under their
 own terms. Citeseer is the standard citation graph, converted to the engine's `.lg`
@@ -64,6 +71,14 @@ python experiments/provenance/run_and_record.py --into results-invariant/<questi
 
 The wrapper refuses to run when the engine jar is older than any Java source. The tests
 of the Python side run with `python -m pytest experiments/tests`.
+
+The measurement machine is declared once, by running
+`python experiments/provenance/machine_info.py --write` on it and committing
+`results/MEASUREMENT_MACHINE.txt` (host id, CPU, cores, RAM, operating system, Python and its
+libraries, Java runtime version and vendor, Maven). Timing records under `results/` are
+refused on any other machine. Records of the same command made on different machines are
+compared exactly, cell by cell, with
+`python experiments/provenance/compare_records.py results-invariant/<question>`.
 
 `run_all_paper3.py` runs each step in order, times it, continues past a failure, prints a
 summary, and finally grades the deterministic values with `check_results.py`. A step can exit

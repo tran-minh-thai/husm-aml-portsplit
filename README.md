@@ -81,7 +81,10 @@ python experiments/provenance/run_and_record.py --into results-invariant/<questi
 The scripts then write into the run's record directory, next to a `run_meta.json` holding
 the command, commit, working-tree state, a hash of the sources, the engine jar's hash, the
 data checksums, library versions and the machine; nothing earlier is overwritten. The
-wrapper refuses to run when the engine jar is older than a Java source. Python tests:
+wrapper refuses to run when the engine jar is older than a Java source.
+`experiments/provenance/machine_info.py --write` declares the measurement machine,
+`verify_datasets.py` checks the benchmark files against `docs/reproduce/datasets.sha256`, and
+`compare_records.py` compares records of one command made on different machines. Python tests:
 
 ```bash
 python -m pytest experiments/tests
