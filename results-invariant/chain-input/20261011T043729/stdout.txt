@@ -1,0 +1,15 @@
+{
+  "rows": 31898238,
+  "self_transactions_dropped": 2561860,
+  "graph_sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393",
+  "source": "amlworld",
+  "dataset": "HI-Medium",
+  "labeling": "S",
+  "accounts": 1758597,
+  "transactions": 29336378,
+  "laundering_accounts": 41857,
+  "account_label_values": 1,
+  "transaction_label_values": 1,
+  "graph_file": "HI-Medium_S.tg",
+  "laundering_file": "HI-Medium_laundering_accounts.txt"
+}

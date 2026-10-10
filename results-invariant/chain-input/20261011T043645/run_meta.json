@@ -1,0 +1,53 @@
+{
+  "run_id": "20261011T043645",
+  "note": "export chain input, AMLworld LI-Small, labeling S",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/export_chain_input.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "LI-Small",
+    "--labeling",
+    "S"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T04:36:45",
+  "git_commit": "fdd0153eae20646436e39431669365a1b8a6b344",
+  "git_tree": "clean (12 untracked result records)",
+  "code_sha256": "aaf2c0d6a95dad8dcd818a4ecd758ffbfd45066995e9eda1c2da6251a8a91fba",
+  "code_files": 96,
+  "engine_jar_sha256": "f27579889b521b20a2a8781364f0b464a8d8e0ba6a74b2c8f90dd09161e88ff2",
+  "data": [
+    {
+      "path": "datasets/amlworld/LI-Small_Trans.csv",
+      "bytes": 650422357,
+      "sha256": "f7a9940339c78b5d1476071505b5867c0f5319640b9c4279d13f531bf965319d"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}

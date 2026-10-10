@@ -1,0 +1,29 @@
+{
+  "rows": 8599468,
+  "special_rows_dropped": 6833019,
+  "self_transactions_dropped": 0,
+  "accounts_with_more_than_one_bank": 4,
+  "account_labels": {
+    "0": "c0",
+    "1": "c1",
+    "2": "c2",
+    "3": "c3",
+    "4": "c4",
+    "5": "c5",
+    "6": "c6",
+    "7": "c7",
+    "8": "c8",
+    "9": "c9"
+  },
+  "graph_sha256": "ee7fd20cd57c68f6a9c755c2afc54c8a3dcdf3625c476df8025e0deb9bc7987d",
+  "source": "amlgentex",
+  "dataset": "us_100K_difficult",
+  "labeling": "A",
+  "accounts": 100000,
+  "transactions": 1766449,
+  "laundering_accounts": 1956,
+  "account_label_values": 10,
+  "transaction_label_values": 1,
+  "graph_file": "us_100K_difficult_A.tg",
+  "laundering_file": "us_100K_difficult_laundering_accounts.txt"
+}

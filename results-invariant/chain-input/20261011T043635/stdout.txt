@@ -1,0 +1,16 @@
+{
+  "rows": 8599468,
+  "special_rows_dropped": 6833019,
+  "self_transactions_dropped": 0,
+  "graph_sha256": "0635c19494d7fdb00b9ba752ab0230009a0aee5f9ad5c54d085ee708ee2a59a5",
+  "source": "amlgentex",
+  "dataset": "us_100K_difficult",
+  "labeling": "S",
+  "accounts": 100000,
+  "transactions": 1766449,
+  "laundering_accounts": 1956,
+  "account_label_values": 1,
+  "transaction_label_values": 1,
+  "graph_file": "us_100K_difficult_S.tg",
+  "laundering_file": "us_100K_difficult_laundering_accounts.txt"
+}

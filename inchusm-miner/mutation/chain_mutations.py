@@ -22,7 +22,8 @@ MODULE = pathlib.Path(__file__).resolve().parents[1]
 MINER = "src/main/java/edu/huflit/inchusm/chain/ChainMiner.java"
 GRAPH = "src/main/java/edu/huflit/inchusm/chain/TransactionGraph.java"
 CONS = "src/main/java/edu/huflit/inchusm/chain/Consistency.java"
-TESTS = "Chain*Test,TransactionGraphTest"
+ENUM = "src/main/java/edu/huflit/inchusm/chain/ChainEnumerator.java"
+TESTS = "Chain*Test,TransactionGraphTest"  # ChainEnumeratorTest is matched by Chain*Test
 
 # (file, text to replace, replacement, what the fault means)
 FAULTS = [
@@ -68,6 +69,10 @@ FAULTS = [
     (MINER, "for (int s = pin - 1; s >= 1; s--) a[s] = Consistency.expand(g, a[s + 1], elab[s - 1], slots[s], theta, false);",
      "for (int s = pin - 1; s >= 1; s--) a[s] = Consistency.expand(g, a[s + 1], elab[s], slots[s], theta, false);",
      "local propagation of a closed chain expands leftwards with the wrong transaction label"),
+    (ENUM, "for (int j = 1; j <= k; j++) {", "for (int j = 2; j <= k; j++) {",
+     "enumeration baseline may revisit the second account of an occurrence"),
+    (ENUM, "b -> b >= (1 - theta) * a", "b -> b > (1 - theta) * a",
+     "enumeration baseline makes the lower conservation bound strict"),
 ]
 
 

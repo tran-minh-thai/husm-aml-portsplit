@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
  *      [--mark accounts.txt] [--accounts-out roles.tsv]
  * </pre>
  *
+ * {@code --engine enumerate} runs the baseline that enumerates every valid occurrence and aggregates
+ * image sets (same output, for timing comparisons).
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
@@ -54,6 +56,22 @@ public final class ChainMain {
                 params.theta(), params.minSupport(), params.maxLength(), params.minCycleLength(),
                 params.closedChains(), !opt.containsKey("--no-consistency"));
 
+        String engine = opt.getOrDefault("--engine", "miner");
+        if (engine.equals("enumerate")) {
+            if (opt.containsKey("--mark") || opt.containsKey("--accounts-out")) {
+                throw new IllegalArgumentException("--mark and --accounts-out belong to the miner, not to --engine enumerate");
+            }
+            ChainEnumerator en = new ChainEnumerator(g, params);
+            long t0 = System.nanoTime();
+            List<ChainMiner.Result> results = en.mine();
+            long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
+            write(out, results);
+            System.out.printf("engine=enumerate valid_occurrences=%d%n", en.occurrences());
+            System.out.printf("patterns written: %d -> %s%n", results.size(), out.getFileName());
+            System.out.printf("mining elapsed ms: %d (machine-dependent)%n", elapsedMs);
+            return;
+        }
+        if (!engine.equals("miner")) throw new IllegalArgumentException("--engine must be miner or enumerate");
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
         if (opt.containsKey("--mark")) {
             boolean[] marked = readMarked(Path.of(opt.get("--mark")), g);

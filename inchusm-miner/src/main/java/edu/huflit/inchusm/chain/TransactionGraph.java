@@ -301,6 +301,11 @@ public final class TransactionGraph {
         return amount[e];
     }
 
+    /** Slot range [from, to) of {@link #outSlot} for every transaction out of v. */
+    public int[] outAll(int v) {
+        return new int[] {outStart[v], outStart[v + 1]};
+    }
+
     /** Slot range [from, to) of {@link #outSlot} for transactions out of v with label lab. */
     public int[] outByLabel(int v, int lab) {
         return labelRange(outTx, outStart[v], outStart[v + 1], lab);
