@@ -1,0 +1,31 @@
+{
+  "rows": 7803219,
+  "special_rows_dropped": 6766138,
+  "self_transactions_dropped": 0,
+  "accounts_with_more_than_one_bank": 20,
+  "account_labels": {
+    "0": "c0",
+    "1": "c1",
+    "2": "c10",
+    "3": "c11",
+    "4": "c2",
+    "5": "c3",
+    "6": "c4",
+    "7": "c5",
+    "8": "c6",
+    "9": "c7",
+    "10": "c8",
+    "11": "c9"
+  },
+  "graph_sha256": "8c56530c0edf70e8ea5ef310a63ec4c1ae9a9b6d2465226e1d22240993e8912d",
+  "source": "amlgentex",
+  "dataset": "sweden_100K_easy",
+  "labeling": "A",
+  "accounts": 99995,
+  "transactions": 1037081,
+  "laundering_accounts": 32207,
+  "account_label_values": 12,
+  "transaction_label_values": 1,
+  "graph_file": "sweden_100K_easy_A.tg",
+  "laundering_file": "sweden_100K_easy_laundering_accounts.txt"
+}

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  *      [--mark accounts.txt] [--accounts-out roles.tsv]
  * </pre>
  *
+ * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
  * output then also counts, for every image set, how many of its accounts are marked. Marking never
@@ -49,11 +50,11 @@ public final class ChainMain {
         TransactionGraph g = TransactionGraph.load(graphPath);
         System.out.printf("graph %s: %d accounts, %d transactions (%d self-transactions dropped)%n",
                 graphPath.getFileName(), g.numAccounts(), g.numTransactions(), g.droppedSelfTransactions());
-        System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s%n",
+        System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s%n",
                 params.theta(), params.minSupport(), params.maxLength(), params.minCycleLength(),
-                params.closedChains());
+                params.closedChains(), !opt.containsKey("--no-consistency"));
 
-        ChainMiner miner = new ChainMiner(g, params);
+        ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
         if (opt.containsKey("--mark")) {
             boolean[] marked = readMarked(Path.of(opt.get("--mark")), g);
             int n = 0;
@@ -68,8 +69,10 @@ public final class ChainMain {
         write(out, results);
         if (opt.containsKey("--accounts-out")) writeAccounts(Path.of(opt.get("--accounts-out")), miner, g);
         ChainMiner.Counters c = miner.counters();
-        System.out.printf("candidates=%d pruned_by_domain=%d searches=%d found=%d failed=%d early_stops=%d%n",
-                c.candidates, c.prunedByDomain, c.searches, c.searchesFound, c.searchesFailed, c.earlyStops);
+        System.out.printf("candidates=%d pruned_by_domain=%d pruned_by_consistency=%d searches=%d found=%d failed=%d"
+                + " budget_fallbacks=%d local_rejections=%d early_stops=%d%n", c.candidates, c.prunedByDomain,
+                c.prunedByConsistency, c.searches, c.searchesFound, c.searchesFailed, c.budgetFallbacks,
+                c.localRejections, c.earlyStops);
         for (Map.Entry<Integer, long[]> e : c.frequentByLength.entrySet()) {
             System.out.printf("length %d: %d open, %d closed%n", e.getKey(), e.getValue()[0], e.getValue()[1]);
         }
@@ -127,7 +130,7 @@ public final class ChainMain {
         for (int i = 0; i < args.length; i++) {
             String a = args[i];
             if (!a.startsWith("--")) throw new IllegalArgumentException("unexpected argument '" + a + "'");
-            if (a.equals("--no-closed")) {
+            if (a.equals("--no-closed") || a.equals("--no-consistency")) {
                 opt.put(a, "");
             } else {
                 if (i + 1 >= args.length) throw new IllegalArgumentException(a + " needs a value");

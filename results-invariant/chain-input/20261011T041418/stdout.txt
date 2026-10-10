@@ -1,0 +1,16 @@
+{
+  "rows": 7803219,
+  "special_rows_dropped": 6766138,
+  "self_transactions_dropped": 0,
+  "graph_sha256": "1f316d932295a210939c85c9df57f27da0741f0b85fe56f07ba2db6f7a6cc901",
+  "source": "amlgentex",
+  "dataset": "sweden_100K_easy",
+  "labeling": "S",
+  "accounts": 99995,
+  "transactions": 1037081,
+  "laundering_accounts": 32207,
+  "account_label_values": 1,
+  "transaction_label_values": 1,
+  "graph_file": "sweden_100K_easy_S.tg",
+  "laundering_file": "sweden_100K_easy_laundering_accounts.txt"
+}

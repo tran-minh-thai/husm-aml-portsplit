@@ -21,6 +21,7 @@ import tempfile
 MODULE = pathlib.Path(__file__).resolve().parents[1]
 MINER = "src/main/java/edu/huflit/inchusm/chain/ChainMiner.java"
 GRAPH = "src/main/java/edu/huflit/inchusm/chain/TransactionGraph.java"
+CONS = "src/main/java/edu/huflit/inchusm/chain/Consistency.java"
 TESTS = "Chain*Test,TransactionGraphTest"
 
 # (file, text to replace, replacement, what the fault means)
@@ -55,6 +56,18 @@ FAULTS = [
     (MINER, "for (int v : img[i]) if (marked[v]) markedCounts[i]++;",
      "for (int v : img[i]) if (!marked[v]) markedCounts[i]++;",
      "marked counts count the unmarked accounts"),
+    (CONS, "if (k < hi && (1 - theta) * g.amount(p[k]) <= b) out[n++] = e;",
+     "if (k < hi && (1 - theta) * g.amount(p[k]) < b) out[n++] = e;",
+     "forward consistency drops transactions at the lower conservation bound"),
+    (CONS, "if (k < hi && g.amount(q[k]) <= (1 + theta) * a) out[n++] = e;",
+     "if (k < hi && g.amount(q[k]) < (1 + theta) * a) out[n++] = e;",
+     "backward consistency drops transactions at the upper conservation bound"),
+    (MINER, "slots[m] = Consistency.byEnd(g, slots[m], origins, false);",
+     "slots[m] = Consistency.byEnd(g, slots[m], origins, true);",
+     "closed-chain consistency filters the returning transaction by its source instead of its target"),
+    (MINER, "for (int s = pin - 1; s >= 1; s--) a[s] = Consistency.expand(g, a[s + 1], elab[s - 1], slots[s], theta, false);",
+     "for (int s = pin - 1; s >= 1; s--) a[s] = Consistency.expand(g, a[s + 1], elab[s], slots[s], theta, false);",
+     "local propagation of a closed chain expands leftwards with the wrong transaction label"),
 ]
 
 

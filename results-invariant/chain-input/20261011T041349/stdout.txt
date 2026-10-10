@@ -1,0 +1,15 @@
+{
+  "rows": 5078345,
+  "self_transactions_dropped": 591212,
+  "graph_sha256": "475c8b40dbca9b5a7fe1213f842e2f67245e9bf23b3ca7e5e1f6e80d486325d8",
+  "source": "amlworld",
+  "dataset": "HI-Small",
+  "labeling": "S",
+  "accounts": 422734,
+  "transactions": 4487133,
+  "laundering_accounts": 6357,
+  "account_label_values": 1,
+  "transaction_label_values": 1,
+  "graph_file": "HI-Small_S.tg",
+  "laundering_file": "HI-Small_laundering_accounts.txt"
+}

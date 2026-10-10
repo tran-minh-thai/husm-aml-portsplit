@@ -57,6 +57,9 @@ public final class ChainMiner {
     public static final class Counters {
         public long candidates;
         public long prunedByDomain;
+        public long prunedByConsistency;
+        public long localRejections;
+        public long budgetFallbacks;
         public long searches;
         public long searchesFound;
         public long searchesFailed;
@@ -70,6 +73,11 @@ public final class ChainMiner {
 
     private record Entry(ChainPattern pattern, int[][] images) {
     }
+
+    /** Steps a depth-first attempt on a closed chain may take before local propagation is used. */
+    static final long DFS_BUDGET = 10_000;
+    private long dfsBudget = DFS_BUDGET;
+    private boolean useConsistency = true;
 
     /** The conservation predicate between an arriving amount and the amount that leaves. */
     public static boolean conserves(double in, double out, double theta) {
@@ -92,6 +100,18 @@ public final class ChainMiner {
     public ChainMiner marked(boolean[] marked) {
         if (marked.length != g.numAccounts()) throw new IllegalArgumentException("one flag per account is needed");
         this.marked = marked.clone();
+        return this;
+    }
+
+    /** Switch slot consistency off (plain pinned search), to measure what it contributes; output is the same. */
+    public ChainMiner consistency(boolean on) {
+        this.useConsistency = on;
+        return this;
+    }
+
+    /** Budget of the first depth-first attempt on a closed chain; only speed depends on it (tests use 0). */
+    ChainMiner dfsBudget(long steps) {
+        this.dfsBudget = steps;
         return this;
     }
 
@@ -250,7 +270,14 @@ public final class ChainMiner {
                 return null;
             }
         }
-        int[][] img = new Search(cand, dom).images();
+        Search search = new Search(cand, dom);
+        if (!useConsistency) {
+            search.plain();
+        } else if (!search.consistent()) {
+            counters.prunedByConsistency++;
+            return null;
+        }
+        int[][] img = search.images();
         return img == null ? null : new Entry(cand, img);
     }
 
@@ -259,8 +286,12 @@ public final class ChainMiner {
         private final int m;
         private final boolean closed;
         private final int[] elab;
-        private final int[][] dom;
-        private final BitSet[] rejected;
+        private int[][] dom;
+        private BitSet[] rejected;
+        private final int[][] slots;    // transactions allowed at each pattern edge 1..m after consistency
+        private int[][] allowed;        // transactions allowed in the current pinned search
+        private long steps;             // transactions tried in the current depth-first attempt
+        private long budget;            // abandon the attempt (not the question) past this many
         private final int[] vert;       // account at each position, -1 if unassigned
         private final int[] tx;         // transaction at each pattern edge 1..m, -1 if unassigned
 
@@ -269,10 +300,99 @@ public final class ChainMiner {
             this.closed = cand.closed();
             this.elab = cand.elab();
             this.dom = dom;
-            this.rejected = new BitSet[dom.length];
-            for (int i = 0; i < dom.length; i++) rejected[i] = new BitSet(dom[i].length);
+            this.slots = new int[m + 1][];
             this.vert = new int[dom.length];
             this.tx = new int[m + 1];
+        }
+
+        /**
+         * Reduce every slot to the transactions that lie on a complete conserving walk with the
+         * pattern's labels and domains (and, for a closed chain, one that starts and ends at an
+         * account of the origin domain), then shrink the domains to the accounts those transactions
+         * use. False when a domain falls below the minimum support.
+         */
+        boolean consistent() {
+            double theta = params.theta();
+            for (int s = 1; s <= m; s++) slots[s] = Consistency.slot(g, dom[s - 1], elab[s - 1], dom[pos(s)]);
+            while (true) {
+                long before = size();
+                for (int s = 2; s <= m; s++) slots[s] = Consistency.forward(g, slots[s - 1], slots[s], theta);
+                for (int s = m - 1; s >= 1; s--) slots[s] = Consistency.backward(g, slots[s], slots[s + 1], theta);
+                if (closed) {
+                    int[] origins = intersect(Consistency.ends(g, slots[1], true), Consistency.ends(g, slots[m], false));
+                    slots[1] = Consistency.byEnd(g, slots[1], origins, true);
+                    slots[m] = Consistency.byEnd(g, slots[m], origins, false);
+                }
+                if (size() == before) break;
+            }
+            int[][] d = new int[dom.length][];
+            d[0] = Consistency.ends(g, slots[1], true);
+            for (int p = 1; p < dom.length; p++) d[p] = Consistency.ends(g, slots[p], false);
+            for (int[] x : d) if (x.length < params.minSupport()) return false;
+            dom = d;
+            rejected = new BitSet[dom.length];
+            for (int i = 0; i < dom.length; i++) rejected[i] = new BitSet(dom[i].length);
+            return true;
+        }
+
+        /** Without consistency: domains as given, every transaction allowed. */
+        void plain() {
+            rejected = new BitSet[dom.length];
+            for (int i = 0; i < dom.length; i++) rejected[i] = new BitSet(dom[i].length);
+        }
+
+        private long size() {
+            long n = 0;
+            for (int s = 1; s <= m; s++) n += slots[s].length;
+            return n;
+        }
+
+        /**
+         * For a closed chain pinned at account u: the transactions reachable from u going forward to
+         * the origin and backward to it, each side conserving, kept only where both sides can meet
+         * at one origin account. False when they cannot, which proves u is not in the image set.
+         */
+        private boolean localClosed(int pin, int u) {
+            double theta = params.theta();
+            int[][] a = new int[m + 1][];
+            int[] at = {u};
+            if (pin == 0) {
+                a[1] = Consistency.byEnd(g, slots[1], at, true);
+                for (int s = 2; s <= m; s++) a[s] = Consistency.expand(g, a[s - 1], elab[s - 1], slots[s], theta, true);
+                a[m] = Consistency.byEnd(g, a[m], at, false);
+                for (int s = m - 1; s >= 1; s--) a[s] = Consistency.backward(g, a[s], a[s + 1], theta);
+                for (int s = 1; s <= m; s++) if (a[s].length == 0) return false;
+                allowed = a;
+                return true;
+            }
+            a[pin + 1] = Consistency.byEnd(g, slots[pin + 1], at, true);
+            for (int s = pin + 2; s <= m; s++) a[s] = Consistency.expand(g, a[s - 1], elab[s - 1], slots[s], theta, true);
+            a[pin] = Consistency.byEnd(g, slots[pin], at, false);
+            for (int s = pin - 1; s >= 1; s--) a[s] = Consistency.expand(g, a[s + 1], elab[s - 1], slots[s], theta, false);
+            while (true) {
+                long before = 0;
+                for (int s = 1; s <= m; s++) before += a[s].length;
+                int[] origins = intersect(Consistency.ends(g, a[1], true), Consistency.ends(g, a[m], false));
+                int self = Arrays.binarySearch(origins, u);
+                if (self >= 0) {                                   // the origin is a different account
+                    int[] o = new int[origins.length - 1];
+                    System.arraycopy(origins, 0, o, 0, self);
+                    System.arraycopy(origins, self + 1, o, self, origins.length - self - 1);
+                    origins = o;
+                }
+                a[1] = Consistency.byEnd(g, a[1], origins, true);
+                a[m] = Consistency.byEnd(g, a[m], origins, false);
+                for (int s = 2; s <= m; s++) a[s] = Consistency.forward(g, a[s - 1], a[s], theta);
+                for (int s = m - 1; s >= 1; s--) a[s] = Consistency.backward(g, a[s], a[s + 1], theta);
+                long after = 0;
+                for (int s = 1; s <= m; s++) {
+                    if (a[s].length == 0) return false;
+                    after += a[s].length;
+                }
+                if (after == before) break;
+            }
+            allowed = a;
+            return true;
         }
 
         /** Exact image sets, or null as soon as one position cannot reach the minimum support. */
@@ -322,6 +442,28 @@ public final class ChainMiner {
 
         /** Is there a valid occurrence with account u at position pin? Leaves it in vert/tx if so. */
         boolean pinned(int pin, int u) {
+            if (!useConsistency) {
+                allowed = null;
+                return attempt(pin, u, Long.MAX_VALUE);
+            }
+            allowed = slots;
+            if (!closed) return attempt(pin, u, Long.MAX_VALUE);
+            // A closed chain must come back to its origin, which slot consistency cannot see; a
+            // depth-first attempt that runs out of budget is completed after local propagation.
+            if (attempt(pin, u, dfsBudget)) return true;
+            if (steps <= dfsBudget) return false;                  // the attempt was exhaustive
+            counters.budgetFallbacks++;
+            if (!localClosed(pin, u)) {
+                counters.localRejections++;
+                return false;
+            }
+            return attempt(pin, u, Long.MAX_VALUE);
+        }
+
+        /** Depth-first search for an occurrence through u at pin; gives up after budget steps. */
+        private boolean attempt(int pin, int u, long budget) {
+            this.budget = budget;
+            this.steps = 0;
             Arrays.fill(vert, -1);
             Arrays.fill(tx, -1);
             vert[pin] = u;
@@ -342,6 +484,8 @@ public final class ChainMiner {
             int tp = pos(s);
             for (int i = range[0]; i < range[1]; i++) {
                 int e = g.outSlot(i);
+                if (allowed != null && Arrays.binarySearch(allowed[s], e) < 0) continue;
+                if (++steps > budget) return false;
                 int t = g.target(e);
                 boolean assign = vert[tp] < 0;
                 if (assign ? !admissible(tp, t) : t != vert[tp]) continue;
@@ -366,6 +510,8 @@ public final class ChainMiner {
             int fp = s - 1;
             for (int i = range[0]; i < range[1]; i++) {
                 int e = g.inSlot(i);
+                if (allowed != null && Arrays.binarySearch(allowed[s], e) < 0) continue;
+                if (++steps > budget) return false;
                 int f = g.source(e);
                 boolean assign = vert[fp] < 0;
                 if (assign ? !admissible(fp, f) : f != vert[fp]) continue;
