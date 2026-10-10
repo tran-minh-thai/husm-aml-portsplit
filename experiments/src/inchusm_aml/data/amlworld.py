@@ -279,3 +279,36 @@ def load_patterns(path: str | Path, code: dict[str, int] | None = None) -> list[
                 current.srcs.append(enc(f"{tok[1]}_{tok[2]}"))
                 current.dsts.append(enc(f"{tok[3]}_{tok[4]}"))
     return attempts
+
+
+def load_pattern_transactions(path: str | Path, code: dict[str, int], rates: dict[str, float]) -> pd.DataFrame:
+    """Every transaction of every laundering attempt in Patterns.txt, one row each.
+
+    Columns: attempt (0-based, in file order), type, src, dst (encoded with `code`, -1 when the
+    account is absent from the transactions), time (minutes, as load_transactions), amount (paid
+    amount converted to US Dollar with `rates`, i.e. load_transactions(...)[0].attrs["usd_rates"]
+    of the matching *_Trans.csv), currency (payment currency name). Raises ValueError on a payment
+    currency without a rate and on a malformed transaction line inside an attempt.
+    """
+    rows = []
+    attempt, typ = -1, None
+    for n, raw in enumerate(Path(path).read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+        line = raw.strip()
+        if line.startswith("BEGIN LAUNDERING ATTEMPT"):
+            attempt += 1
+            typ = line.split("-", 1)[1].strip().split(":")[0].strip().upper()
+        elif line.startswith("END LAUNDERING ATTEMPT"):
+            typ = None
+        elif typ is not None and line:
+            tok = line.split(",")
+            if len(tok) < 9:
+                raise ValueError(f"{path}:{n}: expected at least 9 fields, got {len(tok)}: {line!r}")
+            cur = tok[8].strip()
+            if cur not in rates:
+                raise ValueError(f"{path}:{n}: payment currency {cur!r} has no US Dollar rate")
+            rows.append((attempt, typ, code.get(f"{tok[1]}_{tok[2]}", -1), code.get(f"{tok[3]}_{tok[4]}", -1),
+                         tok[0].strip(), float(tok[7]) / rates[cur], cur))
+    out = pd.DataFrame(rows, columns=["attempt", "type", "src", "dst", "ts", "amount", "currency"])
+    t = (pd.to_datetime(out["ts"], format="%Y/%m/%d %H:%M").astype("datetime64[ns]").astype("int64").to_numpy())
+    out["time"] = (t // 60_000_000_000).astype(np.int32)
+    return out.drop(columns="ts")[["attempt", "type", "src", "dst", "time", "amount", "currency"]]
