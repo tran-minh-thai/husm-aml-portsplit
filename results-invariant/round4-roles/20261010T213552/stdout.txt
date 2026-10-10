@@ -1,0 +1,15 @@
+amlgentex us_100K_difficult
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+  1,766,449 transactions; 210 attempts; typologies ['BIPARTITE', 'CYCLE', 'FAN-IN', 'FAN-OUT', 'GATHER-SCATTER', 'SCATTER-GATHER', 'STACK']
+
+[i] chain nodes (background accounts with one background transaction in and one out: 1)
+          type  n_chain_pairs  auc_i  auc_i_one_in_one_out_control  within_0.1
+         CYCLE            213  0.803                           NaN       0.394
+SCATTER-GATHER            246  0.997                           NaN       1.000
+    H7 on this set (every typology with >= 30 units at AUC >= 0.70): CYCLE 0.803 (213); SCATTER-GATHER 0.997 (246); holds here: True
+
+[ii] split/merge nodes (0 nodes without an eligible background account)
+          type  n_split_merge_nodes  n_background_replicates  auc_ii  ratio_median
+GATHER-SCATTER                   30                      300   0.042         0.432
+         STACK                   78                      780   0.475         3.079
+    H8 on this set (every typology with >= 30 units at AUC >= 0.70): GATHER-SCATTER 0.042 (30); STACK 0.475 (78); holds here: False

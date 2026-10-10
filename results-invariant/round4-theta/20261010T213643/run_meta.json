@@ -1,0 +1,57 @@
+{
+  "run_id": "20261010T213643",
+  "note": "round four theta choice, DECISION set AMLworld HI-Small",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/round4_theta.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "HI-Small"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-10T21:36:43",
+  "git_commit": "5b5b319181e30505f5ea766500f8708c5914a5b2",
+  "git_tree": "clean (35 untracked result records)",
+  "code_sha256": "9d03f6626569be1af276553ba99fa86c8bbf892db1558428204bfa0064ced9d8",
+  "code_files": 80,
+  "engine_jar_sha256": "90a50c4c4f2f1472e1ea080449d49c8fc1ea27758fde82291a4107791aa6b9f8",
+  "data": [
+    {
+      "path": "datasets/amlworld/HI-Small_Trans.csv",
+      "bytes": 475664283,
+      "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040"
+    },
+    {
+      "path": "datasets/amlworld/HI-Small_Patterns.txt",
+      "bytes": 323844,
+      "sha256": "2c546b5ce6009e73851f0139af053cf845f08bf92f3bc82fe1eb937dec2ef39b"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (36 untracked result records)"
+}

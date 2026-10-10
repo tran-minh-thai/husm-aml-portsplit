@@ -1,0 +1,52 @@
+{
+  "run_id": "20261010T213552",
+  "note": "pre-registered round four, CONFIRMATION set AMLGentex us_100K_difficult (first time this set is read)",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/round4_measurements.py",
+    "--source",
+    "amlgentex",
+    "--dataset",
+    "us_100K_difficult"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-10T21:35:52",
+  "git_commit": "5ae19092b995a2004cebc8d1afa6b169055e56be",
+  "git_tree": "clean (30 untracked result records)",
+  "code_sha256": "e4f5f1f5d6e6dc89f3eb53ae3edb538605266a3ccdf370d1829d3d1fdf7c9513",
+  "code_files": 79,
+  "engine_jar_sha256": "90a50c4c4f2f1472e1ea080449d49c8fc1ea27758fde82291a4107791aa6b9f8",
+  "data": [
+    {
+      "path": "datasets/amlgentex/us_100K_difficult/tx_log.csv",
+      "bytes": 699090117,
+      "sha256": "51fbdc09809762c10c030cc1b011518457f83cdd6cb2ae36ea625b96b9e2595e"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (32 untracked result records)"
+}

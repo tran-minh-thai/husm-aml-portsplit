@@ -1,0 +1,16 @@
+amlworld LI-Medium
+  31,251,483 transactions; 456 attempts; typologies ['BIPARTITE', 'CYCLE', 'FAN-IN', 'FAN-OUT', 'GATHER-SCATTER', 'RANDOM', 'SCATTER-GATHER', 'STACK']
+
+[i] chain nodes (background accounts with one background transaction in and one out: 18,995)
+          type  n_chain_pairs  auc_i  auc_i_one_in_one_out_control  within_0.1
+         CYCLE            261  0.981                         0.987       0.877
+        RANDOM            229  0.993                         0.996       0.952
+SCATTER-GATHER            421  0.982                         0.989       0.568
+         STACK            294  0.983                         0.988       0.976
+    H7 on this set (every typology with >= 30 units at AUC >= 0.70): CYCLE 0.981 (261); RANDOM 0.993 (229); SCATTER-GATHER 0.982 (421); STACK 0.983 (294); holds here: True
+
+[ii] split/merge nodes (0 nodes without an eligible background account)
+          type  n_split_merge_nodes  n_background_replicates  auc_ii  ratio_median
+GATHER-SCATTER                   35                      350   0.716         1.000
+SCATTER-GATHER                    4                       40   0.950         0.984
+    H8 on this set (every typology with >= 30 units at AUC >= 0.70): GATHER-SCATTER 0.716 (35); not counted: SCATTER-GATHER (4); holds here: True

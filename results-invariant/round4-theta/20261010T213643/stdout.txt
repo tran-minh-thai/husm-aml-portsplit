@@ -1,0 +1,7 @@
+amlworld HI-Small: chain-node pairs within theta
+          group  n_pairs  within_0.05  within_0.1  within_0.2  within_0.5
+ALL chain pairs      927        0.576       0.810       0.960       0.996
+          CYCLE      259        0.552       0.853       0.958       0.992
+         RANDOM      150        0.620       0.927       0.967       0.993
+ SCATTER-GATHER      298        0.443       0.581       0.936       0.997
+          STACK      220        0.755       0.991       0.991       1.000

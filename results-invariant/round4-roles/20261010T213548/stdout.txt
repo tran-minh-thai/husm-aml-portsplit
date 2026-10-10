@@ -1,0 +1,15 @@
+amlgentex sweden_100K_difficult
+  rows 7,748,933; dropped 6,752,598 rows with the income source or spending sink; 0 flagged rows outside any attempt
+  996,335 transactions; 210 attempts; typologies ['BIPARTITE', 'CYCLE', 'FAN-IN', 'FAN-OUT', 'GATHER-SCATTER', 'SCATTER-GATHER', 'STACK']
+
+[i] chain nodes (background accounts with one background transaction in and one out: 1)
+          type  n_chain_pairs  auc_i  auc_i_one_in_one_out_control  within_0.1
+         CYCLE            215  0.785                           NaN       0.400
+SCATTER-GATHER            227  0.991                           NaN       1.000
+    H7 on this set (every typology with >= 30 units at AUC >= 0.70): CYCLE 0.785 (215); SCATTER-GATHER 0.991 (227); holds here: True
+
+[ii] split/merge nodes (0 nodes without an eligible background account)
+          type  n_split_merge_nodes  n_background_replicates  auc_ii  ratio_median
+GATHER-SCATTER                   30                      300   0.076         0.475
+         STACK                   89                      890   0.495         2.293
+    H8 on this set (every typology with >= 30 units at AUC >= 0.70): GATHER-SCATTER 0.076 (30); STACK 0.495 (89); holds here: False

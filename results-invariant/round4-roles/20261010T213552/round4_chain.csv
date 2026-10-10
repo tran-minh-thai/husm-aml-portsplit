@@ -1,0 +1,3 @@
+type,n_chain_pairs,auc_i,auc_i_one_in_one_out_control,within_0.1
+CYCLE,213,0.8032507394366196,,0.39436619718309857
+SCATTER-GATHER,246,0.9965425000000003,,1.0

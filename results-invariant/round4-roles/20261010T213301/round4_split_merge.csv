@@ -1,0 +1,2 @@
+type,n_split_merge_nodes,n_background_replicates,auc_ii,ratio_median
+GATHER-SCATTER,8,80,0.5953124999999999,2.3806591911397907

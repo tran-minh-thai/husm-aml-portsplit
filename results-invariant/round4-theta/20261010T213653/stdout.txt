@@ -1,0 +1,6 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy: chain-node pairs within theta
+          group  n_pairs  within_0.05  within_0.1  within_0.2  within_0.5
+ALL chain pairs     7431        0.498       0.699       0.932       0.933
+          CYCLE     3725        0.000       0.402       0.867       0.867
+ SCATTER-GATHER     3706        0.998       0.998       0.998       0.998
