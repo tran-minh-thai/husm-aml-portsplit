@@ -1,8 +1,10 @@
 """What conservation changes in the mined chains: laundering accounts among their intermediate accounts.
 
-For one data set and one labeling, mines the chain input twice with the same threshold and maximum
-length, once with conservation (theta = 0.2) and once without (theta = inf), marking the accounts
-that have at least one laundering transaction. For every open-chain length m >= 2:
+For one data set and one labeling, mines the open chains of the chain input twice with the same
+threshold and maximum length, once with conservation (theta = 0.2) and once without (theta = inf),
+marking the accounts that have at least one laundering transaction. Closed chains are left out of
+both runs: without conservation, deciding whether an account closes a cycle of a given length is a
+cycle search over the whole graph, and the measures below concern open chains only. For every open-chain length m >= 2:
 
   I(m)  accounts at an intermediate position of some reported open chain of length m
   P(m)  share of I(m) that is marked (laundering accounts)
@@ -77,7 +79,7 @@ def mine(graph: Path, marked: Path, theta: str, tau: int, length: int, heap: str
     roles = OUT / f"accounts_theta_{theta}.tsv"
     cmd = ["java", f"-Xmx{heap}", "-cp", str(JAR), "edu.huflit.inchusm.chain.ChainMain", "--graph", str(graph),
            "--theta", theta, "--min-support", str(tau), "--max-length", str(length), "--mark", str(marked),
-           "--out", str(patterns), "--accounts-out", str(roles)]
+           "--no-closed", "--out", str(patterns), "--accounts-out", str(roles)]
     print(f"\n[miner, theta={theta}]", flush=True)
     subprocess.run(cmd, check=True)
     return patterns, roles
