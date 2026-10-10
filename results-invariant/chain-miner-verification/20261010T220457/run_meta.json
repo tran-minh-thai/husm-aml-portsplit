@@ -1,0 +1,46 @@
+{
+  "run_id": "20261010T220457",
+  "note": "chain miner against the independent reference, hand cases, theory checks",
+  "command": [
+    "mvn",
+    "-B",
+    "-o",
+    "-f",
+    "inchusm-miner/pom.xml",
+    "test",
+    "-Dtest=Chain*Test"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 4,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-10T22:04:57",
+  "git_commit": "58ff1247b904d038caa2993b216e833d2abf2cf4",
+  "git_tree": "clean",
+  "code_sha256": "1933c96263ec90722869d6f38d1f1576e267c11d5894960d321bdb61e3e46ecc",
+  "code_files": 85,
+  "engine_jar_sha256": "cea5619847a89da0edfed21f7ae20ca96a8c6d37e78beef242653827fefa5101",
+  "data": [],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}
