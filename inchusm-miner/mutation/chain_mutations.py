@@ -27,6 +27,10 @@ TESTS = "Chain*Test,TransactionGraphTest,ConsistencyTest"  # Chain*Test also mat
 
 # (file, text to replace, replacement, what the fault means)
 FAULTS = [
+    (ENUM, "if (marked[v]) hits[0]++;", "if (!marked[v]) hits[0]++;",
+     "enumerator counts unmarked accounts as marked"),
+    (ENUM, "markedCounts[i] = hits[0];", "markedCounts[counts.length - 1 - i] = hits[0];",
+     "enumerator writes marked counts to the wrong positions"),
     (MINER, "b -> b >= lo", "b -> b > lo",
      "lower conservation bound made strict when extending to the right"),
     (MINER, "a -> (1 + theta) * a >= b", "a -> (1 + theta) * a > b",

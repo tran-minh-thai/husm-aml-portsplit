@@ -26,6 +26,7 @@ public final class ChainEnumerator {
     private final int[] tx;
     private long occurrences;
     private boolean anchored;
+    private boolean[] marked;
     private final Map<String, java.util.BitSet> accounts = new java.util.TreeMap<>();
 
     private static final class Acc {
@@ -54,6 +55,15 @@ public final class ChainEnumerator {
     public ChainEnumerator anchored(boolean on) {
         if (on && params.closedChains()) throw new IllegalArgumentException("the anchored rule is for open chains only");
         this.anchored = on;
+        return this;
+    }
+
+    /** Count, for every image set of a reported chain, how many of its accounts are marked (as in ChainMiner). */
+    public ChainEnumerator marked(boolean[] marked) {
+        if (marked != null && marked.length != g.numAccounts()) {
+            throw new IllegalArgumentException("marked has " + marked.length + " entries for " + g.numAccounts() + " accounts");
+        }
+        this.marked = marked;
         return this;
     }
 
@@ -87,7 +97,15 @@ public final class ChainEnumerator {
                 min = Math.min(min, counts[i]);
             }
             if (min >= params.minSupport()) {
-                out.add(new ChainMiner.Result(a.pattern, min, counts, null, null));
+                int[] markedCounts = marked == null ? null : new int[counts.length];
+                for (int i = 0; markedCounts != null && i < counts.length; i++) {
+                    int[] hits = {0};
+                    a.images[i].forEach(v -> {
+                        if (marked[v]) hits[0]++;
+                    });
+                    markedCounts[i] = hits[0];
+                }
+                out.add(new ChainMiner.Result(a.pattern, min, counts, markedCounts, null));
                 int m = a.pattern.length();
                 if (m >= 2) {
                     java.util.BitSet mid = accounts.computeIfAbsent(

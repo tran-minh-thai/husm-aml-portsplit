@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
- * output then also counts, for every image set, how many of its accounts are marked. Marking never
+ * output then also counts, for every image set, how many of its accounts are marked (both engines). Marking never
  * changes what is mined. {@code --accounts-out} writes, for every kind and length, the accounts that
  * occupy an intermediate position of some reported chain (and the origins of closed chains).
  *
@@ -60,12 +60,12 @@ public final class ChainMain {
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {
-            if (opt.containsKey("--mark")) throw new IllegalArgumentException("--mark belongs to the miner");
             String rule = opt.getOrDefault("--rule", "pairwise");
             if (!rule.equals("pairwise") && !rule.equals("anchored")) {
                 throw new IllegalArgumentException("--rule must be pairwise or anchored");
             }
             ChainEnumerator en = new ChainEnumerator(g, params).anchored(rule.equals("anchored"));
+            if (opt.containsKey("--mark")) en.marked(markedAccounts(Path.of(opt.get("--mark")), g));
             long t0 = System.nanoTime();
             List<ChainMiner.Result> results = en.mine();
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
@@ -78,13 +78,7 @@ public final class ChainMain {
         }
         if (!engine.equals("miner")) throw new IllegalArgumentException("--engine must be miner or enumerate");
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
-        if (opt.containsKey("--mark")) {
-            boolean[] marked = readMarked(Path.of(opt.get("--mark")), g);
-            int n = 0;
-            for (boolean b : marked) if (b) n++;
-            System.out.printf("marked accounts present in the graph: %d%n", n);
-            miner.marked(marked);
-        }
+        if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();
         long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
@@ -101,6 +95,14 @@ public final class ChainMain {
         }
         System.out.printf("patterns written: %d -> %s%n", results.size(), out.getFileName());
         System.out.printf("mining elapsed ms: %d (machine-dependent)%n", elapsedMs);
+    }
+
+    private static boolean[] markedAccounts(Path file, TransactionGraph g) throws IOException {
+        boolean[] marked = readMarked(file, g);
+        int n = 0;
+        for (boolean b : marked) if (b) n++;
+        System.out.printf("marked accounts present in the graph: %d%n", n);
+        return marked;
     }
 
     static void write(Path out, List<ChainMiner.Result> results) throws IOException {
