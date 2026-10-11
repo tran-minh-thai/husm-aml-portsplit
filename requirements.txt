@@ -3,11 +3,12 @@
 #   python -m venv ~/.venvs/husm-aml-portsplit
 #   ~/.venvs/husm-aml-portsplit/bin/python -m pip install -r requirements.txt
 #   (Windows: %USERPROFILE%\.venvs\husm-aml-portsplit\Scripts\python.exe)
-# This list covers every non-standard import under experiments/.
-numpy
-pandas
-scikit-learn      # imported as sklearn; random-forest baselines
-scipy             # bootstrap intervals; also needed by scikit-learn
-matplotlib        # figures
-networkx          # subgraph-isomorphism baseline and brute-force probes
-pytest            # tests under experiments/tests
+# This list covers every non-standard import under experiments/. Versions are pinned to the ones that
+# produced the recorded results (Python 3.14.6); the measurement machine installs exactly these.
+numpy==2.5.3
+pandas==3.0.6
+scikit-learn==1.9.1 # imported as sklearn; random-forest baselines
+scipy==1.18.1     # bootstrap intervals; also needed by scikit-learn
+matplotlib==3.11.2 # figures
+networkx==3.7     # subgraph-isomorphism baseline and brute-force probes
+pytest==9.1.1     # tests under experiments/tests
