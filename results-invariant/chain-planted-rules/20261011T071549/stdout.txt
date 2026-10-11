@@ -1,0 +1,49 @@
+amlworld HI-Small: 143 attempts with a planted chain, 1652 planted chains (open up to length 5, closed of any length)
+
+planted chains, pooled over typologies (share valid under each rule):
+  kind  length   n  pairwise  anchored
+closed       2  14     0.929     0.929
+closed       3   9     1.000     1.000
+closed       4   7     1.000     1.000
+closed       5   3     1.000     0.667
+closed       6   1     1.000     1.000
+closed       7   5     1.000     0.600
+closed       8   4     1.000     0.750
+closed      10   6     1.000     0.500
+closed      11   4     0.750     0.500
+closed      12   1     1.000     1.000
+  open       2 887     0.967     0.967
+  open       3 296     0.953     0.953
+  open       4 231     0.948     0.939
+  open       5 184     0.924     0.880
+
+planted chains by typology:
+  kind  length           type   n  pairwise  anchored
+closed       2          CYCLE  14     0.929     0.929
+closed       3          CYCLE   9     1.000     1.000
+closed       4          CYCLE   7     1.000     1.000
+closed       5          CYCLE   3     1.000     0.667
+closed       6          CYCLE   1     1.000     1.000
+closed       7          CYCLE   5     1.000     0.600
+closed       8          CYCLE   4     1.000     0.750
+closed      10          CYCLE   6     1.000     0.500
+closed      11          CYCLE   4     0.750     0.500
+closed      12          CYCLE   1     1.000     1.000
+  open       2          CYCLE 219     0.986     0.986
+  open       2         RANDOM 150     0.967     0.967
+  open       2 SCATTER-GATHER 298     0.936     0.936
+  open       2          STACK 220     0.991     0.991
+  open       3          CYCLE 170     0.976     0.976
+  open       3         RANDOM 122     0.951     0.951
+  open       3          STACK   4     0.000     0.000
+  open       4          CYCLE 132     0.970     0.947
+  open       4         RANDOM  99     0.919     0.929
+  open       5          CYCLE 105     0.962     0.886
+  open       5         RANDOM  79     0.873     0.873
+
+background open chains (200000 per length, seed 20261012 + length):
+ length      n  discarded_walks  pairwise  anchored
+      2 200000           138430     0.046     0.046
+      3 200000           470760     0.003     0.003
+      4 200000          1253722     0.000     0.000
+      5 200000          3190270     0.000     0.000

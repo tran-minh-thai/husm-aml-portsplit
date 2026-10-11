@@ -1,0 +1,55 @@
+amlworld LI-Medium: 181 attempts with a planted chain, 2170 planted chains (open up to length 5, closed of any length)
+
+planted chains, pooled over typologies (share valid under each rule):
+  kind  length    n  pairwise  anchored
+closed       2   11     0.818     0.818
+closed       3    6     1.000     1.000
+closed       4    1     1.000     1.000
+closed       5    3     1.000     1.000
+closed       6    4     0.750     0.750
+closed       7    5     0.800     0.600
+closed       8    2     1.000     0.500
+closed       9    3     1.000     1.000
+closed      10    2     0.500     0.000
+closed      11    7     1.000     0.857
+closed      12    1     1.000     1.000
+closed      13    1     1.000     1.000
+  open       2 1170     0.969     0.969
+  open       3  392     0.954     0.944
+  open       4  313     0.965     0.930
+  open       5  249     0.960     0.871
+
+planted chains by typology:
+  kind  length           type   n  pairwise  anchored
+closed       2          CYCLE  11     0.818     0.818
+closed       3          CYCLE   6     1.000     1.000
+closed       4          CYCLE   1     1.000     1.000
+closed       5          CYCLE   3     1.000     1.000
+closed       6          CYCLE   4     0.750     0.750
+closed       7          CYCLE   5     0.800     0.600
+closed       8          CYCLE   2     1.000     0.500
+closed       9          CYCLE   3     1.000     1.000
+closed      10          CYCLE   2     0.500     0.000
+closed      11          CYCLE   7     1.000     0.857
+closed      12          CYCLE   1     1.000     1.000
+closed      13          CYCLE   1     1.000     1.000
+  open       2          CYCLE 226     0.982     0.982
+  open       2         RANDOM 229     1.000     1.000
+  open       2 SCATTER-GATHER 421     0.941     0.941
+  open       2          STACK 294     0.976     0.976
+  open       3          CYCLE 185     0.968     0.968
+  open       3         RANDOM 189     1.000     0.979
+  open       3          STACK  18     0.333     0.333
+  open       4          CYCLE 155     0.955     0.942
+  open       4         RANDOM 153     1.000     0.941
+  open       4          STACK   5     0.200     0.200
+  open       5          CYCLE 124     0.952     0.887
+  open       5         RANDOM 121     1.000     0.884
+  open       5          STACK   4     0.000     0.000
+
+background open chains (200000 per length, seed 20261012 + length):
+ length      n  discarded_walks  pairwise  anchored
+      2 200000           123495     0.047     0.047
+      3 200000           413129     0.003     0.003
+      4 200000          1086072     0.000     0.000
+      5 200000          2669796     0.000     0.000

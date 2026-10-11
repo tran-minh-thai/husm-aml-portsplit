@@ -1,0 +1,36 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex us_100K_difficult: 60 attempts with a planted chain, 819 planted chains (open up to length 5, closed of any length)
+
+planted chains, pooled over typologies (share valid under each rule):
+  kind  length   n  pairwise  anchored
+closed       5   9     1.000     0.000
+closed       6   2     1.000     0.000
+closed       7   4     1.000     0.000
+closed       8   8     1.000     0.000
+closed       9   6     1.000     0.000
+closed      10   1     1.000     0.000
+  open       2 429     1.000     1.000
+  open       3 153     1.000     1.000
+  open       4 123     1.000     0.000
+  open       5  84     1.000     0.000
+
+planted chains by typology:
+  kind  length           type   n  pairwise  anchored
+closed       5          CYCLE   9     1.000     0.000
+closed       6          CYCLE   2     1.000     0.000
+closed       7          CYCLE   4     1.000     0.000
+closed       8          CYCLE   8     1.000     0.000
+closed       9          CYCLE   6     1.000     0.000
+closed      10          CYCLE   1     1.000     0.000
+  open       2          CYCLE 183     1.000     1.000
+  open       2 SCATTER-GATHER 246     1.000     1.000
+  open       3          CYCLE 153     1.000     1.000
+  open       4          CYCLE 123     1.000     0.000
+  open       5          CYCLE  84     1.000     0.000
+
+background open chains (200000 per length, seed 20261012 + length):
+ length      n  discarded_walks  pairwise  anchored
+      2 200000            58736     0.241     0.241
+      3 200000           158204     0.069     0.068
+      4 200000           296449     0.021     0.021
+      5 200000           485156     0.007     0.007

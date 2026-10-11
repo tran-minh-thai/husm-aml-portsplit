@@ -1,0 +1,22 @@
+unmodified copy: pass
+fault 1: caught - lower conservation bound made strict when extending to the right
+fault 2: caught - upper conservation bound made strict when extending to the left
+fault 3: caught - accounts of an occurrence no longer required to be distinct
+fault 4: caught - a closed chain may end at any account instead of its origin
+fault 5: caught - support taken as the largest image set instead of the smallest
+fault 6: caught - join takes the new transaction label from the wrong chain
+fault 7: caught - early stop discards chains whose support equals the threshold
+fault 8: caught - conservation at the last intermediate account skipped in the leftward search
+fault 9: caught - conservation skipped at the first intermediate account reached when extending to the right
+fault 10: caught - transactions sorted by decreasing amount, so the range search reads the wrong slots
+fault 11: caught - merge step of the sort reversed, so accounts with many transactions are out of order
+fault 12: caught - the first account of a chain reported as intermediate
+fault 13: caught - marked counts count the unmarked accounts
+fault 14: caught - forward consistency drops transactions at the lower conservation bound
+fault 15: caught - backward consistency drops transactions at the upper conservation bound
+fault 16: caught - closed-chain consistency filters the returning transaction by its source instead of its target
+fault 17: caught - local propagation of a closed chain expands leftwards with the wrong transaction label
+fault 18: caught - enumeration baseline may revisit the second account of an occurrence
+fault 19: caught - enumeration baseline makes the lower conservation bound strict
+
+19 of 19 faults caught; 0 survived; 0 did not land

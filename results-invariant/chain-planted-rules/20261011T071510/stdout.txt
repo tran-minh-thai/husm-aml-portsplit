@@ -1,0 +1,36 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy: 997 attempts with a planted chain, 13959 planted chains (open up to length 5, closed of any length)
+
+planted chains, pooled over typologies (share valid under each rule):
+  kind  length    n  pairwise  anchored
+closed       5   88     0.989     0.000
+closed       6   69     1.000     0.000
+closed       7   72     0.986     0.000
+closed       8   88     1.000     0.000
+closed       9   72     1.000     0.000
+closed      10   88     1.000     0.000
+  open       2 6937     0.999     0.999
+  open       3 2714     0.999     0.999
+  open       4 2208     0.999     0.000
+  open       5 1623     0.999     0.000
+
+planted chains by typology:
+  kind  length           type    n  pairwise  anchored
+closed       5          CYCLE   88     0.989     0.000
+closed       6          CYCLE   69     1.000     0.000
+closed       7          CYCLE   72     0.986     0.000
+closed       8          CYCLE   88     1.000     0.000
+closed       9          CYCLE   72     1.000     0.000
+closed      10          CYCLE   88     1.000     0.000
+  open       2          CYCLE 3231     0.999     0.999
+  open       2 SCATTER-GATHER 3706     0.998     0.998
+  open       3          CYCLE 2714     0.999     0.999
+  open       4          CYCLE 2208     0.999     0.000
+  open       5          CYCLE 1623     0.999     0.000
+
+background open chains (200000 per length, seed 20261012 + length):
+ length      n  discarded_walks  pairwise  anchored
+      2 200000            79306     0.252     0.252
+      3 200000           220219     0.076     0.076
+      4 200000           433827     0.024     0.025
+      5 200000           758590     0.008     0.008

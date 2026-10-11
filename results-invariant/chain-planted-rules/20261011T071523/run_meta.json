@@ -1,0 +1,52 @@
+{
+  "run_id": "20261011T071523",
+  "note": "TN2: planted chains under amount rules, AMLGentex sweden_100K_difficult",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_planted_rules.py",
+    "--source",
+    "amlgentex",
+    "--dataset",
+    "sweden_100K_difficult"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T07:15:23",
+  "git_commit": "e56b6c6a7f96a943838d8417002313679474789d",
+  "git_tree": "clean (11 untracked result records)",
+  "code_sha256": "83972f5314b197c6d2bc9e44553a5d48e35bd1eea9fa6e6351a1e39288a1b3c1",
+  "code_files": 97,
+  "engine_jar_sha256": "d8a9c5bd63018aa62cb76ee4be57dda5f6f1315d055cb3a1978fb73ae73e2991",
+  "data": [
+    {
+      "path": "datasets/amlgentex/sweden_100K_difficult/tx_log.csv",
+      "bytes": 628949539,
+      "sha256": "d87e9742d019242ab1075076219c4c536cc8d082ca844590d7359f14d58666cb"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (13 untracked result records)"
+}
