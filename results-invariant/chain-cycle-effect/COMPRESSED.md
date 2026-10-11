@@ -11,4 +11,5 @@ decompress to exactly those bytes before the uncompressed file was removed:
 
 `experiments/scripts/chain_cycle_effect.py` reads only the files its own run writes, so it never
 needs the compressed form. The run `20261011T202905` (LI-Medium) was stopped while mining with no
-amount constraint; it has the theta = 0.2 files only and no result table.
+amount constraint; it has the theta = 0.2 files only and no result table. The run `20261011T210334` is the complete
+LI-Medium run that replaced it.

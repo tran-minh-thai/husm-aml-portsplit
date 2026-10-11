@@ -1,0 +1,35 @@
+
+[miner with closed chains, theta=0.2]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 23510
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=643596 found=617909 failed=25687 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner with closed chains, theta=inf]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 23510
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=7214658 found=5619174 failed=1595484 budget_fallbacks=202289 local_rejections=199625 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+LI-Medium, closed chains, labeling S, tau 10, 23510 laundering accounts
+  dataset  length  planted_accounts  I_0.2  P_0.2  R_0.2  I_inf  P_inf  R_inf     OR
+LI-Medium       3                18   1084 0.1421 1.0000   8422 0.1044 1.0000 1.4210
+LI-Medium       4                 4    129 0.2248 1.0000   1345 0.1212 1.0000 2.1029
+LI-Medium       5                15     36 0.6111 1.0000    272 0.2316 1.0000 5.2132
+  length 3: 18 planted cycle accounts - not counted
+  length 4: 4 planted cycle accounts - not counted
+  length 5: 15 planted cycle accounts - not counted
