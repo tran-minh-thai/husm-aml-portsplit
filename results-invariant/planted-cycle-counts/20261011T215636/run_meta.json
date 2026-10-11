@@ -1,0 +1,78 @@
+{
+  "run_id": "20261011T215636",
+  "note": "planted cycle accounts by length, six AMLworld pattern files; decides whether the Large sets can count for the closed-chain hypothesis",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/planted_cycle_counts.py",
+    "datasets/amlworld/HI-Small_Patterns.txt",
+    "datasets/amlworld/LI-Small_Patterns.txt",
+    "datasets/amlworld/HI-Medium_Patterns.txt",
+    "datasets/amlworld/LI-Medium_Patterns.txt",
+    "<home>/work/datasets-amlworld-large/HI-Large_Patterns.txt",
+    "<home>/work/datasets-amlworld-large/LI-Large_Patterns.txt"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 3,
+  "exit_code": 0,
+  "started_at": "2026-10-11T21:56:36",
+  "git_commit": "acecdff010d4184e3b15893d86e968560eb0624d",
+  "git_tree": "clean",
+  "code_sha256": "b590fe724414eca6a666dd80520738c9f095211425c1488ba2822c6ccba90a6c",
+  "code_files": 115,
+  "engine_jar_sha256": "b131ff399f48d751e5513067b922d659d21eddf7425c368a897c8e64c36c7ddb",
+  "data": [
+    {
+      "path": "datasets/amlworld/HI-Small_Patterns.txt",
+      "bytes": 323844,
+      "sha256": "2c546b5ce6009e73851f0139af053cf845f08bf92f3bc82fe1eb937dec2ef39b"
+    },
+    {
+      "path": "datasets/amlworld/LI-Small_Patterns.txt",
+      "bytes": 99156,
+      "sha256": "734c15b7ff4be1a04a3529bd1524b92c1e8b62289d3ce4881423596ee47a208f"
+    },
+    {
+      "path": "datasets/amlworld/HI-Medium_Patterns.txt",
+      "bytes": 2279574,
+      "sha256": "d612cd7ed6f7761c0e36f3b788dfbae68aa0842c77145b192c777c22daba5c9f"
+    },
+    {
+      "path": "datasets/amlworld/LI-Medium_Patterns.txt",
+      "bytes": 390893,
+      "sha256": "6aa4c4041894eb272339ed10c862a4ee1ac53a469326ed9dd3dd9e35da0e625c"
+    },
+    {
+      "path": "(outside the repository)",
+      "bytes": 13807473,
+      "sha256": "bcf815a1931cfdcefd5d6d9feaa8f95dbc33cfd6ef8cd52d9a41e8d994c22820"
+    },
+    {
+      "path": "(outside the repository)",
+      "bytes": 1934790,
+      "sha256": "1f7024cdc01a7b0bfcba00db7e72946f65ebf08cfd9f4cc61259ce54b7541e0c"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}

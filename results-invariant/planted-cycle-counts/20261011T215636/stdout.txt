@@ -1,0 +1,7 @@
+                  file  attempts  cycle_attempts  cycle_accounts_2  cycle_accounts_3  cycle_accounts_4  cycle_accounts_5
+ HI-Small_Patterns.txt       370              54                18                27                28                15
+ LI-Small_Patterns.txt       117              12                 4                 6                 8                 0
+HI-Medium_Patterns.txt      2756             367               120                93               100               115
+LI-Medium_Patterns.txt       456              46                18                18                 4                15
+ HI-Large_Patterns.txt     16467            2086               337               471               487               653
+ LI-Large_Patterns.txt      2218             298                91                84                76                95
