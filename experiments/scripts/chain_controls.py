@@ -10,7 +10,8 @@ theta = 0.2 and without conservation) and, for every length m:
   chance control   the laundering flag shuffled among all accounts of the same degree bin, 200 times,
                    seed 20261014; OR recomputed under each shuffle (expected near 1)
   intervals        bootstrap over laundering attempts (1,000 resamples, seed 20261015) for P with
-                   conservation, R with conservation, OR and OR_degree
+                   conservation, R with conservation, OR and OR_degree; an account in c attempts
+                   counts 1/c in each, so the bootstrap is centred on the point estimate
 
 Run: python experiments/scripts/chain_controls.py --source amlworld --dataset HI-Small --labeling S \\
          --effect-record results-invariant/chain-conservation-effect/<run>
@@ -46,6 +47,20 @@ def account_file(record: Path, theta: str) -> Path:
 
 def odds(p: float) -> float:
     return p / (1 - p) if 0 <= p < 1 else float("inf")
+
+
+def attempt_shares(returned: set, groups: list[set]) -> np.ndarray:
+    """Each group's share of |returned & union(groups)|: an account in c groups counts 1/c in each.
+
+    Summing the shares over the groups gives |returned & union(groups)| exactly, so resampling the
+    groups with replacement gives a bootstrap whose expectation is the point estimate. Counting an
+    account once in every group that contains it instead overstates every resample when groups overlap.
+    """
+    count: dict = {}
+    for g in groups:
+        for v in g:
+            count[v] = count.get(v, 0) + 1
+    return np.array([sum(1.0 / count[v] for v in g & returned) for g in groups], dtype=float)
 
 
 def degree_bins(edges: pd.DataFrame) -> pd.Series:
@@ -132,11 +147,11 @@ def main() -> None:
         row["OR_shuffled_median"] = float(np.median(ors))
         row["OR_shuffled_ci"] = f"[{np.percentile(ors, 2.5):.3f}, {np.percentile(ors, 97.5):.3f}]"
         # bootstrap over attempts: laundering accounts and planted intermediates travel with their attempt
-        hit1 = np.array([len(s1 & acc_of[a]) for a in attempts], float)
-        hit0 = np.array([len(s0 & acc_of[a]) for a in attempts], float)
+        groups = [acc_of[a] for a in attempts]
+        hit1, hit0 = attempt_shares(s1, groups), attempt_shares(s0, groups)
         mids = [mid_of.get((a, m), set()) for a in attempts]
-        rec_hit = np.array([len(s1 & x) for x in mids], float)
-        rec_n = np.array([len(x) for x in mids], float)
+        rec_hit = attempt_shares(s1, mids)
+        rec_n = attempt_shares(set().union(*mids), mids)
         fixed1, fixed0 = len(s1 & outside), len(s0 & outside)
         rng_b = np.random.default_rng(SEED_BOOT)
         bp, br, bo, bd = [], [], [], []
@@ -151,6 +166,7 @@ def main() -> None:
             bo.append(odds(q1) / odds(q0) if 0 < q0 < 1 else np.nan)
             bd.append(odds(q1) / odds(pm) if 0 < pm < 1 else np.nan)
             br.append(rec_hit[idx].sum() / rec_n[idx].sum() if rec_n[idx].sum() else np.nan)
+        row["R_0.2_point"] = rec_hit.sum() / rec_n.sum() if rec_n.sum() else float("nan")
         for name, vals in (("P_0.2", bp), ("R_0.2", br), ("OR", bo), ("OR_degree", bd)):
             v = np.array(vals, float)
             v = v[~np.isnan(v)]
@@ -158,6 +174,16 @@ def main() -> None:
         rows.append(row)
     table = pd.DataFrame(rows)
     table.to_csv(OUT / "controls.csv", index=False)
+    outside, checked = 0, 0
+    for _, r in table.iterrows():
+        for name in ("P_0.2", "R_0.2", "OR", "OR_degree"):
+            point = r.get(name if name != "R_0.2" else "R_0.2_point")
+            ci = r.get(f"{name}_ci")
+            if isinstance(ci, str) and ci and point is not None and not pd.isna(point):
+                lo, hi = (float(x) for x in ci.strip("[]").split(", "))
+                checked += 1
+                outside += not (lo <= point <= hi)
+    print(f"intervals checked against their point estimate: {checked}; not containing it: {outside}")
     pd.set_option("display.width", 250)
     pd.set_option("display.max_columns", 30)
     print(f"{args.dataset} labeling {args.labeling}: {len(marked)} laundering accounts, {len(attempts)} attempts")

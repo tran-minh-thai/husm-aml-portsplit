@@ -12,8 +12,8 @@ with a laundering transaction):
   totals      accounts whose total out over total in lies in [0.8, 1.2]
 
 Uncertainty: bootstrap over laundering attempts (1,000 resamples, seed 20261015); the accounts of
-an attempt travel with it; the false positives of a method (returned accounts outside the target)
-are kept fixed.
+an attempt travel with it, an account in c attempts counting 1/c in each; the false positives of a
+method (returned accounts outside the target) are kept fixed.
 
 Run: python experiments/scripts/chain_simple_baselines.py --source amlworld --dataset HI-Small \\
          --effect-record results-invariant/chain-conservation-effect/<run of HI-Small, labeling S>
@@ -36,6 +36,7 @@ sys.path.insert(0, str(ROOT / "experiments" / "probes"))
 
 from inchusm_aml.eval import planted_chains as pc  # noqa: E402
 from round2_measurements import load  # noqa: E402
+from chain_controls import attempt_shares  # noqa: E402
 
 JAR = ROOT / "inchusm-miner" / "target" / "inchusm-miner-0.1.0-SNAPSHOT.jar"
 CHAIN = ROOT / "datasets" / "chain"
@@ -87,8 +88,8 @@ def scores(returned: set, target_by_attempt: list[set], rng: np.random.Generator
     r = tp / len(target) if target else float("nan")
     f1 = 2 * p * r / (p + r) if returned and target and (p + r) > 0 else 0.0
     fp = len(returned - target)
-    hits = np.array([len(returned & a) for a in target_by_attempt], dtype=float)
-    sizes = np.array([len(a) for a in target_by_attempt], dtype=float)
+    hits = attempt_shares(returned, target_by_attempt)
+    sizes = attempt_shares(target, target_by_attempt)
     boot = []
     for _ in range(BOOT):
         idx = rng.integers(0, len(sizes), len(sizes))

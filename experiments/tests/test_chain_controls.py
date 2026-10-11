@@ -62,3 +62,22 @@ def test_scores_by_hand():
     assert (s["tp"], s["returned"]) == (2, 4)
     assert s["precision"] == pytest.approx(2 / 4) and s["recall"] == pytest.approx(2 / 3)
     assert s["f1"] == pytest.approx(2 * (1 / 2) * (2 / 3) / (1 / 2 + 2 / 3))
+
+
+def test_attempt_shares_sum_to_the_point_estimate_when_attempts_overlap():
+    groups = [{1, 2, 3}, {2, 3, 4}, {3, 5}]          # account 3 is in all three attempts, 2 in two
+    returned = {2, 3, 9}
+    shares = cc.attempt_shares(returned, groups)
+    assert shares.sum() == pytest.approx(len(returned & {1, 2, 3, 4, 5}))   # = 2, not 2 + 3 - 1
+    rng = np.random.default_rng(0)
+    means = np.mean([shares[rng.integers(0, 3, 3)].sum() for _ in range(20000)])
+    assert means == pytest.approx(2.0, abs=0.03)    # the bootstrap is centred on the point estimate
+
+
+def test_scores_interval_contains_the_point_estimate_with_overlapping_attempts():
+    groups = [{1, 2, 3}, {2, 3, 4}, {3, 5}, {6}]
+    s = sb.scores({2, 3, 6, 9}, groups, np.random.default_rng(1))
+    lo, hi = (float(x) for x in s["recall_ci"].strip("[]").split(", "))
+    assert lo <= s["recall"] <= hi
+    lo, hi = (float(x) for x in s["precision_ci"].strip("[]").split(", "))
+    assert lo <= s["precision"] <= hi
