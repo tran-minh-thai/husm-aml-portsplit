@@ -1,0 +1,63 @@
+diff -ruN GraMi/GRAMI_DIRECTED_SUBGRAPHS/src/search/Algorithm.java GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/search/Algorithm.java
+--- GraMi/GRAMI_DIRECTED_SUBGRAPHS/src/search/Algorithm.java	2026-10-11 10:01:20
++++ GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/search/Algorithm.java	2026-10-11 15:44:36
+@@ -158,6 +158,7 @@
+ 			curFirst = new FrequencyPruningStep<NodeType, EdgeType>(curFirst,
+ 					new IntFrequency(minFreq), null);
+ 			curFirst = new CanonicalPruningStep<NodeType, EdgeType>(curFirst);
++			curFirst = new PathPruningStep<NodeType, EdgeType>(curFirst);   // added: directed paths only
+ 
+ 		//} 
+ 
+diff -ruN GraMi/GRAMI_DIRECTED_SUBGRAPHS/src/search/PathPruningStep.java GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/search/PathPruningStep.java
+--- GraMi/GRAMI_DIRECTED_SUBGRAPHS/src/search/PathPruningStep.java	1970-01-01 08:00:00
++++ GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/search/PathPruningStep.java	2026-10-11 15:44:36
+@@ -0,0 +1,48 @@
++/**
++ * Added to GraMi (LGPL, Copyright 2014 Mohammed Elseidy, Ehab Abdelhamid) for a same-output comparison:
++ * keeps only patterns that are directed paths with at most maxEdges edges. Every DFS-code prefix of a
++ * directed path is a sub-path, so no directed path is lost by pruning other shapes before frequency
++ * evaluation. maxEdges is read from the system property grami.maxEdges (default 5).
++ */
++package search;
++
++import java.util.Collection;
++
++import dataStructures.DFSCode;
++import dataStructures.Extension;
++import dataStructures.HPListGraph;
++
++public class PathPruningStep<NodeType, EdgeType> extends MiningStep<NodeType, EdgeType> {
++
++	private final int maxEdges = Integer.getInteger("grami.maxEdges", 5);
++
++	public PathPruningStep(final MiningStep<NodeType, EdgeType> next) {
++		super(next);
++	}
++
++	@Override
++	public void call(final SearchLatticeNode<NodeType, EdgeType> node,
++			final Collection<Extension<NodeType, EdgeType>> extensions) {
++		if (isDirectedPath(((DFSCode<NodeType, EdgeType>) node).getHPlistGraph())) {
++			this.callNext(node, extensions);
++		} else {
++			node.store(false);
++		}
++	}
++
++	private boolean isDirectedPath(final HPListGraph<NodeType, EdgeType> g) {
++		int edges = g.getEdgeCount();
++		int nodes = g.getNodeCount();
++		if (edges > maxEdges || nodes != edges + 1) return false;
++		int[] in = new int[nodes];
++		int[] out = new int[nodes];
++		for (int e = 0; e < edges; e++) {
++			int a = g.getNodeA(e);
++			int b = g.getNodeB(e);
++			int from = g.getDirection(e) >= 0 ? a : b;
++			int to = from == a ? b : a;
++			if (++out[from] > 1 || ++in[to] > 1) return false;
++		}
++		return true;
++	}
++}
