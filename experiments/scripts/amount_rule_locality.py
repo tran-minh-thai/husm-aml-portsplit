@@ -159,12 +159,13 @@ def valid_paths(vlab, edges, rule, max_edges):
     found = []
 
     def grow(path, amounts):
-        if amounts:
+        # the rule is tested on the whole sequence only: a valid chain may have an invalid prefix
+        if amounts and rule(amounts):
             found.append((tuple(vlab[v] for v in path), tuple(path)))
         if len(amounts) == max_edges:
             return
         for t, a in out_edges[path[-1]]:
-            if t not in path and rule(amounts + (a,)):
+            if t not in path:
                 grow(path + [t], amounts + (a,))
     for v in range(len(vlab)):
         grow([v], ())
@@ -212,6 +213,65 @@ def pruning_check(rule, rng, instances, max_edges=4, two_sided=True) -> dict:
             frequent += len(truth)
             lost += len(truth - mined)
     return {"graphs": graphs, "frequent_chains": frequent, "lost_chains": lost}
+
+
+# ---------------------------------------------------------------- structural labels only
+
+def structural_condition(rule: Rule, n: int) -> bool:
+    """Every valid sequence of length n has a valid prefix, or every one has a valid suffix."""
+    valid = [w for w in words(rule.alphabet, n) if rule(w)]
+    return all(rule(w[:-1]) for w in valid) or all(rule(w[1:]) for w in valid)
+
+
+def chain_support(vlab, edges, rule, n) -> int:
+    """Support of the single structural chain with n transactions (every label equal)."""
+    return supports(valid_paths(vlab, edges, rule, n)).get(("A",) * (n + 1), 0)
+
+
+def structural_counterexample(rule: Rule, n: int, k: int = 3):
+    """The graph of the necessity proof, for a length n at which the condition fails."""
+    valid = [w for w in words(rule.alphabet, n) if rule(w)]
+    x = next(w for w in valid if not rule(w[:-1]))
+    y = next(w for w in valid if not rule(w[1:]))
+    for z in (x, y):
+        if not rule(z[:-1]) and not rule(z[1:]):
+            return ["A"] * (n + 1), [(i, i + 1, z[i]) for i in range(n)]
+    vlab, edges = ["A"], []                       # account 0 is b0
+    for _ in range(k):
+        prev = 0
+        for i in range(n):
+            vlab.append("A")
+            edges.append((prev, len(vlab) - 1, y[i]))
+            prev = len(vlab) - 1
+    c1 = len(vlab)
+    vlab.append("A")
+    for _ in range(k):
+        vlab.append("A")
+        edges.append((len(vlab) - 1, c1, x[0]))
+        prev = c1
+        for i in range(1, n):
+            vlab.append("A")
+            edges.append((prev, len(vlab) - 1, x[i]))
+            prev = len(vlab) - 1
+    return vlab, edges
+
+
+def structural_check(rule: Rule, rng, instances: int, max_length: int, k: int = 3) -> list[dict]:
+    rows = []
+    graphs = [random_graph(rng, rule.alphabet, labels="A") for _ in range(instances)]
+    for n in range(2, max_length + 1):
+        holds = structural_condition(rule, n)
+        row = {"rule": rule.name, "n": n, "condition_holds": holds}
+        if holds:
+            row["random_graphs"] = len(graphs)
+            row["random_violations"] = sum(chain_support(v, e, rule, n) > chain_support(v, e, rule, n - 1)
+                                           for v, e in graphs)
+        else:
+            vlab, edges = structural_counterexample(rule, n, k)
+            row["construction_support_n"] = chain_support(vlab, edges, rule, n)
+            row["construction_support_n_minus_1"] = chain_support(vlab, edges, rule, n - 1)
+        rows.append(row)
+    return rows
 
 
 # ---------------------------------------------------------------- slot filters on walks
@@ -317,6 +377,9 @@ def main() -> None:
             if ell <= 4:
                 row.update({f"width_filter_{k}": v for k, v in filter_check(rule, rng, args.instances, max(ell, 2)).items()})
         rows.append(row)
+    struct = pd.DataFrame([r for rule in rule_family(random.Random(args.seed))
+                           for r in structural_check(rule, rng, args.instances, n)])
+    struct.to_csv(OUT / "structural_labels.csv", index=False)
     table, join_table = pd.DataFrame(rows), pd.DataFrame(joins)
     table.to_csv(OUT / "rule_properties.csv", index=False)
     join_table.to_csv(OUT / "join_exactness.csv", index=False)
@@ -341,6 +404,11 @@ def main() -> None:
           f"{int(w2['pair_filter_instances'].sum())} instances ({int(w2['pair_filter_with_a_valid_walk'].sum())} with a valid walk); {len(w3)} rules of width >= 3, "
           f"{int((w3['pair_filter_inexact'] > 0).sum())} of them inexact somewhere")
     wf = closed[closed["width_lower_bound"] <= 4]
+    held, failed = struct[struct["condition_holds"]], struct[~struct["condition_holds"]]
+    print(f"structural labels: condition holds in {len(held)} (rule, n) cases, {int(held['random_violations'].sum())} "
+          f"violations over {int(held['random_graphs'].sum())} random graphs; fails in {len(failed)} cases, construction "
+          f"gives support n > support n-1 in {int((failed['construction_support_n'] > failed['construction_support_n_minus_1']).sum())}, "
+          f"support n = 4 and n-1 <= 2 in {int(((failed['construction_support_n'] == 4) & (failed['construction_support_n_minus_1'] <= 2)).sum())}")
     print(f"width filter: {len(wf)} rules of width <= 4 inexact on {int(wf['width_filter_inexact'].sum())} of "
           f"{int(wf['width_filter_instances'].sum())} instances ({int(wf['width_filter_with_a_valid_walk'].sum())} with a valid walk)")
 

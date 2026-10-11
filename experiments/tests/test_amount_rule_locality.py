@@ -79,3 +79,24 @@ def test_random_checks_report_their_denominators():
     assert arl.filter_check(p, rng, 200, 2, sequential=False)["inexact"] > 0
     q = arl.pruning_check(p, rng, 50)
     assert q["frequent_chains"] > 100 and q["lost_chains"] == 0
+
+
+def test_structural_labels_construction_of_the_necessity_proof():
+    # valid: every sequence of length <= 1, the pair (1, 2), and the triples (1, 2, 3) and (3, 1, 2)
+    allowed = {(1, 2), (1, 2, 3), (3, 1, 2)}
+    r = arl.Rule("two triples", (1, 2, 3), lambda w: w in allowed)
+    assert not arl.structural_condition(r, 3)      # (3, 1, 2) loses its prefix, (1, 2, 3) its suffix
+    assert arl.structural_condition(r, 2)
+    vlab, edges = arl.structural_counterexample(r, 3, k=3)
+    assert arl.chain_support(vlab, edges, r, 3) == 4
+    assert arl.chain_support(vlab, edges, r, 2) <= 2
+    # the anchored rule is prefix-closed, so the condition holds at every length
+    a = arl.anchored(0.2)
+    assert all(arl.structural_condition(a, n) for n in range(2, 5))
+
+
+def test_valid_paths_keeps_a_chain_whose_prefix_is_invalid():
+    allowed = {(3, 1, 2)}                          # (3, 1) is not valid, (3, 1, 2) is
+    r = arl.Rule("prefix not closed", (1, 2, 3), lambda w: w in allowed)
+    found = arl.valid_paths(["A"] * 4, [(0, 1, 3), (1, 2, 1), (2, 3, 2)], r, 3)
+    assert {p for _, p in found} == {(0, 1), (1, 2), (2, 3), (0, 1, 2, 3)}
