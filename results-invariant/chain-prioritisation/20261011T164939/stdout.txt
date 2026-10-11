@@ -1,0 +1,24 @@
+HI-Medium: 750085 accounts with incoming and outgoing transactions, 41857 laundering
+
+drifting planted chains (pairwise-valid, anchored-invalid):
+  dataset  length  drift_intermediates  I_conserved  P_conserved  R_drift_conserved  I_anchored  P_anchored  R_drift_anchored  R_drift_gap
+HI-Medium       2                    0       267730        0.066                NaN      267730       0.066               NaN          NaN
+HI-Medium       3                   28       104277        0.095              1.000      114272       0.092             1.000        0.000
+HI-Medium       4                  178        30121        0.179              1.000       38016       0.155             0.910        0.090
+HI-Medium       5                  349         9305        0.386              1.000       12474       0.309             0.837        0.163
+
+precision at k:
+  dataset target         method  precision_at_100  precision_at_1000  precision_at_10000
+HI-Medium      M      conserved            0.3857             0.3857              0.3650
+HI-Medium      M       anchored            0.3090             0.3090              0.3090
+HI-Medium      M         totals            0.0900             0.0780              0.0892
+HI-Medium      M one-in-one-out            0.0501             0.0501              0.0501
+HI-Medium      M     low degree            0.0501             0.0501              0.0501
+HI-Medium      C      conserved            0.3068             0.3068              0.2870
+HI-Medium      C       anchored            0.2310             0.2310              0.2310
+HI-Medium      C         totals            0.0500             0.0450              0.0552
+HI-Medium      C one-in-one-out            0.0109             0.0109              0.0109
+HI-Medium      C     low degree            0.0109             0.0109              0.0109
+  H22 at length 4: gap 0.090; holds here: False
+  H22 at length 5: gap 0.163; holds here: False
+  H23: precision@1000 conserved 0.3857 vs best other 0.3090; holds here: False

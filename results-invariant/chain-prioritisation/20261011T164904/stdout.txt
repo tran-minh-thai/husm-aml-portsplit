@@ -1,0 +1,25 @@
+  rows 7,748,933; dropped 6,752,598 rows with the income source or spending sink; 0 flagged rows outside any attempt
+sweden_100K_difficult: 70533 accounts with incoming and outgoing transactions, 1851 laundering
+
+drifting planted chains (pairwise-valid, anchored-invalid):
+              dataset  length  drift_intermediates  I_conserved  P_conserved  R_drift_conserved  I_anchored  P_anchored  R_drift_anchored  R_drift_gap
+sweden_100K_difficult       2                    0        66371        0.024                NaN       66371       0.024               NaN          NaN
+sweden_100K_difficult       3                    0        61095        0.026                NaN       61658       0.026               NaN          NaN
+sweden_100K_difficult       4                  183        55510        0.027              1.000       56476       0.027             0.962        0.038
+sweden_100K_difficult       5                  159        50768        0.029              1.000       52171       0.028             0.943        0.057
+
+precision at k:
+              dataset target         method  precision_at_100  precision_at_1000  precision_at_10000
+sweden_100K_difficult      M      conserved            0.0286             0.0286              0.0286
+sweden_100K_difficult      M       anchored            0.0285             0.0285              0.0285
+sweden_100K_difficult      M         totals            0.0200             0.0220              0.0229
+sweden_100K_difficult      M one-in-one-out            0.0425             0.0254              0.0237
+sweden_100K_difficult      M     low degree            0.0536             0.0208              0.0136
+sweden_100K_difficult      C      conserved            0.0075             0.0075              0.0075
+sweden_100K_difficult      C       anchored            0.0071             0.0071              0.0071
+sweden_100K_difficult      C         totals            0.0000             0.0050              0.0052
+sweden_100K_difficult      C one-in-one-out            0.0056             0.0058              0.0058
+sweden_100K_difficult      C     low degree            0.0000             0.0063              0.0032
+  H22 at length 4: gap 0.038; holds here: False
+  H22 at length 5: gap 0.057; holds here: False
+  H23: precision@1000 conserved 0.0286 vs best other 0.0285; holds here: False

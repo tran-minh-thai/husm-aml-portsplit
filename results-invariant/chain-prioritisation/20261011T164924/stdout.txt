@@ -1,0 +1,24 @@
+LI-Small: 226593 accounts with incoming and outgoing transactions, 5304 laundering
+
+drifting planted chains (pairwise-valid, anchored-invalid):
+ dataset  length  drift_intermediates  I_conserved  P_conserved  R_drift_conserved  I_anchored  P_anchored  R_drift_anchored  R_drift_gap
+LI-Small       2                    0        80350        0.021                NaN       80350       0.021               NaN          NaN
+LI-Small       3                    2        29502        0.028              1.000       32181       0.028             1.000        0.000
+LI-Small       4                    6         7418        0.047              1.000        9506       0.042             0.667        0.333
+LI-Small       5                   10         1686        0.109              1.000        2372       0.088             0.900        0.100
+
+precision at k:
+ dataset target         method  precision_at_100  precision_at_1000  precision_at_10000
+LI-Small      M      conserved            0.1091             0.1091              0.0402
+LI-Small      M       anchored            0.0877             0.0877              0.0413
+LI-Small      M         totals            0.0000             0.0140              0.0190
+LI-Small      M one-in-one-out            0.0178             0.0178              0.0170
+LI-Small      M     low degree            0.0178             0.0178              0.0154
+LI-Small      C      conserved            0.0741             0.0741              0.0156
+LI-Small      C       anchored            0.0527             0.0527              0.0148
+LI-Small      C         totals            0.0000             0.0040              0.0055
+LI-Small      C one-in-one-out            0.0025             0.0025              0.0020
+LI-Small      C     low degree            0.0025             0.0025              0.0021
+  H22 at length 4: only 6 drift intermediates - not counted
+  H22 at length 5: only 10 drift intermediates - not counted
+  H23: precision@1000 conserved 0.1091 vs best other 0.0877; holds here: False

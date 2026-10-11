@@ -1,0 +1,25 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+sweden_100K_easy: 76532 accounts with incoming and outgoing transactions, 32207 laundering
+
+drifting planted chains (pairwise-valid, anchored-invalid):
+         dataset  length  drift_intermediates  I_conserved  P_conserved  R_drift_conserved  I_anchored  P_anchored  R_drift_anchored  R_drift_gap
+sweden_100K_easy       2                    0        72633        0.382                NaN       72633       0.382               NaN          NaN
+sweden_100K_easy       3                    0        68882        0.390                NaN       69472       0.390               NaN          NaN
+sweden_100K_easy       4                 3164        65163        0.398              1.000       66118       0.396             0.933        0.067
+sweden_100K_easy       5                 2805        62003        0.404              1.000       63525       0.400             0.894        0.106
+
+precision at k:
+         dataset target         method  precision_at_100  precision_at_1000  precision_at_10000
+sweden_100K_easy      M      conserved            0.4043             0.4043              0.4043
+sweden_100K_easy      M       anchored            0.4004             0.4004              0.4004
+sweden_100K_easy      M         totals            0.4000             0.3390              0.3470
+sweden_100K_easy      M one-in-one-out            0.3954             0.3786              0.3769
+sweden_100K_easy      M     low degree            0.4975             0.4193              0.2581
+sweden_100K_easy      C      conserved            0.1022             0.1022              0.1022
+sweden_100K_easy      C       anchored            0.0960             0.0960              0.0960
+sweden_100K_easy      C         totals            0.0700             0.0710              0.0700
+sweden_100K_easy      C one-in-one-out            0.0870             0.0894              0.0896
+sweden_100K_easy      C     low degree            0.0368             0.1464              0.0665
+  H22 at length 4: gap 0.067; holds here: False
+  H22 at length 5: gap 0.106; holds here: False
+  H23: precision@1000 conserved 0.4043 vs best other 0.4193; holds here: False

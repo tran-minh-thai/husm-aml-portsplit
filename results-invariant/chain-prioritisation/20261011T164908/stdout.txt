@@ -1,0 +1,25 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+us_100K_difficult: 79346 accounts with incoming and outgoing transactions, 1956 laundering
+
+drifting planted chains (pairwise-valid, anchored-invalid):
+          dataset  length  drift_intermediates  I_conserved  P_conserved  R_drift_conserved  I_anchored  P_anchored  R_drift_anchored  R_drift_gap
+us_100K_difficult       2                    0        75508        0.023                NaN       75508       0.023               NaN          NaN
+us_100K_difficult       3                    0        71940        0.024                NaN       72674       0.024               NaN          NaN
+us_100K_difficult       4                  183        68456        0.025              1.000       69689       0.025             0.967        0.033
+us_100K_difficult       5                  147        65531        0.026              1.000       67141       0.025             0.959        0.041
+
+precision at k:
+          dataset target         method  precision_at_100  precision_at_1000  precision_at_10000
+us_100K_difficult      M      conserved            0.0256             0.0256              0.0256
+us_100K_difficult      M       anchored            0.0254             0.0254              0.0254
+us_100K_difficult      M         totals            0.0000             0.0130              0.0189
+us_100K_difficult      M one-in-one-out            0.0228             0.0230              0.0230
+us_100K_difficult      M     low degree            0.0349             0.0095              0.0073
+us_100K_difficult      C      conserved            0.0061             0.0061              0.0061
+us_100K_difficult      C       anchored            0.0059             0.0059              0.0059
+us_100K_difficult      C         totals            0.0000             0.0040              0.0042
+us_100K_difficult      C one-in-one-out            0.0053             0.0053              0.0053
+us_100K_difficult      C     low degree            0.0000             0.0010              0.0015
+  H22 at length 4: gap 0.033; holds here: False
+  H22 at length 5: gap 0.041; holds here: False
+  H23: precision@1000 conserved 0.0256 vs best other 0.0254; holds here: False

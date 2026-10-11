@@ -1,0 +1,61 @@
+{
+  "run_id": "20261011T164939",
+  "note": "drifting-chain recovery and precision at k, HI-Medium, on runs 20261011T075419 and 20261011T160307",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_prioritisation.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "HI-Medium",
+    "--effect-record",
+    "results-invariant/chain-conservation-effect/20261011T075419",
+    "--simple-record",
+    "results-invariant/chain-simple-rules/20261011T160307"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T16:49:39",
+  "git_commit": "3e6a85503a398b19e5a36d7f9514bfb978a034b9",
+  "git_tree": "clean (25 untracked result records)",
+  "code_sha256": "9ad5c75c62b9fd997a13efc3c84a4e60c33ca407dc9508b22375b05a206b6b1d",
+  "code_files": 106,
+  "engine_jar_sha256": "df889d78f462b0e726fc51f754783bc66a1cef3a0bd3d8b4a0672ebd20e878ca",
+  "data": [
+    {
+      "path": "datasets/amlworld/HI-Medium_Trans.csv",
+      "bytes": 3031783420,
+      "sha256": "3126afb8155e7c8815d62bc5370549a7b5ae6bf7dfe872b3cd7813e66a3d7ff5"
+    },
+    {
+      "path": "datasets/amlworld/HI-Medium_Patterns.txt",
+      "bytes": 2279574,
+      "sha256": "d612cd7ed6f7761c0e36f3b788dfbae68aa0842c77145b192c777c22daba5c9f"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (27 untracked result records)"
+}
