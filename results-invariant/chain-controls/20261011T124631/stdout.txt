@@ -1,0 +1,9 @@
+intervals checked against their point estimate: 16; not containing it: 0
+LI-Small labeling A: 5304 laundering accounts, 117 attempts
+ dataset labeling  length  I_0.2  I_inf  P_0.2  P_inf        OR  P_degree_matched P_degree_matched_ci  OR_degree  OR_shuffled_median OR_shuffled_ci  R_0.2_point         P_0.2_ci         R_0.2_ci                 OR_ci          OR_degree_ci
+LI-Small        A       2  80341 226246 0.0206 0.0158    1.3110            0.0151    [0.0142, 0.0161]     1.3665              1.0842 [1.040, 1.133]       0.9934 [0.0192, 0.0222] [0.9797, 1.0000]      [1.2710, 1.3542]      [1.2745, 1.4754]
+LI-Small        A       3  29457 209529 0.0283 0.0165    1.7395            0.0157    [0.0145, 0.0170]     1.8306              1.1248 [1.038, 1.224]       0.9921 [0.0258, 0.0310] [0.9707, 1.0000]      [1.6259, 1.8697]      [1.6646, 2.0090]
+LI-Small        A       4   5928 199447 0.0525 0.0166    3.2900            0.0186    [0.0155, 0.0216]     2.9294              1.3592 [1.158, 1.575]       0.9915 [0.0423, 0.0634] [0.9682, 1.0000]      [2.6636, 3.9643]      [2.3356, 3.5793]
+LI-Small        A       5    125 191920 0.9600 0.0166 1422.6332            0.0201    [0.0000, 0.0480]  1168.8429              1.2666 [0.000, 2.668]       1.0000 [0.9270, 0.9734] [1.0000, 1.0000] [760.8484, 2183.7188] [618.5127, 1782.4855]
+  H17 at length 4: OR_degree = 2.929394191741184; holds here: True
+  H17 at length 5: OR_degree = 1168.8429423459236; holds here: True
