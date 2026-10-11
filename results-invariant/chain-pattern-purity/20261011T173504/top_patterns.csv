@@ -1,0 +1,4 @@
+dataset,method,patterns,mean_purity,weighted_purity,image_mid,patterns_length_2,patterns_length_3,patterns_length_4,patterns_length_5
+sweden_100K_easy,conserved,10,0.5072710622710622,0.5092293493308723,333.38461538461536,1728,20161,19,0
+sweden_100K_easy,unconstrained,10,0.6107268862427546,0.6185983827493261,556.5,1728,20736,32964,4
+sweden_100K_easy,anchored,10,0.4941417831062044,0.49451887941534717,328.4,1728,20220,26,0

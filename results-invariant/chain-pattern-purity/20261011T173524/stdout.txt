@@ -1,0 +1,20 @@
+[enumerator, anchored rule, labeling A]
+graph sweden_100K_difficult_A.tg: 99995 accounts, 996335 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+marked accounts present in the graph: 1851
+engine=enumerate rule=anchored valid_occurrences=108188117
+patterns written: 16408 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+sweden_100K_difficult, labeling A: paired purity, conserved minus unconstrained, same pattern
+              dataset  length  paired_patterns  counted  median_difference  min_difference  median_purity_conserved  median_purity_unconstrained
+sweden_100K_difficult       4                0    False                NaN             NaN                      NaN                          NaN
+sweden_100K_difficult       5                0    False                NaN             NaN                      NaN                          NaN
+
+first 10 patterns by length then support:
+              dataset        method  patterns  mean_purity  weighted_purity  image_mid  patterns_length_2  patterns_length_3  patterns_length_4  patterns_length_5
+sweden_100K_difficult     conserved        10        0.077            0.077    495.286               1728              14254                  0                  0
+sweden_100K_difficult unconstrained        10        0.066            0.067    357.000               1728              19836                 58                  0
+sweden_100K_difficult      anchored        10        0.081            0.081    509.444               1728              14536                  0                  0
+  H27 here: 0 counted cells; all with median >= 0.3: False
+  H28 here: conserved 0.077 vs anchored 0.081; holds: False

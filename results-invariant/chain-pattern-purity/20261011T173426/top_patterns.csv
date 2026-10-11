@@ -1,0 +1,4 @@
+dataset,method,patterns,mean_purity,weighted_purity,image_mid,patterns_length_2,patterns_length_3,patterns_length_4,patterns_length_5
+HI-Small,conserved,10,0.6024580592714219,0.765918958031838,2764.0,27,111,90,5
+HI-Small,unconstrained,10,0.020462916738425097,0.020375985036227725,1480910.0,28,128,628,3128
+HI-Small,anchored,10,0.5880819913665604,0.7549692808095411,2767.0,27,112,104,5

@@ -1,0 +1,3 @@
+dataset,length,paired_patterns,counted,median_difference,min_difference,median_purity_conserved,median_purity_unconstrained
+LI-Small,4,109,True,0.024611184242601534,-0.026328168641401816,0.041666666666666664,0.015410212732242601
+LI-Small,5,2,False,0.8685080909251109,0.8275620141845942,0.9750623441396509,0.10655425321453989

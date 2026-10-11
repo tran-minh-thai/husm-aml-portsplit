@@ -1,0 +1,4 @@
+dataset,method,patterns,mean_purity,weighted_purity,image_mid,patterns_length_2,patterns_length_3,patterns_length_4,patterns_length_5
+LI-Medium,conserved,10,0.439927661350497,0.7538116591928251,2230.0,28,125,277,23
+LI-Medium,unconstrained,10,0.016512956071495374,0.01642710309705072,6315234.0,28,128,628,3128
+LI-Medium,anchored,10,0.3988541678983331,0.6064227035100822,2678.0,28,123,282,43

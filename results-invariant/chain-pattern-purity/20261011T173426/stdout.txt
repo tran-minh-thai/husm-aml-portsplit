@@ -1,0 +1,20 @@
+[enumerator, anchored rule, labeling A]
+graph HI-Small_A.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+marked accounts present in the graph: 6357
+engine=enumerate rule=anchored valid_occurrences=77503503
+patterns written: 254 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+HI-Small, labeling A: paired purity, conserved minus unconstrained, same pattern
+ dataset  length  paired_patterns  counted  median_difference  min_difference  median_purity_conserved  median_purity_unconstrained
+HI-Small       4               90     True              0.043          -0.030                    0.070                        0.023
+HI-Small       5                5     True              0.808           0.721                    0.989                        0.178
+
+first 10 patterns by length then support:
+ dataset        method  patterns  mean_purity  weighted_purity   image_mid  patterns_length_2  patterns_length_3  patterns_length_4  patterns_length_5
+HI-Small     conserved        10        0.602            0.766    2764.000                 27                111                 90                  5
+HI-Small unconstrained        10        0.020            0.020 1480910.000                 28                128                628               3128
+HI-Small      anchored        10        0.588            0.755    2767.000                 27                112                104                  5
+  H27 here: 2 counted cells; all with median >= 0.3: False
+  H28 here: conserved 0.602 vs anchored 0.588; holds: False

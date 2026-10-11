@@ -1,0 +1,58 @@
+{
+  "run_id": "20261011T173540",
+  "note": "pattern purity with labeling A, us_100K_difficult, on run 20261011T072323",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_pattern_purity.py",
+    "--source",
+    "amlgentex",
+    "--dataset",
+    "us_100K_difficult",
+    "--effect-record",
+    "results-invariant/chain-conservation-effect/20261011T072323"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 8,
+  "exit_code": 1,
+  "started_at": "2026-10-11T17:35:40",
+  "git_commit": "e51c530457b41753cb2e9b22aad94bd36fba34eb",
+  "git_tree": "clean (36 untracked result records)",
+  "code_sha256": "0caf1677b42cd852088c16fa51970263e01f0383f19c51b65d3d85afccd34936",
+  "code_files": 110,
+  "engine_jar_sha256": "b131ff399f48d751e5513067b922d659d21eddf7425c368a897c8e64c36c7ddb",
+  "data": [
+    {
+      "path": "datasets/chain/us_100K_difficult_A.tg",
+      "bytes": 57626864,
+      "sha256": "ee7fd20cd57c68f6a9c755c2afc54c8a3dcdf3625c476df8025e0deb9bc7987d"
+    },
+    {
+      "path": "datasets/chain/us_100K_difficult_laundering_accounts.txt",
+      "bytes": 11528,
+      "sha256": "deed42df50eb85b0dde299c98e828bd147302285ff3f932930c2f07fcfe2a317"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}

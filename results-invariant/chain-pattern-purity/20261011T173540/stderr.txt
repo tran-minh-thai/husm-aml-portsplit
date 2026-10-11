@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<repository root>/experiments/scripts/chain_pattern_purity.py", line 150, in <module>
+    main()
+    ~~~~^^
+  File "<repository root>/experiments/scripts/chain_pattern_purity.py", line 110, in main
+    "anchored": purity_table(run_anchored(args.dataset, args.heap))}
+                             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repository root>/experiments/scripts/chain_pattern_purity.py", line 92, in run_anchored
+    subprocess.run(cmd, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['java', '-Xmx16g', '-cp', '<repository root>/inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar', 'edu.huflit.inchusm.chain.ChainMain', '--engine', 'enumerate', '--rule', 'anchored', '--graph', '<repository root>/datasets/chain/us_100K_difficult_A.tg', '--theta', '0.2', '--min-support', '10', '--max-length', '5', '--no-closed', '--mark', '<repository root>/datasets/chain/us_100K_difficult_laundering_accounts.txt', '--out', '<repository root>/results-invariant/chain-pattern-purity/20261011T173540/patterns_anchored.tsv']' returned non-zero exit status 143.
