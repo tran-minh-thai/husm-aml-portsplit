@@ -104,7 +104,17 @@ def main() -> None:
     print(f"input {graph.name} sha256 {digest} ({info['transactions']} transactions, {info['accounts']} accounts)")
 
     marked = set(np.loadtxt(marked_file, dtype=np.int64, ndmin=1).tolist())
-    _, ptx, _ = load(args.source, args.dataset)
+    edges, ptx, _ = load(args.source, args.dataset)
+    # the ground truth read here must name accounts exactly as the exported graph does
+    e = edges[edges["src"] != edges["dst"]]
+    flagged = edges["laundering"].to_numpy() == 1
+    again = set(np.union1d(edges["src"].to_numpy()[flagged], edges["dst"].to_numpy()[flagged]).tolist())
+    again &= set(np.union1d(e["src"].to_numpy(), e["dst"].to_numpy()).tolist())
+    if again != marked:
+        sys.exit(f"account ids differ between the export and this loader: {len(again ^ marked)} laundering accounts "
+                 f"in one set only ({len(again)} here, {len(marked)} in {marked_file.name})")
+    print(f"ground truth and export agree on all {len(marked)} laundering accounts")
+    del edges, e
     planted = pc.planted_chains(ptx, args.max_length)
     planted = planted[planted["kind"] == "open"]
     planted_mid = {m: set(a for acc in g["accounts"] for a in acc[1:-1]) for m, g in planted.groupby("length")}
