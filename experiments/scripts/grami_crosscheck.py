@@ -170,7 +170,12 @@ def main() -> None:
                   f"{dict(sorted(cells.items()))}, total {sum(cells.values())}; disagreements: {len(bad)}")
         else:
             vlab, edges = prefix_graph(Path(args.graph), args.transactions)
-            c, bad = compare(vlab, edges, Path(tmp), taus=[args.tau], timeout=args.timeout)
+            try:
+                c, bad = compare(vlab, edges, Path(tmp), taus=[args.tau], timeout=args.timeout)
+            except subprocess.TimeoutExpired:
+                print(f"prefix of {args.transactions} transactions: {len(vlab)} accounts, {len(edges)} distinct edges; "
+                      f"tau {args.tau}; GraMi did not finish within {args.timeout:.0f} s - not compared")
+                sys.exit(2)
             print(f"prefix of {args.transactions} transactions: {len(vlab)} accounts, {len(edges)} distinct edges; "
                   f"tau {args.tau}; chains compared by length: {dict(sorted(c.items()))}; disagreements: {len(bad)}")
         for x in bad[:20]:

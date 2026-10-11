@@ -23,7 +23,7 @@ MINER = "src/main/java/edu/huflit/inchusm/chain/ChainMiner.java"
 GRAPH = "src/main/java/edu/huflit/inchusm/chain/TransactionGraph.java"
 CONS = "src/main/java/edu/huflit/inchusm/chain/Consistency.java"
 ENUM = "src/main/java/edu/huflit/inchusm/chain/ChainEnumerator.java"
-TESTS = "Chain*Test,TransactionGraphTest"  # ChainEnumeratorTest is matched by Chain*Test
+TESTS = "Chain*Test,TransactionGraphTest,ConsistencyTest"  # Chain*Test also matches the enumerator tests
 
 # (file, text to replace, replacement, what the fault means)
 FAULTS = [
@@ -73,6 +73,14 @@ FAULTS = [
      "enumeration baseline may revisit the second account of an occurrence"),
     (ENUM, "b -> b >= (1 - theta) * a", "b -> b > (1 - theta) * a",
      "enumeration baseline makes the lower conservation bound strict"),
+    (ENUM, "double a = g.amount(anchored ? tx[1] : tx[k]);", "double a = g.amount(anchored ? tx[k] : tx[k]);",
+     "the anchored rule compares with the previous transaction instead of the first"),
+    (ENUM, "for (int i = 1; i < m; i++) a.images[i].forEach(mid::set);",
+     "for (int i = 0; i < m; i++) a.images[i].forEach(mid::set);",
+     "the enumeration baseline reports the first account of a chain as intermediate"),
+    (CONS, "a -> (1 + theta) * a >= b", "a -> (1 + theta) * a > b",
+     "leftward local propagation makes the upper conservation bound strict"),
+    (CONS, "b -> b >= lo", "b -> b > lo", "rightward local propagation makes the lower conservation bound strict"),
 ]
 
 

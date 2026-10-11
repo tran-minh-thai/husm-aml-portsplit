@@ -25,6 +25,8 @@ public final class ChainEnumerator {
     private final int[] acct;
     private final int[] tx;
     private long occurrences;
+    private boolean anchored;
+    private final Map<String, java.util.BitSet> accounts = new java.util.TreeMap<>();
 
     private static final class Acc {
         final ChainPattern pattern;
@@ -44,6 +46,22 @@ public final class ChainEnumerator {
         this.tx = new int[params.maxLength() + 1];
     }
 
+    /**
+     * Use the rule of the transaction-cycle detectors instead of pairwise conservation: every amount
+     * within theta of the first transaction's amount. It holds for every prefix of a valid occurrence,
+     * so pruning the walk by it is exact; closed chains are not defined for it here.
+     */
+    public ChainEnumerator anchored(boolean on) {
+        if (on && params.closedChains()) throw new IllegalArgumentException("the anchored rule is for open chains only");
+        this.anchored = on;
+        return this;
+    }
+
+    /** After {@link #mine()}: intermediate accounts of reported chains per kind and length, as in ChainMiner. */
+    public Map<String, java.util.BitSet> accountsByRole() {
+        return accounts;
+    }
+
     /** Number of valid occurrences visited by the last {@link #mine()}. */
     public long occurrences() {
         return occurrences;
@@ -51,6 +69,7 @@ public final class ChainEnumerator {
 
     public List<ChainMiner.Result> mine() {
         byKey.clear();
+        accounts.clear();
         occurrences = 0;
         for (int e = 0; e < g.numTransactions(); e++) {
             acct[0] = g.source(e);
@@ -67,7 +86,15 @@ public final class ChainEnumerator {
                 counts[i] = a.images[i].size();
                 min = Math.min(min, counts[i]);
             }
-            if (min >= params.minSupport()) out.add(new ChainMiner.Result(a.pattern, min, counts, null, null));
+            if (min >= params.minSupport()) {
+                out.add(new ChainMiner.Result(a.pattern, min, counts, null, null));
+                int m = a.pattern.length();
+                if (m >= 2) {
+                    java.util.BitSet mid = accounts.computeIfAbsent(
+                            (a.pattern.closed() ? "closed " : "open ") + m + " intermediate", x -> new java.util.BitSet());
+                    for (int i = 1; i < m; i++) a.images[i].forEach(mid::set);
+                }
+            }
         }
         out.sort(Comparator.comparing((ChainMiner.Result r) -> r.pattern().length())
                 .thenComparing(r -> r.pattern().key()));
@@ -78,7 +105,7 @@ public final class ChainEnumerator {
     private void extend(int k) {
         if (k == params.maxLength()) return;
         double theta = params.theta();
-        double a = g.amount(tx[k]);
+        double a = g.amount(anchored ? tx[1] : tx[k]);
         int v = acct[k];
         for (int lab : outLabels(v)) {
             int[] r = g.narrow(true, g.outByLabel(v, lab), b -> b >= (1 - theta) * a, b -> b <= (1 + theta) * a);
@@ -154,6 +181,10 @@ public final class ChainEnumerator {
 
         int size() {
             return size;
+        }
+
+        void forEach(java.util.function.IntConsumer f) {
+            for (int x : slots) if (x != -1) f.accept(x);
         }
 
         private void grow() {

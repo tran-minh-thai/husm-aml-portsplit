@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
  * </pre>
  *
  * {@code --engine enumerate} runs the baseline that enumerates every valid occurrence and aggregates
- * image sets (same output, for timing comparisons).
+ * image sets (same output, for timing comparisons); with {@code --rule anchored} (open chains only,
+ * {@code --no-closed}) it applies instead the rule of the transaction-cycle detectors, every amount
+ * within theta of the first transaction's amount.
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
@@ -58,15 +60,18 @@ public final class ChainMain {
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {
-            if (opt.containsKey("--mark") || opt.containsKey("--accounts-out")) {
-                throw new IllegalArgumentException("--mark and --accounts-out belong to the miner, not to --engine enumerate");
+            if (opt.containsKey("--mark")) throw new IllegalArgumentException("--mark belongs to the miner");
+            String rule = opt.getOrDefault("--rule", "pairwise");
+            if (!rule.equals("pairwise") && !rule.equals("anchored")) {
+                throw new IllegalArgumentException("--rule must be pairwise or anchored");
             }
-            ChainEnumerator en = new ChainEnumerator(g, params);
+            ChainEnumerator en = new ChainEnumerator(g, params).anchored(rule.equals("anchored"));
             long t0 = System.nanoTime();
             List<ChainMiner.Result> results = en.mine();
             long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
             write(out, results);
-            System.out.printf("engine=enumerate valid_occurrences=%d%n", en.occurrences());
+            if (opt.containsKey("--accounts-out")) writeAccounts(Path.of(opt.get("--accounts-out")), en.accountsByRole(), g);
+            System.out.printf("engine=enumerate rule=%s valid_occurrences=%d%n", rule, en.occurrences());
             System.out.printf("patterns written: %d -> %s%n", results.size(), out.getFileName());
             System.out.printf("mining elapsed ms: %d (machine-dependent)%n", elapsedMs);
             return;
@@ -85,7 +90,7 @@ public final class ChainMain {
         long elapsedMs = (System.nanoTime() - t0) / 1_000_000;
 
         write(out, results);
-        if (opt.containsKey("--accounts-out")) writeAccounts(Path.of(opt.get("--accounts-out")), miner, g);
+        if (opt.containsKey("--accounts-out")) writeAccounts(Path.of(opt.get("--accounts-out")), miner.accountsByRole(), g);
         ChainMiner.Counters c = miner.counters();
         System.out.printf("candidates=%d pruned_by_domain=%d pruned_by_consistency=%d searches=%d found=%d failed=%d"
                 + " budget_fallbacks=%d local_rejections=%d early_stops=%d%n", c.candidates, c.prunedByDomain,
@@ -110,10 +115,10 @@ public final class ChainMain {
         }
     }
 
-    static void writeAccounts(Path out, ChainMiner miner, TransactionGraph g) throws IOException {
+    static void writeAccounts(Path out, Map<String, java.util.BitSet> byRole, TransactionGraph g) throws IOException {
         try (BufferedWriter w = Files.newBufferedWriter(out, StandardCharsets.UTF_8)) {
             w.write("kind\tlength\trole\taccount\n");
-            for (Map.Entry<String, java.util.BitSet> e : miner.accountsByRole().entrySet()) {
+            for (Map.Entry<String, java.util.BitSet> e : byRole.entrySet()) {
                 String[] key = e.getKey().split(" ");
                 java.util.BitSet b = e.getValue();
                 for (int v = b.nextSetBit(0); v >= 0; v = b.nextSetBit(v + 1)) {
