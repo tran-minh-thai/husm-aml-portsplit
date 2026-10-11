@@ -1,0 +1,6 @@
+# AMLworld HI-Large and LI-Large (Kaggle dataset ealtman2019/ibm-transactions-for-anti-money-laundering-aml).
+# sha256  size  path; fetched and checked by experiments/provenance/fetch_amlworld_large.py
+bcf815a1931cfdcefd5d6d9feaa8f95dbc33cfd6ef8cd52d9a41e8d994c22820  13807473  datasets/amlworld/HI-Large_Patterns.txt
+1f7024cdc01a7b0bfcba00db7e72946f65ebf08cfd9f4cc61259ce54b7541e0c  1934790  datasets/amlworld/LI-Large_Patterns.txt
+d13635e297c64673826217631fb88d635c4f506052e1bde833895eda2a65c3f2  17052760651  datasets/amlworld/HI-Large_Trans.csv
+9240e875e7522400c0bd4db1049108b18bb43bbba0a96ff221b62cdef3f7a094  16742513790  datasets/amlworld/LI-Large_Trans.csv
