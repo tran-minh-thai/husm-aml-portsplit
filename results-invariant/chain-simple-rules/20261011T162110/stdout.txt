@@ -1,0 +1,31 @@
+[enumerator, anchored rule]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+engine=enumerate rule=anchored valid_occurrences=5937600927
+patterns written: 5 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+LI-Medium: |C| = 1150 over 170 attempts, |M| = 23510
+  dataset target         method  returned   tp  precision  recall    f1   precision_ci      recall_ci          f1_ci
+LI-Medium      C        ours(2)    258385 1138      0.004   0.990 0.009 [0.004, 0.005] [0.982, 0.996] [0.008, 0.010]
+LI-Medium      C        ours(3)     97436  672      0.007   0.584 0.014 [0.006, 0.008] [0.523, 0.652] [0.012, 0.015]
+LI-Medium      C        ours(4)     25959  504      0.019   0.438 0.037 [0.016, 0.023] [0.357, 0.519] [0.031, 0.044]
+LI-Medium      C        ours(5)      6071  435      0.072   0.378 0.120 [0.058, 0.086] [0.302, 0.463] [0.097, 0.145]
+LI-Medium      C    anchored(2)    258385 1138      0.004   0.990 0.009 [0.004, 0.005] [0.982, 0.996] [0.008, 0.010]
+LI-Medium      C    anchored(3)    107442  675      0.006   0.587 0.012 [0.006, 0.007] [0.527, 0.649] [0.011, 0.014]
+LI-Medium      C    anchored(4)     33823  525      0.016   0.457 0.030 [0.013, 0.018] [0.385, 0.531] [0.025, 0.035]
+LI-Medium      C    anchored(5)      9345  442      0.047   0.384 0.084 [0.038, 0.057] [0.310, 0.466] [0.068, 0.101]
+LI-Medium      C one-in-one-out     20085   52      0.003   0.045 0.005 [0.002, 0.003] [0.034, 0.057] [0.004, 0.006]
+LI-Medium      C         totals     35321  234      0.007   0.203 0.013 [0.006, 0.008] [0.177, 0.233] [0.011, 0.015]
+LI-Medium      M        ours(2)    258385 7636      0.030   0.325 0.054 [0.009, 0.069] [0.292, 0.574] [0.017, 0.111]
+LI-Medium      M        ours(3)     97436 3505      0.036   0.149 0.058 [0.013, 0.078] [0.124, 0.340] [0.025, 0.097]
+LI-Medium      M        ours(4)     25959 1314      0.051   0.056 0.053 [0.027, 0.090] [0.037, 0.207] [0.047, 0.059]
+LI-Medium      M        ours(5)      6071  682      0.112   0.029 0.046 [0.081, 0.156] [0.014, 0.156] [0.026, 0.127]
+LI-Medium      M    anchored(2)    258385 7636      0.030   0.325 0.054 [0.009, 0.069] [0.291, 0.575] [0.017, 0.111]
+LI-Medium      M    anchored(3)    107442 3889      0.036   0.165 0.059 [0.012, 0.080] [0.142, 0.349] [0.024, 0.103]
+LI-Medium      M    anchored(4)     33823 1527      0.045   0.065 0.053 [0.023, 0.083] [0.047, 0.223] [0.040, 0.060]
+LI-Medium      M    anchored(5)      9345  777      0.083   0.033 0.047 [0.055, 0.126] [0.018, 0.160] [0.031, 0.099]
+LI-Medium      M one-in-one-out     20085  361      0.018   0.015 0.017 [0.007, 0.038] [0.012, 0.044] [0.012, 0.019]
+LI-Medium      M         totals     35321  958      0.027   0.041 0.033 [0.009, 0.060] [0.034, 0.091] [0.016, 0.045]
+  H18 at length 4: F1 ours 0.037 vs best simple 0.030; holds here: False
+  H18 at length 5: F1 ours 0.120 vs best simple 0.084; holds here: False

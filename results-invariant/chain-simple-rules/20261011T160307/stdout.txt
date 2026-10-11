@@ -1,0 +1,31 @@
+[enumerator, anchored rule]
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+engine=enumerate rule=anchored valid_occurrences=6309125265
+patterns written: 5 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+HI-Medium: |C| = 6401 over 987 attempts, |M| = 41857
+  dataset target         method  returned    tp  precision  recall    f1   precision_ci      recall_ci          f1_ci
+HI-Medium      C        ours(2)    267730  6358      0.024   0.993 0.046 [0.023, 0.025] [0.991, 0.995] [0.045, 0.048]
+HI-Medium      C        ours(3)    104277  4261      0.041   0.666 0.077 [0.039, 0.043] [0.641, 0.691] [0.073, 0.081]
+HI-Medium      C        ours(4)     30121  3318      0.110   0.518 0.182 [0.104, 0.117] [0.484, 0.550] [0.172, 0.192]
+HI-Medium      C        ours(5)      9305  2855      0.307   0.446 0.364 [0.291, 0.323] [0.415, 0.478] [0.343, 0.385]
+HI-Medium      C    anchored(2)    267730  6358      0.024   0.993 0.046 [0.023, 0.025] [0.991, 0.995] [0.045, 0.048]
+HI-Medium      C    anchored(3)    114272  4261      0.037   0.666 0.071 [0.036, 0.039] [0.640, 0.689] [0.067, 0.074]
+HI-Medium      C    anchored(4)     38016  3375      0.089   0.527 0.152 [0.083, 0.094] [0.494, 0.558] [0.143, 0.160]
+HI-Medium      C    anchored(5)     12474  2882      0.231   0.450 0.305 [0.218, 0.244] [0.416, 0.484] [0.286, 0.324]
+HI-Medium      C one-in-one-out     21113   230      0.011   0.036 0.017 [0.009, 0.012] [0.031, 0.040] [0.015, 0.019]
+HI-Medium      C         totals     37744  1362      0.036   0.213 0.062 [0.034, 0.039] [0.202, 0.224] [0.058, 0.066]
+HI-Medium      M        ours(2)    267730 17660      0.066   0.422 0.114 [0.045, 0.103] [0.349, 0.561] [0.084, 0.159]
+HI-Medium      M        ours(3)    104277  9957      0.095   0.238 0.136 [0.073, 0.134] [0.178, 0.355] [0.119, 0.154]
+HI-Medium      M        ours(4)     30121  5404      0.179   0.129 0.150 [0.157, 0.212] [0.077, 0.228] [0.112, 0.195]
+HI-Medium      M        ours(5)      9305  3589      0.386   0.086 0.140 [0.362, 0.412] [0.046, 0.164] [0.082, 0.230]
+HI-Medium      M    anchored(2)    267730 17660      0.066   0.422 0.114 [0.046, 0.103] [0.348, 0.561] [0.084, 0.159]
+HI-Medium      M    anchored(3)    114272 10510      0.092   0.251 0.135 [0.068, 0.133] [0.193, 0.364] [0.114, 0.159]
+HI-Medium      M    anchored(4)     38016  5880      0.155   0.140 0.147 [0.132, 0.190] [0.089, 0.239] [0.120, 0.178]
+HI-Medium      M    anchored(5)     12474  3854      0.309   0.092 0.142 [0.285, 0.336] [0.050, 0.174] [0.087, 0.222]
+HI-Medium      M one-in-one-out     21113  1057      0.050   0.025 0.034 [0.037, 0.072] [0.018, 0.039] [0.029, 0.041]
+HI-Medium      M         totals     37744  2632      0.070   0.063 0.066 [0.052, 0.102] [0.046, 0.095] [0.063, 0.071]
+  H18 at length 4: F1 ours 0.182 vs best simple 0.152; holds here: False
+  H18 at length 5: F1 ours 0.364 vs best simple 0.305; holds here: False

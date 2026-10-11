@@ -1,0 +1,16 @@
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.5 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=560475 found=545751 failed=14724 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+patterns written: 5 -> patterns_theta_0.5.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+         dataset  theta  length  I_theta  I_inf  P_theta  P_inf     OR  R_theta  planted_intermediates
+sweden_100K_easy 0.5000       2    75127  76499   0.3784 0.3769 1.0064   1.0000                   6861
+sweden_100K_easy 0.5000       3    73265  75255   0.3847 0.3830 1.0073   1.0000                   3184
+sweden_100K_easy 0.5000       4    71521  74155   0.3909 0.3882 1.0117   1.0000                   3166
+sweden_100K_easy 0.5000       5    70218  73437   0.3952 0.3915 1.0153   1.0000                   2806

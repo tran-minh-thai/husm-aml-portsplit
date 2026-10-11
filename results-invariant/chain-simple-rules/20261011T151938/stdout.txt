@@ -1,0 +1,32 @@
+  rows 7,748,933; dropped 6,752,598 rows with the income source or spending sink; 0 flagged rows outside any attempt
+[enumerator, anchored rule]
+graph sweden_100K_difficult_S.tg: 99995 accounts, 996335 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+engine=enumerate rule=anchored valid_occurrences=108188117
+patterns written: 5 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+sweden_100K_difficult: |C| = 408 over 60 attempts, |M| = 1851
+              dataset target         method  returned   tp  precision  recall    f1   precision_ci      recall_ci          f1_ci
+sweden_100K_difficult      C        ours(2)     66371  408      0.006   1.000 0.012 [0.006, 0.007] [1.000, 1.000] [0.011, 0.013]
+sweden_100K_difficult      C        ours(3)     61095  400      0.007   0.980 0.013 [0.006, 0.007] [0.962, 0.995] [0.012, 0.014]
+sweden_100K_difficult      C        ours(4)     55510  392      0.007   0.961 0.014 [0.007, 0.008] [0.939, 0.981] [0.013, 0.015]
+sweden_100K_difficult      C        ours(5)     50768  382      0.008   0.936 0.015 [0.007, 0.008] [0.903, 0.967] [0.014, 0.016]
+sweden_100K_difficult      C    anchored(2)     66371  408      0.006   1.000 0.012 [0.006, 0.007] [1.000, 1.000] [0.011, 0.013]
+sweden_100K_difficult      C    anchored(3)     61658  399      0.006   0.978 0.013 [0.006, 0.007] [0.959, 0.993] [0.012, 0.014]
+sweden_100K_difficult      C    anchored(4)     56476  380      0.007   0.931 0.013 [0.006, 0.007] [0.899, 0.961] [0.012, 0.014]
+sweden_100K_difficult      C    anchored(5)     52171  372      0.007   0.912 0.014 [0.007, 0.008] [0.864, 0.952] [0.013, 0.015]
+sweden_100K_difficult      C one-in-one-out         4    0      0.000   0.000 0.000 [0.000, 0.000] [0.000, 0.000] [0.000, 0.000]
+sweden_100K_difficult      C         totals     10028   56      0.006   0.137 0.011 [0.004, 0.007] [0.101, 0.174] [0.008, 0.014]
+sweden_100K_difficult      M        ours(2)     66371 1611      0.024   0.870 0.047 [0.023, 0.025] [0.852, 0.887] [0.045, 0.049]
+sweden_100K_difficult      M        ours(3)     61095 1563      0.026   0.844 0.050 [0.025, 0.027] [0.825, 0.864] [0.048, 0.052]
+sweden_100K_difficult      M        ours(4)     55510 1510      0.027   0.816 0.053 [0.026, 0.029] [0.795, 0.838] [0.050, 0.055]
+sweden_100K_difficult      M        ours(5)     50768 1453      0.029   0.785 0.055 [0.027, 0.030] [0.760, 0.809] [0.053, 0.058]
+sweden_100K_difficult      M    anchored(2)     66371 1611      0.024   0.870 0.047 [0.023, 0.025] [0.852, 0.887] [0.045, 0.049]
+sweden_100K_difficult      M    anchored(3)     61658 1581      0.026   0.854 0.050 [0.024, 0.027] [0.835, 0.873] [0.048, 0.052]
+sweden_100K_difficult      M    anchored(4)     56476 1522      0.027   0.822 0.052 [0.026, 0.028] [0.802, 0.844] [0.050, 0.054]
+sweden_100K_difficult      M    anchored(5)     52171 1485      0.028   0.802 0.055 [0.027, 0.030] [0.781, 0.827] [0.052, 0.058]
+sweden_100K_difficult      M one-in-one-out         4    2      0.500   0.001 0.002 [0.000, 0.714] [0.000, 0.003] [0.000, 0.005]
+sweden_100K_difficult      M         totals     10028  233      0.023   0.126 0.039 [0.020, 0.026] [0.109, 0.143] [0.034, 0.044]
+  H18 at length 4: F1 ours 0.014 vs best simple 0.013; holds here: False
+  H18 at length 5: F1 ours 0.015 vs best simple 0.014; holds here: False

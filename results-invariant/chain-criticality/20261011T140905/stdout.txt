@@ -1,0 +1,6 @@
+  rows 7,748,933; dropped 6,752,598 rows with the income source or spending sink; 0 flagged rows outside any attempt
+              dataset  theta  background_transactions     mu  share_with_a_continuation  median     p99
+sweden_100K_difficult 0.0500                   993561 0.6915                     0.3060  0.0000  8.0000
+sweden_100K_difficult 0.1000                   993561 1.3198                     0.4303  0.0000 15.0000
+sweden_100K_difficult 0.2000                   993561 2.4962                     0.5552  1.0000 29.0000
+sweden_100K_difficult 0.5000                   993561 5.6875                     0.6672  3.0000 60.0000

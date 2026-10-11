@@ -1,0 +1,32 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+[enumerator, anchored rule]
+graph us_100K_difficult_S.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+engine=enumerate rule=anchored valid_occurrences=34907284742
+patterns written: 5 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+us_100K_difficult: |C| = 423 over 60 attempts, |M| = 1956
+          dataset target         method  returned   tp  precision  recall    f1   precision_ci      recall_ci          f1_ci
+us_100K_difficult      C        ours(2)     75508  423      0.006   1.000 0.011 [0.005, 0.006] [1.000, 1.000] [0.010, 0.012]
+us_100K_difficult      C        ours(3)     71940  415      0.006   0.981 0.011 [0.005, 0.006] [0.966, 0.993] [0.011, 0.012]
+us_100K_difficult      C        ours(4)     68456  410      0.006   0.969 0.012 [0.006, 0.006] [0.950, 0.985] [0.011, 0.013]
+us_100K_difficult      C        ours(5)     65531  400      0.006   0.946 0.012 [0.006, 0.007] [0.921, 0.968] [0.011, 0.013]
+us_100K_difficult      C    anchored(2)     75508  423      0.006   1.000 0.011 [0.005, 0.006] [1.000, 1.000] [0.010, 0.012]
+us_100K_difficult      C    anchored(3)     72674  416      0.006   0.983 0.011 [0.005, 0.006] [0.971, 0.993] [0.011, 0.012]
+us_100K_difficult      C    anchored(4)     69689  406      0.006   0.960 0.012 [0.005, 0.006] [0.937, 0.979] [0.011, 0.013]
+us_100K_difficult      C    anchored(5)     67141  399      0.006   0.943 0.012 [0.005, 0.006] [0.916, 0.969] [0.011, 0.013]
+us_100K_difficult      C one-in-one-out         1    0      0.000   0.000 0.000 [0.000, 0.000] [0.000, 0.000] [0.000, 0.000]
+us_100K_difficult      C         totals     11402   51      0.004   0.121 0.009 [0.003, 0.006] [0.092, 0.153] [0.006, 0.011]
+us_100K_difficult      M        ours(2)     75508 1771      0.023   0.905 0.046 [0.022, 0.025] [0.890, 0.921] [0.044, 0.048]
+us_100K_difficult      M        ours(3)     71940 1741      0.024   0.890 0.047 [0.023, 0.025] [0.873, 0.905] [0.045, 0.050]
+us_100K_difficult      M        ours(4)     68456 1713      0.025   0.876 0.049 [0.024, 0.026] [0.858, 0.892] [0.046, 0.051]
+us_100K_difficult      M        ours(5)     65531 1675      0.026   0.856 0.050 [0.024, 0.027] [0.837, 0.876] [0.047, 0.052]
+us_100K_difficult      M    anchored(2)     75508 1771      0.023   0.905 0.046 [0.022, 0.025] [0.889, 0.920] [0.044, 0.048]
+us_100K_difficult      M    anchored(3)     72674 1753      0.024   0.896 0.047 [0.023, 0.025] [0.882, 0.911] [0.045, 0.049]
+us_100K_difficult      M    anchored(4)     69689 1727      0.025   0.883 0.048 [0.024, 0.026] [0.866, 0.899] [0.046, 0.051]
+us_100K_difficult      M    anchored(5)     67141 1703      0.025   0.871 0.049 [0.024, 0.027] [0.853, 0.888] [0.047, 0.052]
+us_100K_difficult      M one-in-one-out         1    0      0.000   0.000 0.000 [0.000, 0.000] [0.000, 0.000] [0.000, 0.000]
+us_100K_difficult      M         totals     11402  216      0.019   0.110 0.032 [0.017, 0.021] [0.098, 0.123] [0.029, 0.036]
+  H18 at length 4: F1 ours 0.012 vs best simple 0.012; holds here: False
+  H18 at length 5: F1 ours 0.012 vs best simple 0.012; holds here: False

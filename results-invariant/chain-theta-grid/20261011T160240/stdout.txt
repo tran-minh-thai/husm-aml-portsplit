@@ -1,0 +1,15 @@
+graph LI-Small_S.tg: 576781 accounts, 6119572 transactions (0 self-transactions dropped)
+params: theta=0.5 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=382201 found=376539 failed=5662 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+patterns written: 5 -> patterns_theta_0.5.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+ dataset  theta  length  I_theta  I_inf  P_theta  P_inf     OR  R_theta  planted_intermediates
+LI-Small 0.5000       2   120321 226246   0.0189 0.0158 1.2008   1.0000                    301
+LI-Small 0.5000       3    74709 209529   0.0214 0.0165 1.3066   1.0000                    126
+LI-Small 0.5000       4    39115 199447   0.0251 0.0166 1.5286   0.9915                    118
+LI-Small 0.5000       5    18207 191921   0.0333 0.0166 2.0409   1.0000                    113

@@ -1,0 +1,6 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+          dataset  theta  background_transactions      mu  share_with_a_continuation  median      p99
+us_100K_difficult 0.0500                  1763490  2.6210                     0.3987  0.0000  46.0000
+us_100K_difficult 0.1000                  1763490  5.1250                     0.5092  1.0000  91.0000
+us_100K_difficult 0.2000                  1763490 10.1109                     0.6199  1.0000 172.0000
+us_100K_difficult 0.5000                  1763490 23.6214                     0.7237  4.0000 405.0000

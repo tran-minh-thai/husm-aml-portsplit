@@ -1,0 +1,1 @@
+prefix of 50000 transactions: 49843 accounts, 30683 distinct edges; tau 2; GraMi did not finish within 1800 s - not compared

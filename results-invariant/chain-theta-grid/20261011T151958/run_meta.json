@@ -1,0 +1,61 @@
+{
+  "run_id": "20261011T151958",
+  "note": "theta grid, sweden_100K_difficult, labeling S, theta 0.1",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_theta_grid.py",
+    "--source",
+    "amlgentex",
+    "--dataset",
+    "sweden_100K_difficult",
+    "--theta",
+    "0.1",
+    "--effect-record",
+    "results-invariant/chain-conservation-effect/20261011T072056"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 1,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T15:19:58",
+  "git_commit": "931083d51732ed21f4b8283bdd2276655e55e14f",
+  "git_tree": "clean (85 untracked result records)",
+  "code_sha256": "a2d1b791d312a747a92fcfa057f6035dbf5966c4992e984232735e3f2a16c7aa",
+  "code_files": 104,
+  "engine_jar_sha256": "df889d78f462b0e726fc51f754783bc66a1cef3a0bd3d8b4a0672ebd20e878ca",
+  "data": [
+    {
+      "path": "datasets/amlgentex/sweden_100K_difficult/tx_log.csv",
+      "bytes": 628949539,
+      "sha256": "d87e9742d019242ab1075076219c4c536cc8d082ca844590d7359f14d58666cb"
+    },
+    {
+      "path": "datasets/chain/sweden_100K_difficult_S.tg",
+      "bytes": 33248742,
+      "sha256": "21f3948b29238ad6359adca8f477d2fbdbff18ae17a2bfe25bfec98ced30d617"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (88 untracked result records)"
+}

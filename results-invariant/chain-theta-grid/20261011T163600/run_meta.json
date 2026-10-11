@@ -1,0 +1,66 @@
+{
+  "run_id": "20261011T163600",
+  "note": "theta grid, LI-Medium, labeling S, theta 0.5",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_theta_grid.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "LI-Medium",
+    "--theta",
+    "0.5",
+    "--effect-record",
+    "results-invariant/chain-conservation-effect/20261011T103323"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 1,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T16:36:00",
+  "git_commit": "931083d51732ed21f4b8283bdd2276655e55e14f",
+  "git_tree": "clean (211 untracked result records)",
+  "code_sha256": "a2d1b791d312a747a92fcfa057f6035dbf5966c4992e984232735e3f2a16c7aa",
+  "code_files": 104,
+  "engine_jar_sha256": "df889d78f462b0e726fc51f754783bc66a1cef3a0bd3d8b4a0672ebd20e878ca",
+  "data": [
+    {
+      "path": "datasets/amlworld/LI-Medium_Trans.csv",
+      "bytes": 2976436978,
+      "sha256": "0fc89584453c97472b1bfde7ca746e21d7167140c22a6c4875272b197a4a3910"
+    },
+    {
+      "path": "datasets/amlworld/LI-Medium_Patterns.txt",
+      "bytes": 390893,
+      "sha256": "6aa4c4041894eb272339ed10c862a4ee1ac53a469326ed9dd3dd9e35da0e625c"
+    },
+    {
+      "path": "datasets/chain/LI-Medium_S.tg",
+      "bytes": 1061154661,
+      "sha256": "08048a8677f6ba0cccdc3720f62ac6834879742b91c40c63a9573006495e9c66"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (214 untracked result records)"
+}

@@ -1,0 +1,5 @@
+ dataset  theta  background_transactions      mu  share_with_a_continuation  median     p99
+HI-Small 0.0500                  4481967  1.0059                     0.0298  0.0000  7.0000
+HI-Small 0.1000                  4481967  2.0140                     0.0561  0.0000 10.0000
+HI-Small 0.2000                  4481967  4.0557                     0.1017  0.0000 14.0000
+HI-Small 0.5000                  4481967 10.6887                     0.2047  0.0000 25.0000

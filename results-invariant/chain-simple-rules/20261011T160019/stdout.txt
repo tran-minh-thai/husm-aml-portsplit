@@ -1,0 +1,31 @@
+[enumerator, anchored rule]
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true
+engine=enumerate rule=anchored valid_occurrences=77503503
+patterns written: 5 -> patterns_anchored.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+HI-Small: |C| = 862 over 129 attempts, |M| = 6357
+ dataset target         method  returned   tp  precision  recall    f1   precision_ci      recall_ci          f1_ci
+HI-Small      C        ours(2)     59177  852      0.014   0.988 0.028 [0.013, 0.016] [0.980, 0.996] [0.026, 0.031]
+HI-Small      C        ours(3)     21629  516      0.024   0.599 0.046 [0.021, 0.027] [0.525, 0.676] [0.040, 0.052]
+HI-Small      C        ours(4)      5760  389      0.068   0.451 0.117 [0.055, 0.080] [0.363, 0.544] [0.096, 0.139]
+HI-Small      C        ours(5)      1440  331      0.230   0.384 0.288 [0.188, 0.270] [0.297, 0.477] [0.230, 0.343]
+HI-Small      C    anchored(2)     59177  852      0.014   0.988 0.028 [0.013, 0.016] [0.980, 0.996] [0.026, 0.031]
+HI-Small      C    anchored(3)     23661  525      0.022   0.609 0.043 [0.019, 0.025] [0.539, 0.687] [0.037, 0.048]
+HI-Small      C    anchored(4)      7200  389      0.054   0.451 0.097 [0.045, 0.063] [0.366, 0.542] [0.080, 0.113]
+HI-Small      C    anchored(5)      1976  335      0.170   0.389 0.236 [0.136, 0.199] [0.302, 0.478] [0.188, 0.281]
+HI-Small      C one-in-one-out      4578   53      0.012   0.061 0.019 [0.008, 0.016] [0.044, 0.080] [0.014, 0.026]
+HI-Small      C         totals      8057  235      0.029   0.273 0.053 [0.024, 0.035] [0.239, 0.311] [0.045, 0.062]
+HI-Small      M        ours(2)     59177 2338      0.040   0.368 0.071 [0.026, 0.064] [0.285, 0.542] [0.049, 0.106]
+HI-Small      M        ours(3)     21629 1205      0.056   0.190 0.086 [0.040, 0.083] [0.131, 0.319] [0.070, 0.104]
+HI-Small      M        ours(4)      5760  655      0.114   0.103 0.108 [0.088, 0.147] [0.062, 0.205] [0.085, 0.144]
+HI-Small      M        ours(5)      1440  432      0.300   0.068 0.111 [0.248, 0.357] [0.035, 0.154] [0.063, 0.208]
+HI-Small      M    anchored(2)     59177 2338      0.040   0.368 0.071 [0.026, 0.064] [0.287, 0.541] [0.049, 0.105]
+HI-Small      M    anchored(3)     23661 1280      0.054   0.201 0.085 [0.037, 0.081] [0.145, 0.331] [0.066, 0.107]
+HI-Small      M    anchored(4)      7200  684      0.095   0.108 0.101 [0.073, 0.124] [0.063, 0.211] [0.081, 0.130]
+HI-Small      M    anchored(5)      1976  452      0.229   0.071 0.108 [0.187, 0.273] [0.039, 0.158] [0.067, 0.191]
+HI-Small      M one-in-one-out      4578  189      0.041   0.030 0.035 [0.026, 0.065] [0.021, 0.051] [0.030, 0.042]
+HI-Small      M         totals      8057  410      0.051   0.064 0.057 [0.037, 0.072] [0.042, 0.117] [0.050, 0.067]
+  H18 at length 4: F1 ours 0.117 vs best simple 0.097; holds here: False
+  H18 at length 5: F1 ours 0.288 vs best simple 0.236; holds here: False
