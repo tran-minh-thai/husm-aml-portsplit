@@ -1,0 +1,5 @@
+dataset,subset,group,transactions,below,above,ratio
+HI-Small,every format,laundering,5177,149,161,0.9254658385093167
+HI-Small,every format,background,5073168,46266,41304,1.1201336432306799
+HI-Small,cash,laundering,108,1,1,1.0
+HI-Small,cash,background,490783,3757,3212,1.169676214196762

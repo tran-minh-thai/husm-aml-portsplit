@@ -1,0 +1,20 @@
+rule,prefix_closed,suffix_closed,factor_closed,minimal_forbidden_lengths,width_lower_bound,possibly_unbounded,pruning_graphs,pruning_frequent_chains,pruning_lost_chains,prefix_growth_lost_chains,pair_filter_instances,pair_filter_with_a_valid_walk,pair_filter_inexact,width_filter_instances,width_filter_with_a_valid_walk,width_filter_inexact
+pairwise theta=0.0,True,True,True,2,2.0,False,600,2355,0,0.0,300.0,56.0,0.0,300.0,49.0,0.0
+pairwise theta=0.2,True,True,True,2,2.0,False,600,4032,0,0.0,300.0,172.0,0.0,300.0,157.0,0.0
+anchored alpha=0.2,True,False,False,,,False,600,4081,134,0.0,,,,,,
+"range within every 3 consecutive, delta=0.2",True,True,True,2 3,3.0,False,600,3818,0,0.0,300.0,157.0,13.0,300.0,153.0,0.0
+"range over the whole chain, delta=0.2",True,True,True,2 3 4 5,5.0,True,600,3790,0,0.0,300.0,166.0,15.0,,,
+"positional thresholds (0.1, 0.3)",True,False,False,,,False,600,3537,287,0.0,,,,,,
+"forbids [(0, 0, 0)] (only a length-3 factor)",True,True,True,3,3.0,False,600,7512,0,0.0,300.0,175.0,6.0,300.0,184.0,0.0
+"forbids [(2, 1), (2, 1, 0, 1)] (random 0)",True,True,True,2,2.0,False,600,6485,0,0.0,300.0,156.0,0.0,300.0,161.0,0.0
+"forbids [(0, 1)] (random 1)",True,True,True,2,2.0,False,600,6756,0,0.0,300.0,167.0,0.0,300.0,158.0,0.0
+"forbids [(0, 0), (0, 2, 0), (2, 2, 0, 0)] (random 2)",True,True,True,2 3,3.0,False,600,6769,0,0.0,300.0,148.0,8.0,300.0,152.0,0.0
+"forbids [(0, 0)] (random 3)",True,True,True,2,2.0,False,600,6926,0,0.0,300.0,152.0,0.0,300.0,155.0,0.0
+"forbids [(1, 1, 1, 1), (2, 0, 1, 0), (2, 1)] (random 4)",True,True,True,2 4,4.0,False,600,7095,0,0.0,300.0,160.0,9.0,300.0,160.0,0.0
+"forbids [(2, 2, 0, 2)] (random 5)",True,True,True,4,4.0,False,600,7611,0,0.0,300.0,181.0,1.0,300.0,179.0,0.0
+random rule 0,False,False,False,,,False,600,6585,1067,,,,,,,
+random rule 1,False,False,False,,,False,600,6230,2058,,,,,,,
+random rule 2,False,False,False,,,False,600,6261,1473,,,,,,,
+random rule 3,False,False,False,,,False,600,6560,807,,,,,,,
+random rule 4,False,False,False,,,False,600,6521,846,,,,,,,
+random rule 5,False,False,False,,,False,600,6314,735,,,,,,,

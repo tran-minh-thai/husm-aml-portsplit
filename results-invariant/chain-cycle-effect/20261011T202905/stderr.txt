@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<repository root>/experiments/scripts/chain_cycle_effect.py", line 108, in <module>
+    main()
+    ~~~~^^
+  File "<repository root>/experiments/scripts/chain_cycle_effect.py", line 92, in main
+    sets = {theta: closed_sets(mine(args.dataset, theta, args.heap)) for theta in ("0.2", "inf")}
+                               ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repository root>/experiments/scripts/chain_cycle_effect.py", line 79, in mine
+    subprocess.run(cmd, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['java', '-Xmx16g', '-cp', '<repository root>/inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar', 'edu.huflit.inchusm.chain.ChainMain', '--graph', '<repository root>/datasets/chain/LI-Medium_S.tg', '--theta', 'inf', '--min-support', '10', '--max-length', '5', '--min-cycle', '3', '--mark', '<repository root>/datasets/chain/LI-Medium_laundering_accounts.txt', '--out', '<repository root>/results-invariant/chain-cycle-effect/20261011T202905/patterns_theta_inf.tsv', '--accounts-out', '<repository root>/results-invariant/chain-cycle-effect/20261011T202905/accounts_theta_inf.tsv']' returned non-zero exit status 143.

@@ -1,0 +1,35 @@
+
+[miner with closed chains, theta=0.2]
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 41857
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=696298 found=656346 failed=39952 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner with closed chains, theta=inf]
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 41857
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=7739662 found=5913012 failed=1826650 budget_fallbacks=244678 local_rejections=241227 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+HI-Medium, closed chains, labeling S, tau 10, 41857 laundering accounts
+  dataset  length  planted_accounts  I_0.2  P_0.2  R_0.2  I_inf  P_inf  R_inf      OR
+HI-Medium       3                93   1270 0.2780 1.0000   9142 0.1395 1.0000  2.3752
+HI-Medium       4               100    332 0.7078 1.0000   1613 0.2660 1.0000  6.6864
+HI-Medium       5               115    242 0.9380 1.0000    554 0.5812 1.0000 10.9035
+  length 3: H31 OR >= 2: True; R(0.2) >= half R(inf): True
+  length 4: H31 OR >= 2: True; R(0.2) >= half R(inf): True
+  length 5: H31 OR >= 2: True; R(0.2) >= half R(inf): True

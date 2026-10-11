@@ -1,0 +1,77 @@
+rule,n,condition_holds,random_graphs,random_violations,construction_support_n,construction_support_n_minus_1
+pairwise theta=0.0,2,True,300.0,0.0,,
+pairwise theta=0.0,3,True,300.0,0.0,,
+pairwise theta=0.0,4,True,300.0,0.0,,
+pairwise theta=0.0,5,True,300.0,0.0,,
+pairwise theta=0.2,2,True,300.0,0.0,,
+pairwise theta=0.2,3,True,300.0,0.0,,
+pairwise theta=0.2,4,True,300.0,0.0,,
+pairwise theta=0.2,5,True,300.0,0.0,,
+anchored alpha=0.2,2,True,300.0,0.0,,
+anchored alpha=0.2,3,True,300.0,0.0,,
+anchored alpha=0.2,4,True,300.0,0.0,,
+anchored alpha=0.2,5,True,300.0,0.0,,
+"range within every 3 consecutive, delta=0.2",2,True,300.0,0.0,,
+"range within every 3 consecutive, delta=0.2",3,True,300.0,0.0,,
+"range within every 3 consecutive, delta=0.2",4,True,300.0,0.0,,
+"range within every 3 consecutive, delta=0.2",5,True,300.0,0.0,,
+"range over the whole chain, delta=0.2",2,True,300.0,0.0,,
+"range over the whole chain, delta=0.2",3,True,300.0,0.0,,
+"range over the whole chain, delta=0.2",4,True,300.0,0.0,,
+"range over the whole chain, delta=0.2",5,True,300.0,0.0,,
+"positional thresholds (0.1, 0.3)",2,True,300.0,0.0,,
+"positional thresholds (0.1, 0.3)",3,True,300.0,0.0,,
+"positional thresholds (0.1, 0.3)",4,True,300.0,0.0,,
+"positional thresholds (0.1, 0.3)",5,True,300.0,0.0,,
+"forbids [(0, 0, 0)] (only a length-3 factor)",2,True,300.0,0.0,,
+"forbids [(0, 0, 0)] (only a length-3 factor)",3,True,300.0,0.0,,
+"forbids [(0, 0, 0)] (only a length-3 factor)",4,True,300.0,0.0,,
+"forbids [(0, 0, 0)] (only a length-3 factor)",5,True,300.0,0.0,,
+"forbids [(2, 1), (2, 1, 0, 1)] (random 0)",2,True,300.0,0.0,,
+"forbids [(2, 1), (2, 1, 0, 1)] (random 0)",3,True,300.0,0.0,,
+"forbids [(2, 1), (2, 1, 0, 1)] (random 0)",4,True,300.0,0.0,,
+"forbids [(2, 1), (2, 1, 0, 1)] (random 0)",5,True,300.0,0.0,,
+"forbids [(0, 1)] (random 1)",2,True,300.0,0.0,,
+"forbids [(0, 1)] (random 1)",3,True,300.0,0.0,,
+"forbids [(0, 1)] (random 1)",4,True,300.0,0.0,,
+"forbids [(0, 1)] (random 1)",5,True,300.0,0.0,,
+"forbids [(0, 0), (0, 2, 0), (2, 2, 0, 0)] (random 2)",2,True,300.0,0.0,,
+"forbids [(0, 0), (0, 2, 0), (2, 2, 0, 0)] (random 2)",3,True,300.0,0.0,,
+"forbids [(0, 0), (0, 2, 0), (2, 2, 0, 0)] (random 2)",4,True,300.0,0.0,,
+"forbids [(0, 0), (0, 2, 0), (2, 2, 0, 0)] (random 2)",5,True,300.0,0.0,,
+"forbids [(0, 0)] (random 3)",2,True,300.0,0.0,,
+"forbids [(0, 0)] (random 3)",3,True,300.0,0.0,,
+"forbids [(0, 0)] (random 3)",4,True,300.0,0.0,,
+"forbids [(0, 0)] (random 3)",5,True,300.0,0.0,,
+"forbids [(1, 1, 1, 1), (2, 0, 1, 0), (2, 1)] (random 4)",2,True,300.0,0.0,,
+"forbids [(1, 1, 1, 1), (2, 0, 1, 0), (2, 1)] (random 4)",3,True,300.0,0.0,,
+"forbids [(1, 1, 1, 1), (2, 0, 1, 0), (2, 1)] (random 4)",4,True,300.0,0.0,,
+"forbids [(1, 1, 1, 1), (2, 0, 1, 0), (2, 1)] (random 4)",5,True,300.0,0.0,,
+"forbids [(2, 2, 0, 2)] (random 5)",2,True,300.0,0.0,,
+"forbids [(2, 2, 0, 2)] (random 5)",3,True,300.0,0.0,,
+"forbids [(2, 2, 0, 2)] (random 5)",4,True,300.0,0.0,,
+"forbids [(2, 2, 0, 2)] (random 5)",5,True,300.0,0.0,,
+random rule 0,2,True,300.0,0.0,,
+random rule 0,3,False,,,4.0,2.0
+random rule 0,4,False,,,1.0,0.0
+random rule 0,5,False,,,1.0,0.0
+random rule 1,2,True,300.0,0.0,,
+random rule 1,3,False,,,1.0,0.0
+random rule 1,4,False,,,4.0,2.0
+random rule 1,5,False,,,1.0,0.0
+random rule 2,2,True,300.0,0.0,,
+random rule 2,3,False,,,1.0,0.0
+random rule 2,4,False,,,4.0,2.0
+random rule 2,5,False,,,4.0,2.0
+random rule 3,2,True,300.0,0.0,,
+random rule 3,3,False,,,4.0,2.0
+random rule 3,4,False,,,1.0,0.0
+random rule 3,5,False,,,1.0,0.0
+random rule 4,2,True,300.0,0.0,,
+random rule 4,3,False,,,1.0,0.0
+random rule 4,4,False,,,1.0,0.0
+random rule 4,5,False,,,4.0,2.0
+random rule 5,2,True,300.0,0.0,,
+random rule 5,3,False,,,4.0,2.0
+random rule 5,4,False,,,1.0,0.0
+random rule 5,5,False,,,1.0,0.0

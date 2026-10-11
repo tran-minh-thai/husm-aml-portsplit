@@ -1,0 +1,35 @@
+
+[miner with closed chains, theta=0.2]
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 6357
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=141062 found=136381 failed=4681 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner with closed chains, theta=inf]
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+marked accounts present in the graph: 6357
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=1522311 found=1262386 failed=259925 budget_fallbacks=21702 local_rejections=21576 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+HI-Small, closed chains, labeling S, tau 10, 6357 laundering accounts
+ dataset  length  planted_accounts  I_0.2  P_0.2  R_0.2  I_inf  P_inf  R_inf     OR
+HI-Small       3                27    121 0.2975 1.0000    748 0.1471 1.0000 2.4565
+HI-Small       4                28     36 0.8889 1.0000    122 0.5082 1.0000 7.7419
+HI-Small       5                15     20 1.0000 1.0000     83 0.5181 1.0000    inf
+  length 3: 27 planted cycle accounts - not counted
+  length 4: 28 planted cycle accounts - not counted
+  length 5: 15 planted cycle accounts - not counted

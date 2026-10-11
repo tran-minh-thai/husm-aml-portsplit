@@ -1,0 +1,57 @@
+{
+  "run_id": "20261011T184819",
+  "note": "conservation effect on closed chains, labeling S, HI-Small",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_cycle_effect.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "HI-Small"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 2,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-11T18:48:19",
+  "git_commit": "5eb90996afbeffa94ba42f00873f8528f96e7d49",
+  "git_tree": "clean (26 untracked result records)",
+  "code_sha256": "ca955b985ad21b569e72107c9b3e175a7268b0b7322b95a21cb1b61f03208660",
+  "code_files": 114,
+  "engine_jar_sha256": "b131ff399f48d751e5513067b922d659d21eddf7425c368a897c8e64c36c7ddb",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Small_S.tg",
+      "bytes": 162062254,
+      "sha256": "475c8b40dbca9b5a7fe1213f842e2f67245e9bf23b3ca7e5e1f6e80d486325d8"
+    },
+    {
+      "path": "datasets/chain/HI-Small_laundering_accounts.txt",
+      "bytes": 42549,
+      "sha256": "6a6845a84918c9d4a2ef0926e10190b60ef2a10e26a22dc151b140041fa585f8"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (31 untracked result records)"
+}

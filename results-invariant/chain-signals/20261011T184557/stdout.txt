@@ -1,0 +1,19 @@
+HI-Medium: 750085 accounts with incoming and outgoing transactions; base rate 0.0424; 704207 with a dwell time
+
+structuring (US Dollar amounts, [9000, 10000) over [10000, 11000)):
+  dataset       subset      group  transactions  below  above  ratio
+HI-Medium every format laundering         35230   1274   1116  1.142
+HI-Medium every format background      31863008 291495 257671  1.131
+HI-Medium         cash laundering           666      2      2  1.000
+HI-Medium         cash background       3216865  26722  22754  1.174
+
+ranking:
+  dataset               method  base_rate  precision_at_100  precision_at_1000  precision_at_10000
+HI-Medium           dwell time     0.0424            0.0169             0.0169              0.0065
+HI-Medium          night share     0.0424            0.0088             0.0088              0.0088
+HI-Medium            conserved     0.0424            0.3857             0.3857              0.3650
+HI-Medium conserved then dwell     0.0424            0.6300             0.3471              0.3668
+  H30 here: laundering 1.142 vs background 1.131; holds: False
+  H32 here: dwell 0.0169 vs 2 x base 0.0849; holds: False
+  H33 here: night 0.0088 vs 2 x base 0.0849; holds: False
+  H34 here: combined 0.3471 vs conserved 0.3857; holds: False
