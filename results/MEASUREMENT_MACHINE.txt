@@ -1,0 +1,18 @@
+# Measurement machine of this project, written by experiments/provenance/machine_info.py.
+# The line below is the host id that run_and_record.py checks; the rest describes it.
+5f434a5d45c5
+# declared_utc: 2026-10-12T09:25:31+00:00
+# hostname: PC-THAI
+# cpu: AMD Ryzen 9 9950X 16-Core Processor
+# cpu_physical_cores: 16
+# cpu_logical_threads: 32
+# ram_gb: 61.6
+# gpu: NVIDIA GeForce RTX 5060 Ti; AMD Radeon(TM) Graphics
+# os: Windows 11 (10.0.26300) Education
+# architecture: AMD64
+# python: CPython 3.14.7
+# python_libraries: numpy absent, pandas absent, scipy absent, sklearn absent, networkx absent, matplotlib absent, pytest absent
+# java_runtime_version: 25.0.4.1+1-LTS
+# java_vendor: Eclipse Adoptium
+# java_vm: OpenJDK 64-Bit Server VM
+# maven: Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)
