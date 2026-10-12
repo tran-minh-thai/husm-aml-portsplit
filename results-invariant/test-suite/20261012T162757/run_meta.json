@@ -1,0 +1,46 @@
+{
+  "run_id": "20261012T162757",
+  "note": "measurement machine: Python test suite",
+  "command": [
+    "<home>\\.venvs\\husm-aml-portsplit\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "experiments\\tests"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 1,
+  "started_at": "2026-10-12T16:27:57",
+  "git_commit": "1dff6ca0e246dda8752a6400cb7139927ac119fe",
+  "git_tree": "clean",
+  "code_sha256": "731f08e45b2243a21b2b1315389a10939decc9219d2b2c6673ac36c10aa19c85",
+  "code_files": 119,
+  "engine_jar_sha256": "aa79c362f537fb79b9f1e0c46daac028a01a6df4a5ad65754756f6a7d77a3da2",
+  "data": [],
+  "libraries": {
+    "numpy": null,
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": null,
+    "torch": null
+  },
+  "host_id": "5f434a5d45c5",
+  "machine_description": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "memory": "unavailable",
+    "logical_cpus": 32
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18 LTS",
+  "maven": "unavailable"
+}

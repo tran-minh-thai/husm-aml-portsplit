@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "<repository root>\experiments\scripts\e9_portsplit_smoke.py", line 26, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
