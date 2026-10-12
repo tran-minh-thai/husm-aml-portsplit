@@ -1,0 +1,29 @@
+LI-Small: truth neighborhood 58,181 transactions, 6,093 accounts, 4 buckets
+
+[raw scale] utility table (bucket: mean signal)
+   currencies mixed : 0:1343, 1:1.022e+04, 2:6.506e+04, 3:9.74e+08   R = 7.254e+05
+   US Dollar        : 0:1360, 1:1.001e+04, 2:5.976e+04, 3:5.587e+07   R = 4.107e+04
+   accounts changing bucket: 439 / 6,093 (7.2%)
+     BIPARTITE       attempt accounts changing bucket:    9 /  258 (3.5%)
+     CYCLE           attempt accounts changing bucket:    7 /   83 (8.4%)
+     FAN-IN          attempt accounts changing bucket:   10 /   85 (11.8%)
+     FAN-OUT         attempt accounts changing bucket:   12 /  169 (7.1%)
+     GATHER-SCATTER  attempt accounts changing bucket:    4 /  158 (2.5%)
+     RANDOM          attempt accounts changing bucket:    3 /   92 (3.3%)
+     SCATTER-GATHER  attempt accounts changing bucket:    1 /  112 (0.9%)
+     STACK           attempt accounts changing bucket:   22 /  264 (8.3%)
+   share of currency uncertainty explained by bucket (normalized MI): mixed 0.019, US Dollar 0.004
+   most-used currency by bucket (currencies mixed):
+     bucket 0: US Dollar 55%, Euro 40%, Australian Dollar 1%
+     bucket 1: US Dollar 54%, Euro 40%, Yuan 2%
+     bucket 2: US Dollar 53%, Euro 40%, Yuan 2%
+     bucket 3: US Dollar 50%, Euro 35%, Yuan 4%
+   most-used currency by bucket (US Dollar):
+     bucket 0: US Dollar 55%, Euro 37%, Yuan 3%
+     bucket 1: US Dollar 53%, Euro 40%, Yuan 2%
+     bucket 2: US Dollar 52%, Euro 39%, Yuan 2%
+     bucket 3: US Dollar 52%, Euro 40%, Yuan 2%
+
+[log scale] utility table (bucket: mean signal)
+   currencies mixed : 0:6.369, 1:9.084, 2:10.92, 3:14.53   R = 2.282
+   US Dollar        : 0:6.386, 1:9.066, 2:10.86, 3:14.36   R = 2.248

@@ -1,0 +1,35 @@
+=== Citeseer: the dataset and the utility protocol of HUSM (Inf. Sci. 2024) ===
+  10 seeds; the constant arm of each seed uses that seed's own table mean,
+  so both runs share a scale and the shared threshold means the same thing.
+  seed     1: HUSM  81 vs frequent  83 patterns, shared  73, Jaccard 0.802, utility share 7.9% (cov -0.099)
+  seed     2: HUSM  84 vs frequent  95 patterns, shared  79, Jaccard 0.790, utility share 7.0% (cov -0.003)
+  seed     3: HUSM  87 vs frequent  95 patterns, shared  87, Jaccard 0.916, utility share 0.6% (cov -0.030)
+  seed     7: HUSM  88 vs frequent 112 patterns, shared  87, Jaccard 0.770, utility share 5.7% (cov -0.004)
+  seed    13: HUSM  93 vs frequent 105 patterns, shared  89, Jaccard 0.817, utility share 0.1% (cov -0.060)
+  seed    42: HUSM 110 vs frequent 110 patterns, shared 100, Jaccard 0.833, utility share 0.7% (cov -0.034)
+  seed    99: HUSM  92 vs frequent 110 patterns, shared  92, Jaccard 0.836, utility share 0.5% (cov -0.069)
+  seed   123: HUSM 100 vs frequent  98 patterns, shared  92, Jaccard 0.868, utility share 9.2% (cov +0.011)
+  seed  2024: HUSM 114 vs frequent 110 patterns, shared 106, Jaccard 0.898, utility share -0.9% (cov -0.146)
+  seed 31337: HUSM  86 vs frequent  95 patterns, shared  78, Jaccard 0.757, utility share 5.6% (cov -0.068)
+  median over 10 seeds: Jaccard vs frequent mining 0.825 (range 0.757-0.916), top-20 17.5/20, utility share 3.1% (-0.9%-9.2%)
+  -> the published protocol returns nearly the answer that frequency alone gives
+
+=== Elliptic++ actors: the same question with real money ===
+  the same 151 patterns, weighted two ways (re-scoring is exact):
+  ellipticpp/monetary              R=  4456.4  forced  0.0%  utility share  2.2% (cov -0.753)  reversed 14.8%  violations 0  rho=0.869
+  ellipticpp/gaussian (re-scored)  R=     2.2  forced 69.6%  utility share  2.4% (cov +0.045)  reversed  3.9%  violations 0  rho=0.989
+
+==============================================================================
+Does the utility dimension carry the answer, or does support?
+==============================================================================
+                            arm         R  patterns  cmni_span  forced_pairs  var_log_support  var_log_weight  cov_log  var_log_score  share_weight_ubar  share_support  ratio_weight_no_cov_ubar  spearman_u_cmni  jaccard_vs_fsm  top20_vs_fsm  ubar_span        n  degenerate  order_pairs  order_comparable_pairs  order_locked_frac  order_reversed_frac  order_reversed_among_unlocked  order_violations  kendall_u_cmni  top10_vs_cmni    seed  fsm_patterns  shared_vs_fsm
+              citeseer/gaussian    2.2574   90.0000    38.3036        0.5113           0.7636          0.0651  -0.0467         0.7507             0.0314         0.9686                    0.0796           0.9416          0.8249       17.5000     2.2574  90.0000      0.0000    4007.0000               3892.0000             0.5266               0.0900                         0.1971            0.0000          0.8179         8.5000 27.5000      101.5000        88.0000
+            ellipticpp/monetary 4456.4428  151.0000  2022.0482        0.0000           3.1069          0.8045  -0.7526         2.4062             0.0216         0.9784                    0.3343           0.8694             NaN           NaN   192.3604 151.0000      0.0000   11325.0000              11230.0000             0.0000               0.1484                         0.1484            0.0000          0.7030         6.0000     NaN           NaN            NaN
+ellipticpp/gaussian (re-scored)    2.1880  151.0000  2022.0482        0.6958           3.1069          0.0332   0.0447         3.2294             0.0241         0.9759                    0.0103           0.9890             NaN           NaN     2.0705 151.0000      0.0000   11325.0000              11230.0000             0.7017               0.0386                         0.1293            0.0000          0.9228         9.0000     NaN           NaN            NaN
+
+  share_weight_ubar: Shapley share of Var(log u) carried by the utility factor,
+                     (Var(log ubar) + Cov(log CMNI, log ubar)) / Var(log u).
+  forced_pairs:   share of pairs no utility table could reorder (this graph's CMNI).
+  jaccard_vs_fsm: overlap with the answer that frequent subgraph mining returns.
+
+Done -> <repository root>\results-invariant\variance-decomposition\20261012T192024\e8_utility_contrast.csv

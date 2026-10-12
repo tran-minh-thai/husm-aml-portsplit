@@ -1,0 +1,19 @@
+........................................F............................... [ 61%]
+..............................................                           [100%]
+================================== FAILURES ===================================
+___________________ test_run_reports_ok_failure_and_timeout ___________________
+
+tmp_path = WindowsPath('C:/Users/ADMIN/AppData/Local/Temp/pytest-of-ADMIN/pytest-0/test_run_reports_ok_failure_an0')
+
+    def test_run_reports_ok_failure_and_timeout(tmp_path):
+        py = sys.executable
+        ok = cp.run([py, "-c", "x = bytearray(50_000_000)"], tmp_path / "a.txt", 30)
+>       assert ok["status"] == "ok" and ok["peak_bytes"] and ok["peak_bytes"] > 50_000_000
+E       AssertionError: assert ('ok' == 'ok'
+E         
+E           ok and 4734976 and 4734976 > 50000000)
+
+experiments\tests\test_chain_performance.py:29: AssertionError
+=========================== short test summary info ===========================
+FAILED experiments/tests/test_chain_performance.py::test_run_reports_ok_failure_and_timeout
+1 failed, 117 passed in 2.85s

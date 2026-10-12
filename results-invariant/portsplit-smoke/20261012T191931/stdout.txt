@@ -1,0 +1,12 @@
+
+==========================================================================
+PASS  A unsplit: gather, scatter and hop are ONE single-edge pattern
+      cross-bucket edge types: [(0, 0, 1)]
+PASS  B split: fan-in and fan-out are TWO different edge types
+      transaction edge types: [(0, 0, 3), (1, 0, 2)]
+PASS  C split: 3-edge stars centred on an in-port and on an out-port are two patterns
+      star centres found: [2, 3]
+PASS  D pass-through: the internal edge lets a pattern pass THROUGH an account
+      pattern through an account with internal edges: True; without: False
+==========================================================================
+4/4: port-splitting works with the current engine, no Java change
