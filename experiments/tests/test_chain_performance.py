@@ -24,7 +24,8 @@ def test_lock_is_written_once_then_enforced(tmp_path):
 
 
 def test_run_reports_ok_failure_and_timeout(tmp_path):
-    py = sys.executable
+    # the interpreter itself: on Windows a virtual environment's python.exe is a launcher that starts it as a child
+    py = getattr(sys, "_base_executable", sys.executable)
     ok = cp.run([py, "-c", "x = bytearray(50_000_000)"], tmp_path / "a.txt", 30)
     assert ok["status"] == "ok" and ok["peak_bytes"] and ok["peak_bytes"] > 50_000_000
     assert cp.run([py, "-c", "raise SystemExit(3)"], tmp_path / "b.txt", 30)["status"] == "failed (exit 3)"
@@ -43,6 +44,13 @@ def test_kept_log_has_no_timing_and_the_timing_record_has_it(tmp_path, monkeypat
     cp.keep_log(raw, "miner")
     assert "1234" not in (out / "log_miner.txt").read_text() and "1234" in (timing / "log_miner.txt").read_text()
     assert not raw.exists()
+
+
+@pytest.mark.skipif(JAVA is None, reason="needs java")
+def test_the_jvm_binary_comes_from_java_home():
+    identity = cp.jvm_identity()
+    exe = Path(cp.jvm_executable(identity))
+    assert exe.is_file() and exe.parent.parent == Path(identity["java.home"])
 
 
 def tiny_graph(path: Path, seed: int = 7) -> None:

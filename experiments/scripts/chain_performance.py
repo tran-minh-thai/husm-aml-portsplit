@@ -50,10 +50,22 @@ def jvm_identity(java: str = "java") -> dict:
     out = subprocess.run([java, "-XshowSettings:properties", "-version"], capture_output=True, text=True).stderr
     props = {}
     for line in out.splitlines():
-        m = re.match(r"\s*(java\.runtime\.version|java\.vendor|java\.vm\.name) = (.*)", line)
+        m = re.match(r"\s*(java\.runtime\.version|java\.vendor|java\.vm\.name|java\.home) = (.*)", line)
         if m:
             props[m.group(1)] = m.group(2).strip()
     return props
+
+
+def jvm_executable(identity: dict) -> str:
+    """The JVM binary itself, from java.home: on Windows the java on PATH can be a launcher that starts the real JVM
+    as a child, which would make the peak memory and the time limit apply to the launcher instead."""
+    home = identity.get("java.home")
+    if not home:
+        sys.exit(f"refusing to run: the JVM did not report java.home: {identity}")
+    exe = Path(home) / "bin" / ("java.exe" if os.name == "nt" else "java")
+    if not exe.is_file():
+        sys.exit(f"refusing to run: {exe} does not exist")
+    return str(exe)
 
 
 def check_lock(identity: dict, lock: Path | None = None) -> str | None:
@@ -164,6 +176,7 @@ def main() -> None:
     args = ap.parse_args()
 
     identity = jvm_identity()
+    java = jvm_executable(identity)
     refusal = check_lock(identity)
     if refusal:
         sys.exit(f"refusing to run: {refusal}")
@@ -175,7 +188,7 @@ def main() -> None:
     reference = None
     for engine in args.engines:
         table = OUT / f"patterns_{engine}.tsv"
-        cmd = ["java", f"-Xmx{args.heap}", "-cp", str(JAR), "edu.huflit.inchusm.chain.ChainMain", "--graph", str(graph),
+        cmd = [java, f"-Xmx{args.heap}", "-cp", str(JAR), "edu.huflit.inchusm.chain.ChainMain", "--graph", str(graph),
                "--theta", args.theta, "--min-support", str(args.tau), "--max-length", str(args.max_length),
                "--min-cycle", str(args.min_cycle), "--out", str(table)] + ENGINES[engine]
         print(f"[performance] {engine}: started", flush=True)
