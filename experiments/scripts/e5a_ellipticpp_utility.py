@@ -45,6 +45,12 @@ from inchusm_aml import miner_bridge  # noqa: E402
 RESULTS = Path(__file__).resolve().parents[1] / "results"
 
 
+def save_hus(hus: pd.DataFrame, out: Path) -> None:
+    """Write the pattern table with LF line ends on every system: E8 reads this file and the run
+    recorder keeps its sha256 (--data), and pandas would otherwise end lines with os.linesep."""
+    hus.to_csv(out, index=False, lineterminator="\n")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n-buckets", type=int, default=4)
@@ -96,7 +102,7 @@ def main() -> None:
 
     # 6) report
     out = RESULTS / "e5a_ellipticpp_hus.csv"
-    hus.to_csv(out, index=False)
+    save_hus(hus, out)
     print(f"\n{len(hus)} high-utility subgraphs (monetary utility).")
     if len(hus):
         top = hus.sort_values("utility", ascending=False).head(10) if "utility" in hus else hus.head(10)

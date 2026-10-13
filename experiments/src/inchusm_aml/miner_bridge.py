@@ -39,7 +39,9 @@ def export_lg(node_labels: pd.Series, edges: pd.DataFrame, path: Path) -> dict:
             lines.append(f"e {ids[r.src]} {ids[r.dst]} {el} {float(getattr(r, 'weight')):.6g}")
         else:
             lines.append(f"e {ids[r.src]} {ids[r.dst]} {el}")
-    path.write_text("\n".join(lines) + "\n", encoding="ascii")
+    # newline="\n": text mode would write CRLF on Windows, and these files are miner inputs
+    # whose sha256 the run recorder keeps when they are named with --data.
+    path.write_text("\n".join(lines) + "\n", encoding="ascii", newline="\n")
     return ids
 
 
@@ -47,6 +49,7 @@ def export_utilities(table: dict[int, float], path: Path) -> None:
     path.write_text(
         "\n".join(f"{int(k)} {v:.6f}" for k, v in sorted(table.items())) + "\n",
         encoding="ascii",
+        newline="\n",
     )
 
 
