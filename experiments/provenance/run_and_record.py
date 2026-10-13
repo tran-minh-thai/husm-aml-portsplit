@@ -91,6 +91,26 @@ def first_line(args, cwd=None):
         return "unavailable"
 
 
+ES_CONTINUOUS = 0x80000000
+ES_SYSTEM_REQUIRED = 0x00000001
+
+
+def keep_awake(on, kernel32=None):
+    """On Windows, ask the system not to sleep while a run is in progress (on=True) and release it (on=False).
+
+    A run of several hours is lost without an error when the machine sleeps. Returns the state flags requested,
+    or None where there is nothing to do (other systems).
+    """
+    if kernel32 is None:
+        if os.name != "nt":
+            return None
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+    flags = ES_CONTINUOUS | ES_SYSTEM_REQUIRED if on else ES_CONTINUOUS
+    kernel32.SetThreadExecutionState(flags)
+    return flags
+
+
 def repository_root():
     result = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
     if result.returncode != 0:
@@ -360,7 +380,11 @@ def main():
     child_env = dict(os.environ, RUN_RECORD_DIR=str(target), RUN_ID=stamp)
     if timing_target is not None:
         child_env["RUN_TIMING_DIR"] = str(timing_target)
-    result = subprocess.run(command, capture_output=True, text=True, env=child_env)
+    keep_awake(True)
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, env=child_env)
+    finally:
+        keep_awake(False)
     finished = datetime.datetime.now()
     tree_after = tree_state(root)
     if not re.fullmatch(r"[0-9a-f]{40}", commit):

@@ -103,3 +103,17 @@ def test_data_record_hashes_and_refuses_missing(tmp_path):
     assert rec == [{"path": "d.csv", "bytes": 8, "sha256": hashlib.sha256(b"a,b\n1,2\n").hexdigest()}]
     with pytest.raises(FileNotFoundError, match="no such file"):
         rr.data_record([str(tmp_path / "missing.csv")], tmp_path)
+
+
+def test_keep_awake_requests_and_releases_system_wakefulness():
+    calls = []
+
+    class Kernel:
+        def SetThreadExecutionState(self, flags):
+            calls.append(flags)
+
+    assert rr.keep_awake(True, Kernel()) == rr.ES_CONTINUOUS | rr.ES_SYSTEM_REQUIRED
+    assert rr.keep_awake(False, Kernel()) == rr.ES_CONTINUOUS
+    assert calls == [0x80000001, 0x80000000]
+    if os.name != "nt":
+        assert rr.keep_awake(True) is None
