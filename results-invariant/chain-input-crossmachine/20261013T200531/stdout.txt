@@ -1,0 +1,22 @@
+HI-Small S: copy in datasets/chain 475c8b40dbca9b5a7fe1213f842e2f67245e9bf23b3ca7e5e1f6e80d486325d8, rebuilt here bc81456ab506ec2ea43bf44291940443ff67c3fd12cb7bc269d0267f13fa5dbe
+identical: no; lines 4909868 (copy) vs 4909868 (rebuilt)
+  line 2:
+    copy:    v 0 0
+    rebuilt: v 0 0
+
+  line 3:
+    copy:    v 1 0
+    rebuilt: v 1 0
+
+  line 4:
+    copy:    v 3 0
+    rebuilt: v 3 0
+
+  line 5:
+    copy:    v 4 0
+    rebuilt: v 4 0
+
+  line 6:
+    copy:    v 5 0
+    rebuilt: v 5 0
+

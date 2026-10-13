@@ -1,0 +1,22 @@
+LI-Small S: copy in datasets/chain dfd370241bb15b6af19f75bf9d6467d650053118c489e078ccf8e4352147f6dd, rebuilt here 8d41763153235a90d97d1d18d9f279d4d1264c609a7d8d7b1e15d3766e21fd09
+identical: no; lines 6696354 (copy) vs 6696354 (rebuilt)
+  line 2:
+    copy:    v 0 0
+    rebuilt: v 0 0
+
+  line 3:
+    copy:    v 3 0
+    rebuilt: v 3 0
+
+  line 4:
+    copy:    v 4 0
+    rebuilt: v 4 0
+
+  line 5:
+    copy:    v 5 0
+    rebuilt: v 5 0
+
+  line 6:
+    copy:    v 6 0
+    rebuilt: v 6 0
+
