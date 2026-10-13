@@ -1,0 +1,23 @@
+{
+  "rows": 179702229,
+  "self_transactions_dropped": 10895216,
+  "transaction_labels": {
+    "0": "ACH",
+    "1": "Bitcoin",
+    "2": "Cash",
+    "3": "Cheque",
+    "4": "Credit Card",
+    "5": "Wire"
+  },
+  "graph_sha256": "6778b617c57effb94754d4e2ef5b0179c71b925fab0d0b7e7cd838431d59d554",
+  "source": "amlworld",
+  "dataset": "HI-Large",
+  "labeling": "A",
+  "accounts": 1927631,
+  "transactions": 168807013,
+  "laundering_accounts": 222522,
+  "account_label_values": 1,
+  "transaction_label_values": 6,
+  "graph_file": "HI-Large_A.tg",
+  "laundering_file": "HI-Large_laundering_accounts.txt"
+}
