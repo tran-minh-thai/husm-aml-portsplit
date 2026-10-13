@@ -81,14 +81,24 @@ def amlgentex(path: Path, labeling: str):
 
 
 def write_tg(accounts: pd.DataFrame, edges: pd.DataFrame, path: Path) -> None:
-    """Accounts first, then transactions; amounts with 17 significant digits (exact for a double)."""
+    """Accounts first, then transactions; amounts with 17 significant digits (exact for a double).
+
+    Lines end in "\n" on every system: pandas otherwise ends them with os.linesep, "\r\n" on Windows, and the
+    same input would then hash differently on the two machines.
+    """
     if (edges["amount"] <= 0).any() or not np.isfinite(edges["amount"]).all():
         raise ValueError(f"{path.name}: non-positive or non-finite amounts")
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write("# directed transaction graph: v ID LABEL / e SOURCE TARGET LABEL AMOUNT\n")
-        accounts.assign(tag="v")[["tag", "id", "label"]].to_csv(f, sep=" ", header=False, index=False)
+        accounts.assign(tag="v")[["tag", "id", "label"]].to_csv(f, sep=" ", header=False, index=False,
+                                                                lineterminator="\n")
         edges.assign(tag="e")[["tag", "src", "dst", "label", "amount"]].to_csv(
-            f, sep=" ", header=False, index=False, float_format="%.17g")
+            f, sep=" ", header=False, index=False, float_format="%.17g", lineterminator="\n")
+
+
+def write_ids(ids, path: Path) -> None:
+    """One integer per line, "\n" line ends on every system (numpy.savetxt writes in text mode: "\r\n" on Windows)."""
+    path.write_bytes("".join(f"{int(v)}\n" for v in ids).encode("ascii"))
 
 
 def build(source: str, dataset: str, labeling: str, root: Path, out_dir: Path) -> dict:
@@ -102,7 +112,7 @@ def build(source: str, dataset: str, labeling: str, root: Path, out_dir: Path) -
     tg = out_dir / f"{dataset}_{labeling}.tg"
     write_tg(accounts, edges, tg)
     marked = out_dir / f"{dataset}_laundering_accounts.txt"
-    np.savetxt(marked, laundering, fmt="%d")
+    write_ids(laundering, marked)
     import hashlib
     digest = hashlib.sha256()
     with open(tg, "rb") as f:

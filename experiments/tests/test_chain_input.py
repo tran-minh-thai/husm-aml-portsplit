@@ -65,3 +65,17 @@ def test_write_tg_refuses_non_positive_amounts(tmp_path):
     edges = pd.DataFrame({"src": [1], "dst": [2], "label": [0], "amount": [0.0]})
     with pytest.raises(ValueError):
         ci.write_tg(acc, edges, tmp_path / "g.tg")
+
+
+def test_files_end_lines_with_newline_only_even_where_the_system_uses_crlf(tmp_path, monkeypatch):
+    import os
+    import pandas as pd
+    from inchusm_aml.data import chain_input as ci
+    monkeypatch.setattr(os, "linesep", "\r\n")                     # what pandas sees on Windows
+    accounts = pd.DataFrame({"id": [0, 1], "label": [0, 0]})
+    edges = pd.DataFrame({"src": [0], "dst": [1], "label": [0], "amount": [100.5]})
+    ci.write_tg(accounts, edges, tmp_path / "g.tg")
+    ci.write_ids([3, 17], tmp_path / "m.txt")
+    assert b"\r" not in (tmp_path / "g.tg").read_bytes()
+    assert (tmp_path / "g.tg").read_bytes().endswith(b"e 0 1 0 100.5\n")
+    assert (tmp_path / "m.txt").read_bytes() == b"3\n17\n"

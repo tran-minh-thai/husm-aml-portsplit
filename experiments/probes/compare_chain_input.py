@@ -37,8 +37,8 @@ def first_differences(a: Path, b: Path, show: int) -> tuple[int, int, list[tuple
             na += la is not None
             nb += lb is not None
             if la != lb and len(diffs) < show:
-                diffs.append((n, (la or b"<end of file>").decode(errors="replace").rstrip("\n"),
-                              (lb or b"<end of file>").decode(errors="replace").rstrip("\n")))
+                diffs.append((n, repr((la or b"<end of file>").decode(errors="replace")),
+                              repr((lb or b"<end of file>").decode(errors="replace"))))
     return na, nb, diffs
 
 
