@@ -1,0 +1,5 @@
+graph sweden_100K_easy_A.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+engine=enumerate rule=pairwise valid_occurrences=135846443
+patterns written: 22052 -> patterns_enumerate.tsv
+mining elapsed ms: 17167 (machine-dependent)

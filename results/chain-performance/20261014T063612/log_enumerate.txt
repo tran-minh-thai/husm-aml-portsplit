@@ -1,0 +1,5 @@
+graph HI-Small_A.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+engine=enumerate rule=pairwise valid_occurrences=77433584
+patterns written: 242 -> patterns_enumerate.tsv
+mining elapsed ms: 9758 (machine-dependent)
