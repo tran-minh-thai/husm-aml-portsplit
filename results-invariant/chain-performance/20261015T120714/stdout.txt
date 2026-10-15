@@ -1,0 +1,8 @@
+[performance] miner: started
+[performance] miner: ok
+[performance] miner-no-filter: started
+[performance] miner-no-filter: ok
+[performance] enumerate: started
+[performance] enumerate: ok
+[performance] 3 of 3 engines finished; all finished tables identical: True
+[performance] timing written to the paired measurement record

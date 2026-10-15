@@ -1,0 +1,4 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+HI-Medium,S,0.2,10,5,3,48g,miner,ok,dca2a973646beda4f0230ee12088f51f7d26ba9aa47a9314bc089b1a186d2ca2,8,0,0,696298,656346,39952
+HI-Medium,S,0.2,10,5,3,48g,miner-no-filter,ok,dca2a973646beda4f0230ee12088f51f7d26ba9aa47a9314bc089b1a186d2ca2,8,0,0,4168474,655429,3513045
+HI-Medium,S,0.2,10,5,3,48g,enumerate,ok,dca2a973646beda4f0230ee12088f51f7d26ba9aa47a9314bc089b1a186d2ca2,,,,,,
