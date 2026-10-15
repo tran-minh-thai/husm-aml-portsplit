@@ -1,0 +1,48 @@
+{
+  "run_id": "20261016T060917",
+  "note": "same-output timing, LI-Medium, labeling A, repetition 1 of 3",
+  "command": [
+    "<home>\\.venvs\\husm-aml-portsplit\\Scripts\\python.exe",
+    "experiments\\scripts\\chain_performance.py",
+    "--dataset",
+    "LI-Medium",
+    "--labeling",
+    "A"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-16T06:09:17",
+  "git_commit": "2aa77db0fa885f43afde9bab9e89570307aad54c",
+  "git_tree": "clean (73 untracked result records)",
+  "code_sha256": "98e5c94cf8786ca89de18284290f642e74fde5dd4284f534c505897d3e6151a0",
+  "code_files": 122,
+  "engine_jar_sha256": "aa79c362f537fb79b9f1e0c46daac028a01a6df4a5ad65754756f6a7d77a3da2",
+  "data": [],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "5f434a5d45c5",
+  "machine_description": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "memory": "unavailable",
+    "logical_cpus": 32
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18 LTS",
+  "maven": "unavailable",
+  "git_tree_after_run": "clean (85 untracked result records)",
+  "finished_at": "2026-10-16T06:25:14",
+  "paired_with": "results-invariant/chain-performance/20261016T060917"
+}
