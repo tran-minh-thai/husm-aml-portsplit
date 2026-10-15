@@ -1,0 +1,5 @@
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+engine=enumerate rule=pairwise valid_occurrences=5916651794
+patterns written: 8 -> patterns_enumerate.tsv
+mining elapsed ms: 610918 (machine-dependent)

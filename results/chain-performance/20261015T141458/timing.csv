@@ -1,0 +1,4 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+sweden_100K_difficult,S,miner,ok,13633,14.273,944918528,7200.0,48g
+sweden_100K_difficult,S,miner-no-filter,ok,1468,2.107,956534784,7200.0,48g
+sweden_100K_difficult,S,enumerate,ok,9500,10.16,1594376192,7200.0,48g
