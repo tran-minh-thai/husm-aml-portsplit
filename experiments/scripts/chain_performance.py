@@ -5,6 +5,8 @@ For one data set, labeling and parameter set, runs ChainMain three ways:
 
   miner             the level-wise miner with slot consistency
   miner-no-filter   the same miner with --no-consistency (same output; counts what the filter saves)
+  miner-from-L      the same miner with slot consistency only from candidate length L (L = 3, 4, 5; only
+                    when named with --engines)
   enumerate         the baseline that enumerates every valid occurrence and aggregates image sets
 
 Every run that finishes must write exactly the same pattern table as the miner; a difference stops
@@ -40,7 +42,10 @@ CHAIN = ROOT / "datasets" / "chain"
 LOCK = ROOT / "docs" / "reproduce" / "jdk.lock"
 OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else ROOT / "experiments" / "results"
 TIMING = Path(os.environ["RUN_TIMING_DIR"]) if os.environ.get("RUN_TIMING_DIR") else None
-ENGINES = {"miner": [], "miner-no-filter": ["--no-consistency"], "enumerate": ["--engine", "enumerate"]}
+ENGINES = {"miner": [], "miner-no-filter": ["--no-consistency"], "enumerate": ["--engine", "enumerate"],
+           "miner-from-3": ["--consistency-from", "3"], "miner-from-4": ["--consistency-from", "4"],
+           "miner-from-5": ["--consistency-from", "5"]}
+DEFAULT_ENGINES = ["miner", "miner-no-filter", "enumerate"]
 ELAPSED = re.compile(r"mining elapsed ms: (\d+)")
 COUNTERS = re.compile(r"candidates=(\d+) pruned_by_domain=(\d+) pruned_by_consistency=(\d+) searches=(\d+) "
                       r"found=(\d+) failed=(\d+)")
@@ -172,7 +177,7 @@ def main() -> None:
     ap.add_argument("--min-cycle", type=int, default=3)
     ap.add_argument("--limit", type=float, default=7200.0, help="seconds per run")
     ap.add_argument("--heap", default="48g")
-    ap.add_argument("--engines", nargs="+", default=list(ENGINES), choices=list(ENGINES))
+    ap.add_argument("--engines", nargs="+", default=DEFAULT_ENGINES, choices=list(ENGINES))
     args = ap.parse_args()
 
     identity = jvm_identity()

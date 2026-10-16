@@ -90,3 +90,24 @@ def test_three_engines_agree_end_to_end_and_a_different_table_is_refused(tmp_pat
     monkeypatch.setitem(cp.ENGINES, "enumerate", ["--engine", "enumerate", "--theta", "0.05"])
     with pytest.raises(SystemExit, match="OUTPUT DIFFERS"):
         cp.main()
+
+
+@pytest.mark.skipif(JAVA is None or not cp.JAR.is_file(), reason="needs java and the built miner jar")
+def test_per_length_filter_engines_write_the_same_table(tmp_path, monkeypatch):
+    chain, out = tmp_path / "chain", tmp_path / "rec"
+    for d in (chain, out):
+        d.mkdir()
+    tiny_graph(chain / "T_A.tg")
+    monkeypatch.setattr(cp, "CHAIN", chain)
+    monkeypatch.setattr(cp, "OUT", out)
+    monkeypatch.setattr(cp, "TIMING", None)
+    monkeypatch.setattr(cp, "LOCK", tmp_path / "jdk.lock")
+    engines = ["miner", "miner-from-3", "miner-from-4", "miner-from-5", "miner-no-filter"]
+    monkeypatch.setattr(sys, "argv", ["x", "--dataset", "T", "--labeling", "A", "--tau", "2", "--max-length", "5",
+                                      "--heap", "1g", "--limit", "120", "--engines", *engines])
+    cp.main()
+    rows = (out / "performance.csv").read_text().splitlines()[1:]
+    assert [r.split(",")[7] for r in rows] == engines and all(",ok," in r for r in rows)
+    assert len({r.split(",")[9] for r in rows}) == 1
+    # the default set is unchanged by the new engines
+    assert cp.DEFAULT_ENGINES == ["miner", "miner-no-filter", "enumerate"]
