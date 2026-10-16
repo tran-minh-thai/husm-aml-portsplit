@@ -55,8 +55,10 @@ def chain_amounts(dataset: str, labeling: str = "S") -> np.ndarray:
 
 def read_amounts(path: Path) -> np.ndarray:
     """Amounts of the transaction lines ('e SOURCE TARGET LABEL AMOUNT'); account lines ('v ID LABEL') have three fields."""
+    # no usecols: when the first chunk the parser reads holds only account lines, usecols makes it refuse the file
     frame = pd.read_csv(path, sep=" ", header=None, comment="#", names=["kind", "a", "b", "c", "amount"],
-                        usecols=["kind", "amount"], dtype={"kind": "category"}, engine="c")
+                        dtype={"kind": "category", "a": np.float64, "b": np.float64, "c": np.float64,
+                               "amount": np.float64}, engine="c")
     amounts = frame.loc[frame["kind"] == "e", "amount"].to_numpy(dtype=np.float64)
     if len(amounts) == 0 or np.isnan(amounts).any() or (amounts <= 0).any():
         sys.exit(f"could not read positive amounts from {path.name}: {len(amounts)} lines")
@@ -82,8 +84,10 @@ def self_test() -> None:
     import tempfile
     with tempfile.TemporaryDirectory() as d:
         f = Path(d) / "t.tg"
-        f.write_text("# directed transaction graph: v ID LABEL / e SOURCE TARGET LABEL AMOUNT\nv 0 0\nv 1 0\nv 2 1\n"
-                     "e 0 1 0 459.63\ne 1 2 3 910.28999999999996\ne 2 0 0 0.01\n")
+        # enough account lines that the parser's first chunk holds no transaction line, as in the AMLworld inputs
+        accounts = "".join(f"v {i} 0\n" for i in range(400_000))
+        f.write_text("# directed transaction graph: v ID LABEL / e SOURCE TARGET LABEL AMOUNT\n" + accounts
+                     + "e 0 1 0 459.63\ne 1 2 3 910.28999999999996\ne 2 0 0 0.01\n")
         got = read_amounts(f)
         assert got.tolist() == [459.63, 910.28999999999996, 0.01], got
     print("self-test: p_m equals brute force over all sequences for m = 2, 3, 4 (9 amounts, boundaries included); "
