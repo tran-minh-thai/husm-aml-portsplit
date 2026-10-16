@@ -117,3 +117,25 @@ def test_keep_awake_requests_and_releases_system_wakefulness():
     assert calls == [0x80000001, 0x80000000]
     if os.name != "nt":
         assert rr.keep_awake(True) is None
+
+
+def test_timing_kind_names_measurement_and_probe_trees(tmp_path):
+    root = tmp_path
+    assert rr.timing_kind(root / "results" / "q", root) == "measurement"
+    assert rr.timing_kind(root / "results-probe-timing" / "q", root).startswith("probe")
+    assert rr.timing_kind(root / "elsewhere" / "q", root) == "outside the result trees"
+    assert rr.timing_kind(tmp_path.parent / "q", root) == "outside the result trees"
+
+
+def test_probe_timing_pairs_only_with_a_probe_record(tmp_path):
+    root = tmp_path
+    probe_timing = root / "results-probe-timing" / "q"
+    assert rr.probe_pairing_refusal(root / "results-probe" / "q", probe_timing, root) is None
+    assert "pairs only" in rr.probe_pairing_refusal(root / "results-invariant" / "q", probe_timing, root)
+    assert "pairs only" in rr.probe_pairing_refusal(tmp_path.parent / "q", probe_timing, root)
+    # a measurement pairing is not this check's business
+    assert rr.probe_pairing_refusal(root / "results-invariant" / "q", root / "results" / "q", root) is None
+
+
+def test_untracked_probe_timing_records_do_not_make_the_tree_dirty():
+    assert "results-probe-timing" in rr.RESULT_TREES

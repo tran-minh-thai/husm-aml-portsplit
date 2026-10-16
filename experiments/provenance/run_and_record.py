@@ -18,7 +18,8 @@ Two things this tool refuses to do quietly:
   looks like a clean tree. A record that names a commit that never existed is
   worse than no record: it stops people asking. Now it exits non-zero and
   writes nothing.
-* keep machine-dependent timing in a machine-independent tree. Output written
+* keep machine-dependent timing in a machine-independent tree (timing of a probe goes to the paired
+  tree results-probe-timing/, whose records say they are probes and which no paper tool reads). Output written
   under results-invariant/ or results-probe/ has its timing lines redacted and
   no finish time recorded, so nothing in those trees can be read as a
   performance number. The number of redacted lines is recorded so the
@@ -74,6 +75,7 @@ import sys
 
 MACHINE_INDEPENDENT_TREES = {"results-invariant", "results-probe"}
 MEASUREMENT_TREE = "results"
+PROBE_TIMING_TREE = "results-probe-timing"
 MEASUREMENT_MACHINE_FILE = "MEASUREMENT_MACHINE.txt"
 TIMING_LINE = re.compile(r"Time elapsed|Total time|Finished at|elapsed|^Ran \d+ tests? in ", re.IGNORECASE)
 REDACTED = "[timing redacted: machine-dependent, not kept in this tree]"
@@ -130,7 +132,7 @@ def redact_timing(text):
     return "\n".join(kept) + ("\n" if text.endswith("\n") else ""), redacted
 
 
-RESULT_TREES = ("results", "results-invariant", "results-probe")
+RESULT_TREES = ("results", "results-invariant", "results-probe", "results-probe-timing")
 
 
 def tree_state(root):
@@ -280,6 +282,31 @@ def measurement_tree_refusal(timing_parent, root):
     return None
 
 
+def timing_kind(timing_parent, root):
+    """'measurement' under results/, 'probe' under results-probe-timing/, else 'outside the result trees'."""
+    try:
+        first = timing_parent.resolve().relative_to(root.resolve()).parts[:1]
+    except ValueError:
+        return "outside the result trees"
+    if first == (MEASUREMENT_TREE,):
+        return "measurement"
+    if first == (PROBE_TIMING_TREE,):
+        return "probe: development machine, decides whether a change is worth making, never cited"
+    return "outside the result trees"
+
+
+def probe_pairing_refusal(target_parent, timing_parent, root):
+    """Probe timing pairs only with a probe record, so a probe number cannot sit next to a measurement."""
+    if timing_kind(timing_parent, root).startswith("probe"):
+        try:
+            first = target_parent.resolve().relative_to(root.resolve()).parts[:1]
+        except ValueError:
+            first = ()
+        if first != ("results-probe",):
+            return f"--timing-into {PROBE_TIMING_TREE}/ pairs only with --into results-probe/"
+    return None
+
+
 def new_record_dirs(parents, stamp):
     """parent/run_id for every parent, with one run id free under all of them: stamp, or stamp-N.
 
@@ -345,7 +372,7 @@ def main():
             print(f"refusing to run: --timing-into {args.timing_into} lies in a machine-independent tree, "
                   f"where no timing may be kept", file=sys.stderr)
             return 2
-        refusal = measurement_tree_refusal(timing_parent, root)
+        refusal = measurement_tree_refusal(timing_parent, root) or probe_pairing_refusal(target_parent, timing_parent, root)
         if refusal:
             print(f"refusing to run: {refusal}", file=sys.stderr)
             return 2
@@ -442,7 +469,8 @@ def main():
         meta["finished_at"] = finished.isoformat(timespec="seconds")
     (target / "run_meta.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     if timing_target is not None:
-        paired = dict(meta, tree_kind="machine-dependent", timing_lines_redacted=0,
+        paired = dict(meta, tree_kind="machine-dependent", timing_kind=timing_kind(timing_parent, root),
+                      timing_lines_redacted=0,
                       finished_at=finished.isoformat(timespec="seconds"),
                       paired_with=relative_to_root(target, root))
         (timing_target / "run_meta.json").write_text(json.dumps(paired, indent=2) + "\n", encoding="utf-8")
