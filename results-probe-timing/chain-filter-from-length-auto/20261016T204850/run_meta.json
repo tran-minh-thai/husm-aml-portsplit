@@ -1,0 +1,63 @@
+{
+  "run_id": "20261016T204850",
+  "note": "probe: always filter (auto) against from length L and no filter, HI-Medium labeling S (V2 decision, rule 12.3)",
+  "command": [
+    "python3",
+    "experiments/scripts/chain_performance.py",
+    "--dataset",
+    "HI-Medium",
+    "--labeling",
+    "S",
+    "--heap",
+    "24g",
+    "--engines",
+    "miner",
+    "miner-from-3",
+    "miner-from-4",
+    "miner-from-5",
+    "miner-no-filter"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-16T20:48:50",
+  "git_commit": "b3d4e909d34f35bde1a961bcdb88f5e698ccc888",
+  "git_tree": "clean (50 untracked result records)",
+  "code_sha256": "588b0f676b3a63c9d5e350c726a03446643b0eeab217c80f3a8d27b1faf0ebd2",
+  "code_files": 124,
+  "engine_jar_sha256": "7d9f9f29c476cdf5cfaddbdf59b5fa8e4693eafcdd5d0b9a87a36738014f6e15",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_S.tg",
+      "bytes": 1085071319,
+      "sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.2",
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": "3.11.1",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (68 untracked result records)",
+  "timing_kind": "probe: development machine, decides whether a change is worth making, never cited",
+  "finished_at": "2026-10-16T20:52:12",
+  "paired_with": "results-probe/chain-filter-from-length-auto/20261016T204850"
+}

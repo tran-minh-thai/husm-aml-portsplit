@@ -1,0 +1,6 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+us_100K_difficult,A,miner,ok,34495,35.422,670138368,7200.0,24g
+us_100K_difficult,A,miner-from-3,ok,32603,33.674,660766720,7200.0,24g
+us_100K_difficult,A,miner-from-4,ok,24607,25.718,666337280,7200.0,24g
+us_100K_difficult,A,miner-from-5,ok,18092,19.556,649314304,7200.0,24g
+us_100K_difficult,A,miner-no-filter,ok,17162,18.176,654589952,7200.0,24g

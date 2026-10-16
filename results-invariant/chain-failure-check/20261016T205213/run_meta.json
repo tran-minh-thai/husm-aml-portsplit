@@ -1,0 +1,63 @@
+{
+  "run_id": "20261016T205213",
+  "note": "H37: failed pinned searches on open chains checked for a conserving walk, HI-Medium labeling S",
+  "command": [
+    "<home>/Library/Java/JavaVirtualMachines/openjdk-26.0.1/Contents/Home/bin/java",
+    "-Xmx24g",
+    "-cp",
+    "inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar",
+    "edu.huflit.inchusm.chain.ChainMain",
+    "--graph",
+    "datasets/chain/HI-Medium_S.tg",
+    "--theta",
+    "0.2",
+    "--min-support",
+    "10",
+    "--max-length",
+    "5",
+    "--min-cycle",
+    "3",
+    "--out",
+    "/dev/null",
+    "--check-failures"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 5,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-16T20:52:13",
+  "git_commit": "b3d4e909d34f35bde1a961bcdb88f5e698ccc888",
+  "git_tree": "clean (72 untracked result records)",
+  "code_sha256": "588b0f676b3a63c9d5e350c726a03446643b0eeab217c80f3a8d27b1faf0ebd2",
+  "code_files": 124,
+  "engine_jar_sha256": "7d9f9f29c476cdf5cfaddbdf59b5fa8e4693eafcdd5d0b9a87a36738014f6e15",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_S.tg",
+      "bytes": 1085071319,
+      "sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.2",
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": "3.11.1",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}
