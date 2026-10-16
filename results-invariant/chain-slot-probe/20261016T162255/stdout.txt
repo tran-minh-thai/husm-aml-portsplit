@@ -1,0 +1,15 @@
+graph LI-Medium_A.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true
+candidates=3524 pruned_by_domain=2941 pruned_by_consistency=120 searches=1104031 found=1074153 failed=29878 budget_fallbacks=0 local_rejections=0 early_stops=1
+length 1: 6 open, 0 closed
+length 2: 28 open, 0 closed
+length 3: 125 open, 1 closed
+length 4: 277 open, 1 closed
+length 5: 23 open, 1 closed
+slot probe length 1: candidates=0 fresh=0 inherited=0 consistent=0 not_inherited=0 kept_by_frequent_open=28752132
+slot probe length 2: candidates=28 fresh=111273596 inherited=111273596 consistent=10053817 not_inherited=0 kept_by_frequent_open=10053817
+slot probe length 3: candidates=232 fresh=6445829 inherited=5235604 consistent=2671199 not_inherited=0 kept_by_frequent_open=2666392
+slot probe length 4: candidates=292 fresh=1473856 inherited=1442290 consistent=895797 not_inherited=0 kept_by_frequent_open=873158
+slot probe length 5: candidates=25 fresh=75869 inherited=73599 consistent=30366 not_inherited=0 kept_by_frequent_open=26464
+patterns written: 462 -> null
+[timing redacted: machine-dependent, not kept in this tree]
