@@ -230,6 +230,39 @@ class ChainMinerTest {
         assertTrue(longCompared > 300, "chains of length >= 3 compared: " + longCompared);
     }
 
+    @Test
+    void slotsInheritedFromPrefixAndSuffixContainTheConsistentSlots() {
+        Random rnd = new Random(20261016L);
+        long candidates = 0;
+        long consistent = 0;
+        for (int it = 0; it < 2000; it++) {
+            Instance x = randomInstance(rnd);
+            ChainMiner.Params p = new ChainMiner.Params(THETAS[it % THETAS.length], 1 + rnd.nextInt(2),
+                    3 + rnd.nextInt(2), 2 + rnd.nextInt(2), true);
+            List<ChainMiner.Result> plain = new ChainMiner(x.graph(), p).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).mine();
+            ChainMiner probed = new ChainMiner(x.graph(), p).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).slotProbe(true);
+            List<ChainMiner.Result> got = probed.mine();
+            assertEquals(plain.size(), got.size(), "instance " + it);
+            for (int i = 0; i < got.size(); i++) {
+                assertEquals(plain.get(i).pattern().key(), got.get(i).pattern().key());
+                assertArrayEquals(plain.get(i).imageCounts(), got.get(i).imageCounts());
+            }
+            for (Map.Entry<Integer, long[]> e : probed.slotProbeStats().byLength.entrySet()) {
+                long[] v = e.getValue();
+                assertEquals(0, v[4], "consistent slot transactions outside the inherited slots, length " + e.getKey()
+                        + ", instance " + it);
+                assertTrue(v[2] <= v[1], "inherited slots larger than the slots built from the domains, instance " + it);
+                assertTrue(v[3] <= v[2], "consistent slots larger than the inherited slots, instance " + it);
+                candidates += v[0];
+                consistent += v[3];
+            }
+        }
+        // the check must not be vacuous
+        System.out.printf("slot inheritance: %d candidates, %d consistent slot transactions checked%n", candidates, consistent);
+        assertTrue(candidates > 2000, "candidates checked: " + candidates);
+        assertTrue(consistent > 5000, "consistent slot transactions checked: " + consistent);
+    }
+
     static TreeSet<Integer> toSet(int[] a) {
         TreeSet<Integer> s = new TreeSet<>();
         for (int v : a) s.add(v);

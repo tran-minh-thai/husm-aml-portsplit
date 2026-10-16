@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
  * {@code --no-closed}) it applies instead the rule of the transaction-cycle detectors, every amount
  * within theta of the first transaction's amount.
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
+ * {@code --slot-probe} prints, per length, slot sizes built from the domains against slots inherited from
+ * prefix and suffix (same output; keeps the slots of one level in memory).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
  * output then also counts, for every image set, how many of its accounts are marked (both engines). Marking never
@@ -78,6 +80,7 @@ public final class ChainMain {
         }
         if (!engine.equals("miner")) throw new IllegalArgumentException("--engine must be miner or enumerate");
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
+        if (opt.containsKey("--slot-probe")) miner.slotProbe(true);
         if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();
@@ -92,6 +95,13 @@ public final class ChainMain {
                 c.localRejections, c.earlyStops);
         for (Map.Entry<Integer, long[]> e : c.frequentByLength.entrySet()) {
             System.out.printf("length %d: %d open, %d closed%n", e.getKey(), e.getValue()[0], e.getValue()[1]);
+        }
+        if (miner.slotProbeStats() != null) {
+            for (Map.Entry<Integer, long[]> e : miner.slotProbeStats().byLength.entrySet()) {
+                long[] v = e.getValue();
+                System.out.printf("slot probe length %d: candidates=%d fresh=%d inherited=%d consistent=%d"
+                        + " not_inherited=%d kept_by_frequent_open=%d%n", e.getKey(), v[0], v[1], v[2], v[3], v[4], v[5]);
+            }
         }
         System.out.printf("patterns written: %d -> %s%n", results.size(), out.getFileName());
         System.out.printf("mining elapsed ms: %d (machine-dependent)%n", elapsedMs);
@@ -155,7 +165,7 @@ public final class ChainMain {
         for (int i = 0; i < args.length; i++) {
             String a = args[i];
             if (!a.startsWith("--")) throw new IllegalArgumentException("unexpected argument '" + a + "'");
-            if (a.equals("--no-closed") || a.equals("--no-consistency")) {
+            if (a.equals("--no-closed") || a.equals("--no-consistency") || a.equals("--slot-probe")) {
                 opt.put(a, "");
             } else {
                 if (i + 1 >= args.length) throw new IllegalArgumentException(a + " needs a value");

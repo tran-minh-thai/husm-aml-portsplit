@@ -71,7 +71,23 @@ public final class ChainMiner {
         }
     }
 
-    private record Entry(ChainPattern pattern, int[][] images) {
+    /** slots (consistent slots per pattern edge 1..m) is kept only by the slot probe. */
+    private record Entry(ChainPattern pattern, int[][] images, int[][] slots) {
+    }
+
+    /**
+     * Slot probe, per candidate length: candidates that reached slot consistency, the total size of
+     * the slots built from the domains, of the slots inherited from prefix and suffix (intersection,
+     * restricted to the domains), of the consistent slots, consistent-slot transactions outside the
+     * inherited slots (zero if inheritance is sound), and the total slot size kept by the frequent open
+     * chains of that length. Mining is unchanged by the probe.
+     */
+    public static final class SlotProbe {
+        public final Map<Integer, long[]> byLength = new TreeMap<>();
+
+        long[] at(int length) {
+            return byLength.computeIfAbsent(length, k -> new long[6]);
+        }
     }
 
     /** Steps a depth-first attempt on a closed chain may take before local propagation is used. */
@@ -89,6 +105,7 @@ public final class ChainMiner {
     private final Counters counters = new Counters();
     private boolean[] marked;
     private boolean keepImages;
+    private SlotProbe slotProbe;
     private final Map<String, BitSet> accounts = new TreeMap<>();
 
     public ChainMiner(TransactionGraph g, Params params) {
@@ -113,6 +130,16 @@ public final class ChainMiner {
     ChainMiner dfsBudget(long steps) {
         this.dfsBudget = steps;
         return this;
+    }
+
+    /** Record the slot probe (keeps the consistent slots of every open chain of the current level). */
+    public ChainMiner slotProbe(boolean on) {
+        this.slotProbe = on ? new SlotProbe() : null;
+        return this;
+    }
+
+    public SlotProbe slotProbeStats() {
+        return slotProbe;
     }
 
     /** Keep the image sets themselves in the results (memory grows with every reported chain). */
@@ -223,7 +250,12 @@ public final class ChainMiner {
                 continue;
             }
             int[] lab = kv.getValue();
-            out.add(new Entry(new ChainPattern(new int[] {lab[0], lab[2]}, new int[] {lab[1]}, false), img));
+            int[][] slots = null;
+            if (slotProbe != null) {
+                slots = new int[][] {null, Consistency.slot(g, img[0], lab[1], img[1])};
+                slotProbe.at(1)[5] += slots[1].length;
+            }
+            out.add(new Entry(new ChainPattern(new int[] {lab[0], lab[2]}, new int[] {lab[1]}, false), img, slots));
         }
         return out;
     }
@@ -271,14 +303,53 @@ public final class ChainMiner {
             }
         }
         Search search = new Search(cand, dom);
+        int[][] inherited = slotProbe != null && useConsistency ? inherited(cand, dom, p, q) : null;
+        boolean consistent = true;
         if (!useConsistency) {
             search.plain();
-        } else if (!search.consistent()) {
-            counters.prunedByConsistency++;
-            return null;
+        } else {
+            consistent = search.consistent();
+            if (inherited != null) probe(cand, inherited, search);
+            if (!consistent) {
+                counters.prunedByConsistency++;
+                return null;
+            }
         }
         int[][] img = search.images();
-        return img == null ? null : new Entry(cand, img);
+        if (img == null) return null;
+        int[][] kept = null;
+        if (inherited != null && !cand.closed()) {
+            kept = search.slots.clone();
+            long n = 0;
+            for (int s = 1; s < kept.length; s++) n += kept[s].length;
+            slotProbe.at(cand.length())[5] += n;
+        }
+        return new Entry(cand, img, kept);
+    }
+
+    /** Slots of the candidate inherited from its prefix p (edges 1..k) and suffix q (edges 2..k+1), within the domains. */
+    private int[][] inherited(ChainPattern cand, int[][] dom, Entry p, Entry q) {
+        int m = cand.length();
+        int[][] ps = p.slots();
+        int[][] qs = q.slots();
+        int[][] in = new int[m + 1][];
+        for (int s = 1; s <= m; s++) {
+            int[] x = s == 1 ? ps[1] : s == m ? qs[m - 1] : intersect(ps[s], qs[s - 1]);
+            int to = cand.closed() && s == m ? 0 : s;
+            in[s] = Consistency.byEnd(g, Consistency.byEnd(g, x, dom[s - 1], true), dom[to], false);
+        }
+        return in;
+    }
+
+    private void probe(ChainPattern cand, int[][] inherited, Search search) {
+        long[] a = slotProbe.at(cand.length());
+        a[0]++;
+        for (int s = 1; s < inherited.length; s++) {
+            a[1] += search.fresh[s];
+            a[2] += inherited[s].length;
+            a[3] += search.slots[s].length;
+            for (int e : search.slots[s]) if (Arrays.binarySearch(inherited[s], e) < 0) a[4]++;
+        }
     }
 
     /** Decides, for every account of every position domain, whether it is in the image set. */
@@ -289,6 +360,7 @@ public final class ChainMiner {
         private int[][] dom;
         private BitSet[] rejected;
         private final int[][] slots;    // transactions allowed at each pattern edge 1..m after consistency
+        private final int[] fresh;      // slot sizes built from the domains, before propagation (slot probe)
         private int[][] allowed;        // transactions allowed in the current pinned search
         private long steps;             // transactions tried in the current depth-first attempt
         private long budget;            // abandon the attempt (not the question) past this many
@@ -301,6 +373,7 @@ public final class ChainMiner {
             this.elab = cand.elab();
             this.dom = dom;
             this.slots = new int[m + 1][];
+            this.fresh = new int[m + 1];
             this.vert = new int[dom.length];
             this.tx = new int[m + 1];
         }
@@ -313,7 +386,10 @@ public final class ChainMiner {
          */
         boolean consistent() {
             double theta = params.theta();
-            for (int s = 1; s <= m; s++) slots[s] = Consistency.slot(g, dom[s - 1], elab[s - 1], dom[pos(s)]);
+            for (int s = 1; s <= m; s++) {
+                slots[s] = Consistency.slot(g, dom[s - 1], elab[s - 1], dom[pos(s)]);
+                fresh[s] = slots[s].length;
+            }
             while (true) {
                 long before = size();
                 for (int s = 2; s <= m; s++) slots[s] = Consistency.forward(g, slots[s - 1], slots[s], theta);
