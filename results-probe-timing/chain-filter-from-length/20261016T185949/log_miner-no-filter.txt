@@ -1,0 +1,10 @@
+graph us_100K_difficult_S.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=false consistency_from=2
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=1164506 found=475426 failed=689080 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_miner-no-filter.tsv
+mining elapsed ms: 111201 (machine-dependent)

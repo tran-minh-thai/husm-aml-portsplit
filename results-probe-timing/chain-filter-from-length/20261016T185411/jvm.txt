@@ -1,0 +1,4 @@
+java.home = <home>/Library/Java/JavaVirtualMachines/openjdk-26.0.1/Contents/Home
+java.runtime.version = 26.0.1+8-34
+java.vendor = Oracle Corporation
+java.vm.name = OpenJDK 64-Bit Server VM

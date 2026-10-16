@@ -1,0 +1,10 @@
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=false consistency_from=2
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=4023711 found=616915 failed=3406796 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+patterns written: 8 -> patterns_miner-no-filter.tsv
+[timing redacted: machine-dependent]

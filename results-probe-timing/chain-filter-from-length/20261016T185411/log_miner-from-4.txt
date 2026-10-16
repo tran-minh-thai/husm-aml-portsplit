@@ -1,0 +1,10 @@
+graph LI-Small_A.tg: 576781 accounts, 6119572 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4
+candidates=1950 pruned_by_domain=1584 pruned_by_consistency=9 searches=11142750 found=298057 failed=10844693 budget_fallbacks=0 local_rejections=0 early_stops=97
+length 1: 6 open, 0 closed
+length 2: 27 open, 0 closed
+length 3: 114 open, 1 closed
+length 4: 109 open, 1 closed
+length 5: 2 open, 0 closed
+patterns written: 260 -> patterns_miner-from-4.tsv
+mining elapsed ms: 7206 (machine-dependent)
