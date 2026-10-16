@@ -14,6 +14,11 @@ cycle search over the whole graph, and the measures below concern open chains on
 Writes the two pattern tables, the two account-role tables and conservation_effect.csv into the run
 record, and prints the values the hypotheses are decided on.
 
+With --shuffle-amounts SEED the amounts are permuted at random among all transactions of the chain input
+(sources, targets and labels unchanged) before mining, in a copy on local disk: the null in which amounts
+carry no information tied to the structure. With --inf-roles RUN_ID the theta = inf account roles are taken
+from that earlier record instead of being mined again (without conservation, amounts are not read at all).
+
 Run: python experiments/scripts/chain_conservation_effect.py --source amlworld --dataset HI-Small --labeling A
 """
 from __future__ import annotations
@@ -25,6 +30,7 @@ import math
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -85,6 +91,30 @@ def mine(graph: Path, marked: Path, theta: str, tau: int, length: int, heap: str
     return patterns, roles
 
 
+def shuffled_copy(graph: Path, seed: int, dest: Path) -> Path:
+    """The chain input with its transaction amounts permuted at random; every other byte of every line is kept."""
+    frame = pd.read_csv(graph, sep=" ", header=None, comment="#", names=["kind", "a", "b", "c", "amount"],
+                        dtype={"kind": "category", "a": np.float64, "b": np.float64, "c": np.float64,
+                               "amount": np.float64}, engine="c")
+    amounts = frame.loc[frame["kind"] == "e", "amount"].to_numpy(dtype=np.float64)
+    del frame
+    order = np.random.default_rng(seed).permutation(len(amounts))
+    shuffled = amounts[order]
+    out = dest / graph.name
+    i = 0
+    with open(graph, "r", encoding="utf-8") as src, open(out, "w", encoding="utf-8", newline="\n") as dst:
+        for line in src:
+            if line.startswith("e "):
+                head = line.rstrip("\n").rsplit(" ", 1)[0]
+                dst.write(f"{head} {repr(float(shuffled[i]))}\n")
+                i += 1
+            else:
+                dst.write(line)
+    if i != len(amounts):
+        sys.exit(f"shuffled {i} transaction lines, read {len(amounts)} amounts")
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", choices=["amlworld", "amlgentex"], required=True)
@@ -93,6 +123,8 @@ def main() -> None:
     ap.add_argument("--tau", type=int, default=10)
     ap.add_argument("--max-length", type=int, default=5)
     ap.add_argument("--heap", default="16g")
+    ap.add_argument("--shuffle-amounts", type=int, metavar="SEED")
+    ap.add_argument("--inf-roles", metavar="RUN_ID", help="reuse theta = inf account roles from this chain-conservation-effect record")
     args = ap.parse_args()
 
     graph = CHAIN / f"{args.dataset}_{args.labeling}.tg"
@@ -119,11 +151,20 @@ def main() -> None:
     planted = planted[planted["kind"] == "open"]
     planted_mid = {m: set(a for acc in g["accounts"] for a in acc[1:-1]) for m, g in planted.groupby("length")}
 
+    scratch = tempfile.TemporaryDirectory(prefix="chain-shuffle-")
+    if args.shuffle_amounts is not None:
+        graph = shuffled_copy(graph, args.shuffle_amounts, Path(scratch.name))
+        print(f"amounts permuted among all transactions, seed {args.shuffle_amounts}; shuffled input sha256 {sha256(graph)}")
     roles = {}
     for theta in THETAS:
-        _, role_file = mine(graph, marked_file, theta, args.tau, args.max_length, args.heap)
+        if theta == "inf" and args.inf_roles:
+            role_file = ROOT / "results-invariant" / "chain-conservation-effect" / args.inf_roles / "accounts_theta_inf.tsv.gz"
+            print(f"\n[theta=inf account roles reused from {args.inf_roles}]", flush=True)
+        else:
+            _, role_file = mine(graph, marked_file, theta, args.tau, args.max_length, args.heap)
         r = pd.read_csv(role_file, sep="\t")
         roles[theta] = r[(r["kind"] == "open") & (r["role"] == "intermediate")]
+    scratch.cleanup()
 
     table = effect_table(roles, marked, planted_mid, args.max_length)
     table.insert(0, "labeling", args.labeling)
