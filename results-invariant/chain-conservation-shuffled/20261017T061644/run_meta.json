@@ -1,0 +1,60 @@
+{
+  "run_id": "20261017T061644",
+  "note": "amount shuffle test (H42-H44): amounts permuted among transactions, seed 20261017, LI-Small labeling S",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_conservation_effect.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "LI-Small",
+    "--labeling",
+    "S",
+    "--heap",
+    "24g",
+    "--shuffle-amounts",
+    "20261017",
+    "--inf-roles",
+    "20261011T073647"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 5,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-17T06:16:44",
+  "git_commit": "b1ba7a7b2b5b9659e55a90eab73af3c9523e836c",
+  "git_tree": "clean (16 untracked result records)",
+  "code_sha256": "8c35ad56b2a5c1a3937d363e194233dc7e9609b13421f83df6d6ce2b182a119c",
+  "code_files": 126,
+  "engine_jar_sha256": "7d9f9f29c476cdf5cfaddbdf59b5fa8e4693eafcdd5d0b9a87a36738014f6e15",
+  "data": [
+    {
+      "path": "datasets/chain/LI-Small_S.tg",
+      "bytes": 222233745,
+      "sha256": "dfd370241bb15b6af19f75bf9d6467d650053118c489e078ccf8e4352147f6dd"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (19 untracked result records)"
+}
