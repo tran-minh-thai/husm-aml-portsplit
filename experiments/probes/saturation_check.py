@@ -50,10 +50,17 @@ def p_conserving(amounts: np.ndarray, theta: float, max_m: int) -> list[float]:
 
 
 def chain_amounts(dataset: str, labeling: str = "S") -> np.ndarray:
-    path = ROOT / "datasets" / "chain" / f"{dataset}_{labeling}.tg"
-    frame = pd.read_csv(path, sep=" ", header=None, comment="#", usecols=[0, 4], names=["kind", "amount"],
-                        dtype={"kind": "category"}, engine="c")
-    return frame.loc[frame["kind"] == "e", "amount"].to_numpy(dtype=np.float64)
+    return read_amounts(ROOT / "datasets" / "chain" / f"{dataset}_{labeling}.tg")
+
+
+def read_amounts(path: Path) -> np.ndarray:
+    """Amounts of the transaction lines ('e SOURCE TARGET LABEL AMOUNT'); account lines ('v ID LABEL') have three fields."""
+    frame = pd.read_csv(path, sep=" ", header=None, comment="#", names=["kind", "a", "b", "c", "amount"],
+                        usecols=["kind", "amount"], dtype={"kind": "category"}, engine="c")
+    amounts = frame.loc[frame["kind"] == "e", "amount"].to_numpy(dtype=np.float64)
+    if len(amounts) == 0 or np.isnan(amounts).any() or (amounts <= 0).any():
+        sys.exit(f"could not read positive amounts from {path.name}: {len(amounts)} lines")
+    return amounts
 
 
 def self_test() -> None:
@@ -71,8 +78,16 @@ def self_test() -> None:
     # a distribution with every amount equal conserves always; two far-apart values conserve only within themselves
     assert p_conserving(np.full(5, 7.0), 0.0, 4) == [1.0, 1.0, 1.0, 1.0]
     assert abs(p_conserving(np.array([1.0, 100.0]), 0.2, 3)[2] - 0.25) < 1e-12
+    # the reader on a file of the chain input's format: header comment, account lines with three fields, transactions with five
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        f = Path(d) / "t.tg"
+        f.write_text("# directed transaction graph: v ID LABEL / e SOURCE TARGET LABEL AMOUNT\nv 0 0\nv 1 0\nv 2 1\n"
+                     "e 0 1 0 459.63\ne 1 2 3 910.28999999999996\ne 2 0 0 0.01\n")
+        got = read_amounts(f)
+        assert got.tolist() == [459.63, 910.28999999999996, 0.01], got
     print("self-test: p_m equals brute force over all sequences for m = 2, 3, 4 (9 amounts, boundaries included); "
-          "two closed-form cases pass")
+          "two closed-form cases pass; the reader returns the three amounts of a sample chain input file")
 
 
 def main() -> None:
