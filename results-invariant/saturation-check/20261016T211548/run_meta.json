@@ -1,0 +1,54 @@
+{
+  "run_id": "20261016T211548",
+  "note": "ticket 04 step 0: p_m from the empirical amounts against sampled background chains (H40) and against background retention (H41), HI-Medium labeling S",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/probes/saturation_check.py",
+    "--dataset",
+    "HI-Medium",
+    "--effect",
+    "20261011T075419",
+    "--planted",
+    "20261011T071654"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-16T21:15:48",
+  "git_commit": "f8fa9e81d9a708c07994c8dd7ac165bddd159cc0",
+  "git_tree": "clean (342 untracked result records)",
+  "code_sha256": "64e1ec5ca349bc0e15025fd2916c070604edecad831b461b6be4567f625b0f96",
+  "code_files": 125,
+  "engine_jar_sha256": "7d9f9f29c476cdf5cfaddbdf59b5fa8e4693eafcdd5d0b9a87a36738014f6e15",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_S.tg",
+      "bytes": 1085071319,
+      "sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (343 untracked result records)"
+}

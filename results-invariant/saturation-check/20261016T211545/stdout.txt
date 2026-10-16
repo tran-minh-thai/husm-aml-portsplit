@@ -1,0 +1,4 @@
+dataset=LI-Small, labeling=S, theta=0.2, length=2, transactions=6119572, p_m=0.0463464, w_m=0.04551, background_chains=200000, w_over_p=0.981954, r_B=0.353413, r_L=0.463264, OR_record=1.31083, OR_identity=1.31083, lower_bound_holds=True
+dataset=LI-Small, labeling=S, theta=0.2, length=3, transactions=6119572, p_m=0.00256316, w_m=0.00281, background_chains=200000, w_over_p=1.0963, r_B=0.139111, r_L=0.241609, OR_record=1.73681, OR_identity=1.73681, lower_bound_holds=True
+dataset=LI-Small, labeling=S, theta=0.2, length=4, transactions=6119572, p_m=0.000149845, w_m=0.000155, background_chains=200000, w_over_p=1.0344, r_B=0.0360599, r_L=0.104514, OR_record=2.89834, OR_identity=2.89834, lower_bound_holds=True
+dataset=LI-Small, labeling=S, theta=0.2, length=5, transactions=6119572, p_m=8.98741e-06, w_m=1e-05, background_chains=200000, w_over_p=1.11267, r_B=0.00795816, r_L=0.0577889, OR_record=7.26159, OR_identity=7.26159, lower_bound_holds=True

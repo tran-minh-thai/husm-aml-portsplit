@@ -1,0 +1,4 @@
+dataset=sweden_100K_easy, labeling=S, theta=0.2, length=2, transactions=1037081, p_m=0.239419, w_m=0.25182, background_chains=200000, w_over_p=1.05179, r_B=0.941908, r_L=0.961953, OR_record=1.02128, OR_identity=1.02128, lower_bound_holds=True
+dataset=sweden_100K_easy, labeling=S, theta=0.2, length=3, transactions=1037081, p_m=0.0689529, w_m=0.07566, background_chains=200000, w_over_p=1.09727, r_B=0.904725, r_L=0.932376, OR_record=1.03056, OR_identity=1.03056, lower_bound_holds=True
+dataset=sweden_100K_easy, labeling=S, theta=0.2, length=4, transactions=1037081, p_m=0.0209734, w_m=0.02389, background_chains=200000, w_over_p=1.13906, r_B=0.864004, r_L=0.901966, OR_record=1.04394, OR_identity=1.04394, lower_bound_holds=True
+dataset=sweden_100K_easy, labeling=S, theta=0.2, length=5, transactions=1037081, p_m=0.00652327, w_m=0.007935, background_chains=200000, w_over_p=1.21642, r_B=0.826582, r_L=0.871839, OR_record=1.05475, OR_identity=1.05475, lower_bound_holds=True

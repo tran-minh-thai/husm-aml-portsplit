@@ -1,0 +1,4 @@
+dataset=us_100K_difficult, labeling=S, theta=0.2, length=2, transactions=1766449, p_m=0.23488, w_m=0.24083, background_chains=200000, w_over_p=1.02533, r_B=0.951261, r_L=0.970411, OR_record=1.02013, OR_identity=1.02013, lower_bound_holds=True
+dataset=us_100K_difficult, labeling=S, theta=0.2, length=3, transactions=1766449, p_m=0.0662539, w_m=0.06872, background_chains=200000, w_over_p=1.03722, r_B=0.926316, r_L=0.953973, OR_record=1.02986, OR_identity=1.02986, lower_bound_holds=True
+dataset=us_100K_difficult, labeling=S, theta=0.2, length=4, transactions=1766449, p_m=0.0197766, w_m=0.020775, background_chains=200000, w_over_p=1.05048, r_B=0.900132, r_L=0.93966, OR_record=1.04391, OR_identity=1.04391, lower_bound_holds=True
+dataset=us_100K_difficult, labeling=S, theta=0.2, length=5, transactions=1766449, p_m=0.00604289, w_m=0.006535, background_chains=200000, w_over_p=1.08144, r_B=0.876372, r_L=0.920836, OR_record=1.05074, OR_identity=1.05074, lower_bound_holds=True
