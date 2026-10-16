@@ -1,0 +1,5 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+LI-Medium,A,miner,ok,81225,92.525,7574798336,7200.0,24g
+LI-Medium,A,miner-indexed,ok,104168,115.017,7998816256,7200.0,24g
+LI-Medium,A,miner-sorted,ok,131475,142.378,6299811840,7200.0,24g
+LI-Medium,A,miner-no-filter,ok,106030,117.652,6213599232,7200.0,24g

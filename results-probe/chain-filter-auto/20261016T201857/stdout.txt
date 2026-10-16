@@ -1,0 +1,11 @@
+[performance] probe timing: JVM not checked against jdk.lock (26.0.1+8-34)
+[performance] miner: started
+[performance] miner: ok
+[performance] miner-indexed: started
+[performance] miner-indexed: ok
+[performance] miner-sorted: started
+[performance] miner-sorted: ok
+[performance] miner-no-filter: started
+[performance] miner-no-filter: ok
+[performance] 4 of 4 engines finished; all finished tables identical: True
+[performance] timing written to the paired measurement record
