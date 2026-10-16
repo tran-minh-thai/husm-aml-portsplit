@@ -91,6 +91,12 @@ def check_lock(identity: dict, lock: Path | None = None) -> str | None:
     return None if not diff else f"JVM differs from {lock.name} (locked, found): {diff}"
 
 
+def jvm_text(identity: dict) -> str:
+    """The JVM properties as recorded, with the home directory replaced (a JDK may be installed under it)."""
+    home = str(Path.home())
+    return "".join(f"{k} = {v.replace(home, '<home>')}\n" for k, v in sorted(identity.items()))
+
+
 def peak_memory_bytes(proc) -> int | None:
     """Peak resident memory of a finished child process; None when the platform gives none."""
     if os.name == "nt":
@@ -242,7 +248,7 @@ def main() -> None:
             w = csv.DictWriter(f, fieldnames=list(timing[0]))
             w.writeheader()
             w.writerows(timing)
-        (TIMING / "jvm.txt").write_text("".join(f"{k} = {v}\n" for k, v in sorted(identity.items())), encoding="utf-8")
+        (TIMING / "jvm.txt").write_text(jvm_text(identity), encoding="utf-8")
         print(f"[performance] timing written to the paired measurement record")
     else:
         print("[performance] no measurement record paired: no timing written")

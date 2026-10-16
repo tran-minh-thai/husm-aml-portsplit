@@ -153,3 +153,9 @@ def test_a_finished_run_whose_log_comes_back_empty_is_not_ok(tmp_path, monkeypat
     status = {r.split(",")[7]: r.split(",")[8] for r in (out / "performance.csv").read_text().splitlines()[1:]}
     assert status["miner"] == "ok" and status["enumerate"] == "ok"
     assert status["miner-no-filter"].startswith("failed (exit 0 but the log")
+
+
+def test_the_recorded_jvm_does_not_name_the_home_directory():
+    home = str(Path.home())
+    text = cp.jvm_text({"java.home": f"{home}/jdks/jdk-25", "java.vendor": "Eclipse Adoptium"})
+    assert home not in text and "java.home = <home>/jdks/jdk-25" in text and "java.vendor = Eclipse Adoptium" in text
