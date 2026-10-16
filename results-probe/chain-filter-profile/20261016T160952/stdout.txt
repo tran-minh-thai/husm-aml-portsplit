@@ -1,0 +1,5 @@
+[profile] filter: started
+[profile] filter: 1020 samples
+[profile] no-filter: started
+[profile] no-filter: 614 samples
+[profile] same pattern table in both modes: 519a4f4cb6d5b07d05669c837fcdfb09cd34f70fb2108827623bc6879368a2b1
