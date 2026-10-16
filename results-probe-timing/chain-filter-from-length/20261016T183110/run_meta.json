@@ -1,0 +1,63 @@
+{
+  "run_id": "20261016T183110",
+  "note": "probe: slot consistency from length L against always on and always off, HI-Medium labeling A",
+  "command": [
+    "python3",
+    "experiments/scripts/chain_performance.py",
+    "--dataset",
+    "HI-Medium",
+    "--labeling",
+    "A",
+    "--heap",
+    "24g",
+    "--engines",
+    "miner",
+    "miner-from-3",
+    "miner-from-4",
+    "miner-from-5",
+    "miner-no-filter"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-16T18:31:10",
+  "git_commit": "a549c90f89425c2120f8dfee6332059c2a596e29",
+  "git_tree": "clean",
+  "code_sha256": "82fdf9432128271e31e43c19922b4b43195839cc7d4f35fcdc2cfd56f2c22924",
+  "code_files": 124,
+  "engine_jar_sha256": "ec83f98b248d1cde1c49440cafb64dd2a01d0d1ff3394d0301d1018d181e7d3d",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_A.tg",
+      "bytes": 1085071319,
+      "sha256": "105ec0fa9c871dff7819a9b27115ddb0a7482537ead9eef0880f5d54162dcb12"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.2",
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": "3.11.1",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (18 untracked result records)",
+  "timing_kind": "probe: development machine, decides whether a change is worth making, never cited",
+  "finished_at": "2026-10-16T18:38:56",
+  "paired_with": "results-probe/chain-filter-from-length/20261016T183110"
+}

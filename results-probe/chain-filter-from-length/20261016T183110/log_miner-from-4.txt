@@ -1,0 +1,10 @@
+graph HI-Medium_A.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4
+candidates=3658 pruned_by_domain=3017 pruned_by_consistency=19 searches=35993735 found=1135868 failed=34857867 budget_fallbacks=0 local_rejections=0 early_stops=109
+length 1: 6 open, 0 closed
+length 2: 28 open, 0 closed
+length 3: 123 open, 2 closed
+length 4: 293 open, 1 closed
+length 5: 59 open, 1 closed
+patterns written: 513 -> patterns_miner-from-4.tsv
+[timing redacted: machine-dependent]
