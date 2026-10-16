@@ -113,6 +113,18 @@ def keep_awake(on, kernel32=None):
     return flags
 
 
+def load_average():
+    """System load averages over 1, 5 and 15 minutes, or None where the system gives none (Windows).
+
+    Kept with timing only: a timing taken while other work loads the machine is not comparable with one taken on an
+    idle machine, and nothing else in a record says which it was.
+    """
+    try:
+        return [round(x, 2) for x in os.getloadavg()]
+    except (AttributeError, OSError):
+        return None
+
+
 def repository_root():
     result = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
     if result.returncode != 0:
@@ -396,6 +408,7 @@ def main():
     tree_before = tree_state(root)
     commit = first_line(["git", "rev-parse", "HEAD"], cwd=root)
     started = datetime.datetime.now()
+    load_start = load_average()
     # The record directories exist before the command starts, so it can write its own files into
     # them. Two runs started in the same second used to share one directory, the second overwriting
     # the first without a word; a second run in the same second now gets a suffix.
@@ -414,6 +427,7 @@ def main():
     finally:
         keep_awake(False)
     finished = datetime.datetime.now()
+    load_end = load_average()
     tree_after = tree_state(root)
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         print(f"refusing to record: could not read HEAD of {root} ({commit})", file=sys.stderr)
@@ -468,9 +482,12 @@ def main():
         meta["git_tree_after_run"] = tree_after
     if not machine_independent:
         meta["finished_at"] = finished.isoformat(timespec="seconds")
+        meta["load_average_start"] = load_start
+        meta["load_average_end"] = load_end
     (target / "run_meta.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     if timing_target is not None:
         paired = dict(meta, tree_kind="machine-dependent", timing_kind=timing_kind(timing_parent, root),
+                      load_average_start=load_start, load_average_end=load_end,
                       timing_lines_redacted=0,
                       finished_at=finished.isoformat(timespec="seconds"),
                       paired_with=relative_to_root(target, root))

@@ -139,3 +139,10 @@ def test_probe_timing_pairs_only_with_a_probe_record(tmp_path):
 
 def test_untracked_probe_timing_records_do_not_make_the_tree_dirty():
     assert "results-probe-timing" in rr.RESULT_TREES
+
+
+def test_load_average_is_three_numbers_or_none(monkeypatch):
+    got = rr.load_average()
+    assert got is None or (len(got) == 3 and all(x >= 0 for x in got))
+    monkeypatch.delattr(rr.os, "getloadavg", raising=False)
+    assert rr.load_average() is None                     # what Windows gives
