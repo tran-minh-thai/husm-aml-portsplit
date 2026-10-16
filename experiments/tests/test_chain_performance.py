@@ -111,3 +111,17 @@ def test_per_length_filter_engines_write_the_same_table(tmp_path, monkeypatch):
     assert len({r.split(",")[9] for r in rows}) == 1
     # the default set is unchanged by the new engines
     assert cp.DEFAULT_ENGINES == ["miner", "miner-no-filter", "enumerate"]
+
+
+def test_only_a_probe_skips_the_jvm_lock(tmp_path, monkeypatch):
+    lock = tmp_path / "jdk.lock"
+    lock.write_text("java.runtime.version = 0\njava.vendor = nobody\n")
+    monkeypatch.setattr(cp, "LOCK", lock)
+    monkeypatch.setattr(cp, "CHAIN", tmp_path)
+    monkeypatch.setattr(sys, "argv", ["x", "--dataset", "missing", "--labeling", "A"])
+    monkeypatch.setattr(cp, "PROBE", False)
+    with pytest.raises(SystemExit, match="JVM differs"):
+        cp.main()
+    monkeypatch.setattr(cp, "PROBE", True)
+    with pytest.raises(SystemExit, match="does not exist"):        # past the lock, stopped by the missing input
+        cp.main()

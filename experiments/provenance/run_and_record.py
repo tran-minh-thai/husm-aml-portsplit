@@ -47,7 +47,7 @@ redaction, so the scrubbing is visible rather than silent.
 A run that produces both kinds of number writes them into two records with
 the same run id: the machine-independent one under --into, and, with
 --timing-into, a paired machine-dependent one. The command learns both
-directories from the environment (RUN_RECORD_DIR, RUN_TIMING_DIR, RUN_ID),
+directories from the environment (RUN_RECORD_DIR, RUN_TIMING_DIR, RUN_TIMING_KIND, RUN_ID),
 which exist before it starts. A paired record under results/ is accepted only
 on the declared measurement machine: results/MEASUREMENT_MACHINE.txt must hold
 the host id this tool records (a short hash of the host name, so the name
@@ -407,6 +407,7 @@ def main():
     child_env = dict(os.environ, RUN_RECORD_DIR=str(target), RUN_ID=stamp)
     if timing_target is not None:
         child_env["RUN_TIMING_DIR"] = str(timing_target)
+        child_env["RUN_TIMING_KIND"] = timing_kind(timing_parent, root)
     keep_awake(True)
     try:
         result = subprocess.run(command, capture_output=True, text=True, env=child_env)

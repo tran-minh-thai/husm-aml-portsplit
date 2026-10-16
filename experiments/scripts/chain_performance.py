@@ -19,7 +19,8 @@ recorder pairs a measurement record): the mining time measured inside the JVM, t
 process and its peak resident memory. Without a timing directory no timing is written anywhere.
 
 Before running, the JVM's runtime version and vendor are compared with docs/reproduce/jdk.lock; a
-missing lock file is written from this JVM (to be committed), a different JVM is refused.
+missing lock file is written from this JVM (to be committed), a different JVM is refused. A probe (the
+recorder sets RUN_TIMING_KIND to a probe kind) skips the lock and records its JVM in jvm.txt.
 
 Run: python experiments/scripts/chain_performance.py --dataset HI-Medium --labeling A \\
          [--theta 0.2] [--tau 10] [--max-length 5] [--min-cycle 3] [--limit 7200] [--heap 48g]
@@ -42,6 +43,7 @@ CHAIN = ROOT / "datasets" / "chain"
 LOCK = ROOT / "docs" / "reproduce" / "jdk.lock"
 OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else ROOT / "experiments" / "results"
 TIMING = Path(os.environ["RUN_TIMING_DIR"]) if os.environ.get("RUN_TIMING_DIR") else None
+PROBE = os.environ.get("RUN_TIMING_KIND", "").startswith("probe")
 ENGINES = {"miner": [], "miner-no-filter": ["--no-consistency"], "enumerate": ["--engine", "enumerate"],
            "miner-from-3": ["--consistency-from", "3"], "miner-from-4": ["--consistency-from", "4"],
            "miner-from-5": ["--consistency-from", "5"]}
@@ -182,12 +184,15 @@ def main() -> None:
 
     identity = jvm_identity()
     java = jvm_executable(identity)
-    refusal = check_lock(identity)
+    refusal = check_lock(identity) if not PROBE else None
     if refusal:
         sys.exit(f"refusing to run: {refusal}")
+    if PROBE:
+        print(f"[performance] probe timing: JVM not checked against {LOCK.name} ({identity.get('java.runtime.version')})")
     graph = CHAIN / f"{args.dataset}_{args.labeling}.tg"
     if not graph.is_file():
-        sys.exit(f"refusing to run: {graph.relative_to(ROOT).as_posix()} does not exist (export the chain input first)")
+        shown = graph.relative_to(ROOT).as_posix() if graph.is_relative_to(ROOT) else graph.name
+        sys.exit(f"refusing to run: {shown} does not exist (export the chain input first)")
 
     rows, timing = [], []
     reference = None
