@@ -190,7 +190,7 @@ class ChainMinerTest {
             // every third one runs without slot consistency; the others apply it from length 2, 3, 4 or 5
             ChainMiner miner = new ChainMiner(x.graph(), new ChainMiner.Params(theta, minSupport, maxLength, minCycle,
                     true)).marked(marked).keepImages(true).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).consistency(it % 3 != 0)
-                    .consistencyFrom(2 + (it / 3) % 4).filterIndexed(it % 5 != 0).checkFailures(true);
+                    .consistencyFrom(2 + (it / 3) % 4).filterMode(new String[] {"auto", "indexed", "sorted"}[(it / 5) % 3]).checkFailures(true);
             Map<String, ChainMiner.Result> got = new HashMap<>();
             for (ChainMiner.Result r : miner.mine()) got.put(r.pattern().key(), r);
             Map<String, TreeSet<Integer>> roles = new HashMap<>();

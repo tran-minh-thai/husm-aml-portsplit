@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
  * {@code --slot-probe} prints, per length, slot sizes built from the domains against slots inherited from
  * prefix and suffix (same output; keeps the slots of one level in memory). {@code --consistency-from L}
  * applies slot consistency only to candidates of at least L transactions (same output). {@code --filter-impl
- * sorted} builds slots by sorting them instead of through the amount-sorted adjacency (same output; the default
- * is {@code indexed}). {@code --check-failures} checks every failed pinned search on an open chain against an
+ * sorted} builds slots by sorting them, {@code indexed} through the amount-sorted adjacency, and the default
+ * {@code auto} chooses between the two for every pass by predicted work (same output). {@code --check-failures} checks every failed pinned search on an open chain against an
  * independent walk search over the whole graph (for checks only).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
@@ -63,7 +63,7 @@ public final class ChainMain {
         System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s"
                 + " consistency_from=%s filter_impl=%s%n", params.theta(), params.minSupport(), params.maxLength(),
                 params.minCycleLength(), params.closedChains(), !opt.containsKey("--no-consistency"),
-                opt.getOrDefault("--consistency-from", "2"), opt.getOrDefault("--filter-impl", "indexed"));
+                opt.getOrDefault("--consistency-from", "2"), opt.getOrDefault("--filter-impl", "auto"));
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {
@@ -87,9 +87,11 @@ public final class ChainMain {
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
         if (opt.containsKey("--slot-probe")) miner.slotProbe(true);
         if (opt.containsKey("--consistency-from")) miner.consistencyFrom(Integer.parseInt(opt.get("--consistency-from")));
-        String impl = opt.getOrDefault("--filter-impl", "indexed");
-        if (!impl.equals("indexed") && !impl.equals("sorted")) throw new IllegalArgumentException("--filter-impl must be indexed or sorted");
-        miner.filterIndexed(impl.equals("indexed"));
+        String impl = opt.getOrDefault("--filter-impl", "auto");
+        if (!impl.equals("indexed") && !impl.equals("sorted") && !impl.equals("auto")) {
+            throw new IllegalArgumentException("--filter-impl must be auto, indexed or sorted");
+        }
+        miner.filterMode(impl);
         if (opt.containsKey("--check-failures")) miner.checkFailures(true);
         if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
@@ -108,6 +110,11 @@ public final class ChainMain {
         }
         for (Map.Entry<Integer, Long> e : c.filterOpsByLength.entrySet()) {
             System.out.printf("filter ops length %d: %d%n", e.getKey(), e.getValue());
+        }
+        long[] auto = miner.filterAutoChoices();
+        if (auto[0] + auto[1] > 0) System.out.printf("filter auto passes: indexed=%d sorted=%d%n", auto[0], auto[1]);
+        for (Map.Entry<Integer, Long> e : c.filterNanosByLength.entrySet()) {
+            System.out.printf("filter elapsed ms length %d: %d (machine-dependent)%n", e.getKey(), e.getValue() / 1_000_000);
         }
         if (opt.containsKey("--check-failures")) {
             System.out.printf("failure check (open chains): checked=%d without_walk=%d%n", c.failuresChecked, c.failuresWithoutWalk);

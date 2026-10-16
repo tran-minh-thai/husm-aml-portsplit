@@ -26,10 +26,63 @@ class ConsistencyTest {
     }
 
     @Test
+    void predictedWorkMatchesHandCounts() {
+        // scan: mark 4 + ranges 30 = 34; sorted: 4 * ceil(log2 5) = 12 to sort, 3 * 3 * 3 = 27 to search, 39 in all
+        int[][] ranges = {{0, 10}, {0, 10}, {5, 15}};
+        assertTrue(Consistency.indexedIsCheaper(ranges, 4, 3));
+        // scan 4 + 42 = 46 > 39
+        int[][] longer = {{0, 14}, {0, 14}, {0, 14}};
+        assertTrue(!Consistency.indexedIsCheaper(longer, 4, 3));
+    }
+
+    /**
+     * A hub with many arriving and leaving transactions of one amount, and a single transaction in the other slot: the
+     * conserving ranges are long and almost empty of marked transactions, so auto must sort instead, and still be right.
+     */
+    @Test
+    void autoSortsWhenTheRangesAreLongAndTheOtherSlotIsSmall() {
+        int hub = 0;
+        int k = 300;
+        int[] vlab = new int[2 * k + 1];
+        int[] s = new int[2 * k];
+        int[] t = new int[2 * k];
+        int[] l = new int[2 * k];
+        double[] a = new double[2 * k];
+        for (int i = 0; i < k; i++) {
+            s[i] = 1 + i;                // arriving at the hub
+            t[i] = hub;
+            s[k + i] = hub;              // leaving the hub
+            t[k + i] = k + 1 + i;
+            a[i] = 100;
+            a[k + i] = 100 + (i % 3);
+        }
+        TransactionGraph g = new TransactionGraph(vlab, s, t, l, a);
+        int[] arriving = java.util.stream.IntStream.range(0, k).toArray();
+        int[] leaving = java.util.stream.IntStream.range(k, 2 * k).toArray();
+        for (double theta : THETAS) {
+            int[] oneIn = {arriving[7]};
+            int[] oneOut = {leaving[5]};
+            int[] wantF = Arrays.stream(leaving).filter(f -> cons(100, g.amount(f), theta)).toArray();
+            int[] wantB = Arrays.stream(arriving).filter(e -> cons(g.amount(e), g.amount(leaving[5]), theta)).toArray();
+            for (Consistency.Mode mode : Consistency.Mode.values()) {
+                Consistency c = new Consistency(g, mode);
+                assertArrayEquals(wantF, c.forward(oneIn, 0, leaving, theta), mode + " forward, theta " + theta);
+                assertArrayEquals(wantB, c.backward(arriving, oneOut, 0, theta), mode + " backward, theta " + theta);
+                if (mode == Consistency.Mode.AUTO) {
+                    assertTrue(c.autoChoices[1] == 2 && c.autoChoices[0] == 0,
+                            "auto should sort both passes: " + Arrays.toString(c.autoChoices));
+                }
+            }
+        }
+    }
+
+    @Test
     void forwardBackwardSlotAndExpandEqualTheirDefinitionsInBothImplementations() {
         Random rnd = new Random(20261018L);
         int cases = 0;
         int nonEmpty = 0;
+        long autoIndexed = 0;
+        long autoSorted = 0;
         for (int it = 0; it < 400; it++) {
             int n = 4 + rnd.nextInt(4);
             int m = 20 + rnd.nextInt(40);
@@ -61,14 +114,16 @@ class ConsistencyTest {
             int[] wantS = java.util.stream.IntStream.range(0, m).filter(e -> g.label(e) == lab
                     && Arrays.binarySearch(from, g.source(e)) >= 0 && Arrays.binarySearch(to, g.target(e)) >= 0).toArray();
             // four calls on one instance, so the stamps of one call are still in the arrays at the next
-            for (boolean indexed : new boolean[] {false, true}) {
-                Consistency c = new Consistency(g, indexed);
-                String impl = (indexed ? "indexed " : "sorted ") + it;
+            for (Consistency.Mode mode : Consistency.Mode.values()) {
+                Consistency c = new Consistency(g, mode);
+                String impl = mode + " " + it;
                 assertArrayEquals(wantF, c.forward(prev, labPrev, next, theta), "forward, case " + impl);
                 assertArrayEquals(wantB, c.backward(prev, next, labNext, theta), "backward, case " + impl);
                 assertArrayEquals(wantS, c.slot(from, lab, to), "slot, case " + impl);
                 assertArrayEquals(wantB, c.backward(prev, next, labNext, theta), "backward again, case " + impl);
                 assertTrue(c.ops > 0 || prev.length == 0 || next.length == 0 || from.length == 0, "no work counted");
+                autoIndexed += c.autoChoices[0];
+                autoSorted += c.autoChoices[1];
             }
 
             int[] slot = sample(rnd, m);
@@ -84,5 +139,8 @@ class ConsistencyTest {
         }
         System.out.printf("consistency operations: %d cases, %d with all five results non-empty%n", cases, nonEmpty);
         assertTrue(nonEmpty > 60, "non-empty cases: " + nonEmpty);
+        // small random graphs rarely make sorting cheaper; that branch is forced in the hub test below
+        System.out.printf("auto mode passes: %d indexed, %d sorted%n", autoIndexed, autoSorted);
+        assertTrue(autoIndexed > 50, "auto passes ran indexed: " + autoIndexed);
     }
 }

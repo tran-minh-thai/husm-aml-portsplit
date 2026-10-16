@@ -18,23 +18,34 @@ import java.util.function.IntBinaryOperator;
  * <p>Two implementations give the same slots. {@code sorted} sorts the other slot by account and
  * amount and binary-searches it for every transaction. {@code indexed} marks the other slot in a
  * stamp array and scans the conserving range of the graph's adjacency lists, which are already
- * sorted by label and amount (the range the pinned search uses). {@link #ops} counts the work of
+ * sorted by label and amount (the range the pinned search uses). {@code auto} computes those ranges
+ * first and, for each forward or backward call, runs whichever of the two its counts predict to be
+ * cheaper: the total length of the ranges against sorting the other slot plus three binary searches
+ * per transaction. {@link #ops} counts the work of
  * {@link #slot}, {@link #forward} and {@link #backward} in one unit for both: a comparison made by a
  * sort or a binary search, or a membership test.
  */
 final class Consistency {
 
+    /** How forward and backward passes are computed. */
+    enum Mode { SORTED, INDEXED, AUTO }
+
     private final TransactionGraph g;
-    private final boolean indexed;
+    private final Mode mode;
+    private final boolean indexed;      // slot() marks accounts instead of binary-searching them
     private int[] txStamp;
     private int[] accountStamp;
     private int generation;
     /** Work of slot, forward and backward (see the class comment). */
     long ops;
 
-    Consistency(TransactionGraph g, boolean indexed) {
+    /** Passes chosen per call by AUTO: {indexed, sorted}. */
+    final long[] autoChoices = new long[2];
+
+    Consistency(TransactionGraph g, Mode mode) {
         this.g = g;
-        this.indexed = indexed;
+        this.mode = mode;
+        this.indexed = mode != Mode.SORTED;
     }
 
     /** Transactions with label lab whose source lies in from and target in to (sorted accounts). */
@@ -63,58 +74,85 @@ final class Consistency {
     /** The transactions of next that start where some transaction of prev (all with label prevLab) ends and conserve its amount. */
     int[] forward(int[] prev, int prevLab, int[] next, double theta) {
         if (prev.length == 0 || next.length == 0) return new int[0];
-        return indexed ? forwardIndexed(prev, prevLab, next, theta) : forwardSorted(prev, next, theta);
+        if (mode == Mode.SORTED) return forwardSorted(prev, next, theta);
+        int[][] ranges = forwardRanges(prevLab, next, theta);
+        if (mode == Mode.AUTO && !indexedIsCheaper(ranges, prev.length, next.length)) {
+            autoChoices[1]++;
+            return forwardSorted(prev, next, theta);
+        }
+        if (mode == Mode.AUTO) autoChoices[0]++;
+        return scan(prev, next, ranges, false);
     }
 
     /** The transactions of cur that some transaction of next (all with label nextLab) continues, conserving the amount. */
     int[] backward(int[] cur, int[] next, int nextLab, double theta) {
         if (cur.length == 0 || next.length == 0) return new int[0];
-        return indexed ? backwardIndexed(cur, next, nextLab, theta) : backwardSorted(cur, next, theta);
+        if (mode == Mode.SORTED) return backwardSorted(cur, next, theta);
+        int[][] ranges = backwardRanges(cur, nextLab, theta);
+        if (mode == Mode.AUTO && !indexedIsCheaper(ranges, next.length, cur.length)) {
+            autoChoices[1]++;
+            return backwardSorted(cur, next, theta);
+        }
+        if (mode == Mode.AUTO) autoChoices[0]++;
+        return scan(next, cur, ranges, true);
     }
 
     // ---------------------------------------------------------------- indexed
 
-    private int[] forwardIndexed(int[] prev, int prevLab, int[] next, double theta) {
-        int stamp = mark(txStamp(), prev);
+    /** For every transaction of next, the range of in-slots into its source that could conserve into it. */
+    private int[][] forwardRanges(int prevLab, int[] next, double theta) {
         long probes = g.probes;
-        int[] out = new int[next.length];
-        int n = 0;
-        for (int e : next) {
+        int[][] ranges = new int[next.length][];
+        for (int j = 0; j < next.length; j++) {
+            int e = next[j];
             double b = g.amount(e);
             // the same two predicates as the pinned search uses when it chooses an arriving transaction
-            int[] r = g.narrow(false, g.inByLabel(g.source(e), prevLab), a -> (1 + theta) * a >= b,
+            ranges[j] = g.narrow(false, g.inByLabel(g.source(e), prevLab), a -> (1 + theta) * a >= b,
                     a -> (1 - theta) * a <= b);
-            for (int i = r[0]; i < r[1]; i++) {
-                if (isMarked(txStamp, g.inSlot(i), stamp)) {
-                    out[n++] = e;
-                    break;
-                }
-            }
         }
         ops += g.probes - probes;
-        return Arrays.copyOf(out, n);
+        return ranges;
     }
 
-    private int[] backwardIndexed(int[] cur, int[] next, int nextLab, double theta) {
-        int stamp = mark(txStamp(), next);
+    /** For every transaction of cur, the range of out-slots from its target that could continue it. */
+    private int[][] backwardRanges(int[] cur, int nextLab, double theta) {
         long probes = g.probes;
-        int[] out = new int[cur.length];
-        int n = 0;
-        for (int e : cur) {
+        int[][] ranges = new int[cur.length][];
+        for (int j = 0; j < cur.length; j++) {
+            int e = cur[j];
             double a = g.amount(e);
             double lo = (1 - theta) * a;
             double hi = (1 + theta) * a;
             // the same two predicates as the pinned search uses when it chooses a leaving transaction
-            int[] r = g.narrow(true, g.outByLabel(g.target(e), nextLab), b -> b >= lo, b -> b <= hi);
-            for (int i = r[0]; i < r[1]; i++) {
-                if (isMarked(txStamp, g.outSlot(i), stamp)) {
-                    out[n++] = e;
+            ranges[j] = g.narrow(true, g.outByLabel(g.target(e), nextLab), b -> b >= lo, b -> b <= hi);
+        }
+        ops += g.probes - probes;
+        return ranges;
+    }
+
+    /** The predicted work of scanning the ranges against sorting the other slot and searching it three times per transaction. */
+    static boolean indexedIsCheaper(int[][] ranges, int other, int kept) {
+        long scan = other;                                   // marking the other slot
+        for (int[] r : ranges) scan += r[1] - r[0];
+        long log = 64 - Long.numberOfLeadingZeros(other);    // ceil(log2(other + 1))
+        long sorted = other * log + (long) kept * 3 * log;
+        return scan <= sorted;
+    }
+
+    /** Keep the transactions whose range holds a transaction of other (in-slots for a forward pass, out-slots for a backward one). */
+    private int[] scan(int[] other, int[] candidates, int[][] ranges, boolean out) {
+        int stamp = mark(txStamp(), other);
+        int[] kept = new int[candidates.length];
+        int n = 0;
+        for (int j = 0; j < candidates.length; j++) {
+            for (int i = ranges[j][0]; i < ranges[j][1]; i++) {
+                if (isMarked(txStamp, out ? g.outSlot(i) : g.inSlot(i), stamp)) {
+                    kept[n++] = candidates[j];
                     break;
                 }
             }
         }
-        ops += g.probes - probes;
-        return Arrays.copyOf(out, n);
+        return Arrays.copyOf(kept, n);
     }
 
     private int[] txStamp() {

@@ -66,6 +66,8 @@ public final class ChainMiner {
         public long earlyStops;
         /** Work of slot consistency per candidate length (see {@link Consistency#ops}): length -> ops. */
         public final Map<Integer, Long> filterOpsByLength = new TreeMap<>();
+        /** Wall time of slot consistency per candidate length, in nanoseconds (machine-dependent; not a work counter). */
+        public final Map<Integer, Long> filterNanosByLength = new TreeMap<>();
         /** Failed pinned searches on open chains checked for a conserving walk, and those that had none (should be 0). */
         public long failuresChecked;
         public long failuresWithoutWalk;
@@ -100,7 +102,7 @@ public final class ChainMiner {
     private long dfsBudget = DFS_BUDGET;
     private boolean useConsistency = true;
     private int consistencyFrom = 2;
-    private boolean filterIndexed = true;
+    private Consistency.Mode filterMode = Consistency.Mode.AUTO;
     private boolean checkFailures;
     private Consistency cons;
 
@@ -135,10 +137,15 @@ public final class ChainMiner {
         return this;
     }
 
-    /** Slot consistency through the graph's amount-sorted adjacency (true) or by sorting slots (false); same output. */
-    public ChainMiner filterIndexed(boolean indexed) {
-        this.filterIndexed = indexed;
+    /** How slot consistency computes its passes (see {@link Consistency}); the output is the same for every mode. */
+    public ChainMiner filterMode(String mode) {
+        this.filterMode = Consistency.Mode.valueOf(mode.toUpperCase(java.util.Locale.ROOT));
         return this;
+    }
+
+    /** Forward and backward passes that the auto mode ran indexed and sorted. */
+    public long[] filterAutoChoices() {
+        return cons == null ? new long[2] : cons.autoChoices.clone();
     }
 
     /**
@@ -194,7 +201,7 @@ public final class ChainMiner {
     }
 
     public List<Result> mine() {
-        cons = new Consistency(g, filterIndexed);
+        cons = new Consistency(g, filterMode);
         List<Result> results = new ArrayList<>();
         List<Entry> level = levelOne();
         for (Entry e : level) results.add(result(e));
@@ -344,7 +351,9 @@ public final class ChainMiner {
             search.plain();
         } else {
             long before = cons.ops;
+            long t0 = System.nanoTime();
             consistent = search.consistent();
+            counters.filterNanosByLength.merge(cand.length(), System.nanoTime() - t0, Long::sum);
             counters.filterOpsByLength.merge(cand.length(), cons.ops - before, Long::sum);
             if (inherited != null) probe(cand, inherited, search);
             if (!consistent) {
