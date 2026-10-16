@@ -26,7 +26,10 @@ import java.util.stream.Collectors;
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --slot-probe} prints, per length, slot sizes built from the domains against slots inherited from
  * prefix and suffix (same output; keeps the slots of one level in memory). {@code --consistency-from L}
- * applies slot consistency only to candidates of at least L transactions (same output).
+ * applies slot consistency only to candidates of at least L transactions (same output). {@code --filter-impl
+ * sorted} builds slots by sorting them instead of through the amount-sorted adjacency (same output; the default
+ * is {@code indexed}). {@code --check-failures} checks every failed pinned search on an open chain against an
+ * independent walk search over the whole graph (for checks only).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
  * output then also counts, for every image set, how many of its accounts are marked (both engines). Marking never
@@ -58,9 +61,9 @@ public final class ChainMain {
         System.out.printf("graph %s: %d accounts, %d transactions (%d self-transactions dropped)%n",
                 graphPath.getFileName(), g.numAccounts(), g.numTransactions(), g.droppedSelfTransactions());
         System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s"
-                + " consistency_from=%s%n", params.theta(), params.minSupport(), params.maxLength(),
+                + " consistency_from=%s filter_impl=%s%n", params.theta(), params.minSupport(), params.maxLength(),
                 params.minCycleLength(), params.closedChains(), !opt.containsKey("--no-consistency"),
-                opt.getOrDefault("--consistency-from", "2"));
+                opt.getOrDefault("--consistency-from", "2"), opt.getOrDefault("--filter-impl", "indexed"));
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {
@@ -84,6 +87,10 @@ public final class ChainMain {
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
         if (opt.containsKey("--slot-probe")) miner.slotProbe(true);
         if (opt.containsKey("--consistency-from")) miner.consistencyFrom(Integer.parseInt(opt.get("--consistency-from")));
+        String impl = opt.getOrDefault("--filter-impl", "indexed");
+        if (!impl.equals("indexed") && !impl.equals("sorted")) throw new IllegalArgumentException("--filter-impl must be indexed or sorted");
+        miner.filterIndexed(impl.equals("indexed"));
+        if (opt.containsKey("--check-failures")) miner.checkFailures(true);
         if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();
@@ -98,6 +105,12 @@ public final class ChainMain {
                 c.localRejections, c.earlyStops);
         for (Map.Entry<Integer, long[]> e : c.frequentByLength.entrySet()) {
             System.out.printf("length %d: %d open, %d closed%n", e.getKey(), e.getValue()[0], e.getValue()[1]);
+        }
+        for (Map.Entry<Integer, Long> e : c.filterOpsByLength.entrySet()) {
+            System.out.printf("filter ops length %d: %d%n", e.getKey(), e.getValue());
+        }
+        if (opt.containsKey("--check-failures")) {
+            System.out.printf("failure check (open chains): checked=%d without_walk=%d%n", c.failuresChecked, c.failuresWithoutWalk);
         }
         if (miner.slotProbeStats() != null) {
             for (Map.Entry<Integer, long[]> e : miner.slotProbeStats().byLength.entrySet()) {
@@ -168,7 +181,7 @@ public final class ChainMain {
         for (int i = 0; i < args.length; i++) {
             String a = args[i];
             if (!a.startsWith("--")) throw new IllegalArgumentException("unexpected argument '" + a + "'");
-            if (a.equals("--no-closed") || a.equals("--no-consistency") || a.equals("--slot-probe")) {
+            if (a.equals("--no-closed") || a.equals("--no-consistency") || a.equals("--slot-probe") || a.equals("--check-failures")) {
                 opt.put(a, "");
             } else {
                 if (i + 1 >= args.length) throw new IllegalArgumentException(a + " needs a value");

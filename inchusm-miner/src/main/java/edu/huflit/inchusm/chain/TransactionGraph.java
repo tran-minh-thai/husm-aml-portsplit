@@ -41,6 +41,8 @@ public final class TransactionGraph {
     private final int[] inTx;
     private final int droppedSelfTransactions;
     private final long[] originalIds;
+    /** Steps of the binary searches in {@link #outByLabel}, {@link #inByLabel} and {@link #narrow} (a work counter). */
+    long probes;
 
     public TransactionGraph(int[] vlabel, int[] src, int[] dst, int[] elabel, double[] amount) {
         this(vlabel, src, dst, elabel, amount, null);
@@ -306,6 +308,11 @@ public final class TransactionGraph {
         return new int[] {outStart[v], outStart[v + 1]};
     }
 
+    /** Slot range [from, to) of {@link #inSlot} for every transaction into v. */
+    public int[] inAll(int v) {
+        return new int[] {inStart[v], inStart[v + 1]};
+    }
+
     /** Slot range [from, to) of {@link #outSlot} for transactions out of v with label lab. */
     public int[] outByLabel(int v, int lab) {
         return labelRange(outTx, outStart[v], outStart[v + 1], lab);
@@ -336,6 +343,7 @@ public final class TransactionGraph {
         int a = lo;
         int b = hi;
         while (a < b) {                       // first slot whose amount satisfies atLeast
+            probes++;
             int mid = (a + b) >>> 1;
             if (atLeast.test(amount[slots[mid]])) b = mid;
             else a = mid + 1;
@@ -344,6 +352,7 @@ public final class TransactionGraph {
         a = from;
         b = hi;
         while (a < b) {                       // first slot whose amount fails atMost
+            probes++;
             int mid = (a + b) >>> 1;
             if (atMost.test(amount[slots[mid]])) a = mid + 1;
             else b = mid;
@@ -355,6 +364,7 @@ public final class TransactionGraph {
         int a = lo;
         int b = hi;
         while (a < b) {
+            probes++;
             int mid = (a + b) >>> 1;
             if (elabel[slots[mid]] < lab) a = mid + 1;
             else b = mid;
@@ -362,6 +372,7 @@ public final class TransactionGraph {
         int from = a;
         b = hi;
         while (a < b) {
+            probes++;
             int mid = (a + b) >>> 1;
             if (elabel[slots[mid]] <= lab) a = mid + 1;
             else b = mid;

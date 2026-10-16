@@ -175,6 +175,7 @@ class ChainMinerTest {
         int closedCompared = 0;
         int longCompared = 0;
         int boundaryRuns = 0;
+        long failuresChecked = 0;
         for (int it = 0; it < 3000; it++) {
             Instance x = randomInstance(rnd);
             double theta = THETAS[it % THETAS.length];
@@ -189,7 +190,7 @@ class ChainMinerTest {
             // every third one runs without slot consistency; the others apply it from length 2, 3, 4 or 5
             ChainMiner miner = new ChainMiner(x.graph(), new ChainMiner.Params(theta, minSupport, maxLength, minCycle,
                     true)).marked(marked).keepImages(true).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).consistency(it % 3 != 0)
-                    .consistencyFrom(2 + (it / 3) % 4);
+                    .consistencyFrom(2 + (it / 3) % 4).filterIndexed(it % 5 != 0).checkFailures(true);
             Map<String, ChainMiner.Result> got = new HashMap<>();
             for (ChainMiner.Result r : miner.mine()) got.put(r.pattern().key(), r);
             Map<String, TreeSet<Integer>> roles = new HashMap<>();
@@ -220,12 +221,16 @@ class ChainMinerTest {
             Map<String, TreeSet<Integer>> gotRoles = new HashMap<>();
             miner.accountsByRole().forEach((k, b) -> gotRoles.put(k, toSet(b.stream().toArray())));
             assertEquals(roles, gotRoles, "accounts by role, instance " + it);
+            assertEquals(0, miner.counters().failuresWithoutWalk, "failed search with no conserving walk, instance " + it);
+            failuresChecked += miner.counters().failuresChecked;
             graphs++;
             if (theta == 0.25) boundaryRuns++;
         }
         // the comparison must not be vacuous
         System.out.printf("reference comparison: %d graphs, %d patterns compared, %d closed, %d of length >= 3,"
-                + " %d runs at theta 0.25%n", graphs, compared, closedCompared, longCompared, boundaryRuns);
+                + " %d runs at theta 0.25, %d failed searches checked for a walk%n", graphs, compared, closedCompared,
+                longCompared, boundaryRuns, failuresChecked);
+        assertTrue(failuresChecked > 100, "failed searches checked: " + failuresChecked);
         assertTrue(compared > 2000, "patterns compared: " + compared);
         assertTrue(closedCompared > 100, "closed chains compared: " + closedCompared);
         assertTrue(longCompared > 300, "chains of length >= 3 compared: " + longCompared);

@@ -64,6 +64,11 @@ public final class ChainMiner {
         public long searchesFound;
         public long searchesFailed;
         public long earlyStops;
+        /** Work of slot consistency per candidate length (see {@link Consistency#ops}): length -> ops. */
+        public final Map<Integer, Long> filterOpsByLength = new TreeMap<>();
+        /** Failed pinned searches on open chains checked for a conserving walk, and those that had none (should be 0). */
+        public long failuresChecked;
+        public long failuresWithoutWalk;
         public final Map<Integer, long[]> frequentByLength = new TreeMap<>();   // length -> {open, closed}
 
         void frequent(ChainPattern p) {
@@ -95,6 +100,9 @@ public final class ChainMiner {
     private long dfsBudget = DFS_BUDGET;
     private boolean useConsistency = true;
     private int consistencyFrom = 2;
+    private boolean filterIndexed = true;
+    private boolean checkFailures;
+    private Consistency cons;
 
     /** The conservation predicate between an arriving amount and the amount that leaves. */
     public static boolean conserves(double in, double out, double theta) {
@@ -124,6 +132,22 @@ public final class ChainMiner {
     /** Switch slot consistency off (plain pinned search), to measure what it contributes; output is the same. */
     public ChainMiner consistency(boolean on) {
         this.useConsistency = on;
+        return this;
+    }
+
+    /** Slot consistency through the graph's amount-sorted adjacency (true) or by sorting slots (false); same output. */
+    public ChainMiner filterIndexed(boolean indexed) {
+        this.filterIndexed = indexed;
+        return this;
+    }
+
+    /**
+     * After every failed pinned search on an open chain with slot consistency, search the whole graph for a
+     * conserving walk through that account (distinct accounts not required), independently of the slots; a failure
+     * without such a walk means slot consistency kept an account it should have removed. Costs time; for checks only.
+     */
+    public ChainMiner checkFailures(boolean on) {
+        this.checkFailures = on;
         return this;
     }
 
@@ -170,6 +194,7 @@ public final class ChainMiner {
     }
 
     public List<Result> mine() {
+        cons = new Consistency(g, filterIndexed);
         List<Result> results = new ArrayList<>();
         List<Entry> level = levelOne();
         for (Entry e : level) results.add(result(e));
@@ -260,7 +285,7 @@ public final class ChainMiner {
             int[] lab = kv.getValue();
             int[][] slots = null;
             if (slotProbe != null) {
-                slots = new int[][] {null, Consistency.slot(g, img[0], lab[1], img[1])};
+                slots = new int[][] {null, cons.slot(img[0], lab[1], img[1])};
                 slotProbe.at(1)[5] += slots[1].length;
             }
             out.add(new Entry(new ChainPattern(new int[] {lab[0], lab[2]}, new int[] {lab[1]}, false), img, slots));
@@ -318,7 +343,9 @@ public final class ChainMiner {
         if (!filtered) {
             search.plain();
         } else {
+            long before = cons.ops;
             consistent = search.consistent();
+            counters.filterOpsByLength.merge(cand.length(), cons.ops - before, Long::sum);
             if (inherited != null) probe(cand, inherited, search);
             if (!consistent) {
                 counters.prunedByConsistency++;
@@ -368,6 +395,7 @@ public final class ChainMiner {
         private final boolean closed;
         private final int[] elab;
         private int[][] dom;
+        private final int[][] dom0;      // domains before slot consistency (intersections of prefix and suffix images)
         private BitSet[] rejected;
         private final int[][] slots;    // transactions allowed at each pattern edge 1..m after consistency
         private final int[] fresh;      // slot sizes built from the domains, before propagation (slot probe)
@@ -385,6 +413,7 @@ public final class ChainMiner {
             this.closed = cand.closed();
             this.elab = cand.elab();
             this.dom = dom;
+            this.dom0 = dom;
             this.slots = new int[m + 1][];
             this.fresh = new int[m + 1];
             this.vert = new int[dom.length];
@@ -400,13 +429,13 @@ public final class ChainMiner {
         boolean consistent() {
             double theta = params.theta();
             for (int s = 1; s <= m; s++) {
-                slots[s] = Consistency.slot(g, dom[s - 1], elab[s - 1], dom[pos(s)]);
+                slots[s] = cons.slot(dom[s - 1], elab[s - 1], dom[pos(s)]);
                 fresh[s] = slots[s].length;
             }
             while (true) {
                 long before = size();
-                for (int s = 2; s <= m; s++) slots[s] = Consistency.forward(g, slots[s - 1], slots[s], theta);
-                for (int s = m - 1; s >= 1; s--) slots[s] = Consistency.backward(g, slots[s], slots[s + 1], theta);
+                for (int s = 2; s <= m; s++) slots[s] = cons.forward(slots[s - 1], elab[s - 2], slots[s], theta);
+                for (int s = m - 1; s >= 1; s--) slots[s] = cons.backward(slots[s], slots[s + 1], elab[s], theta);
                 if (closed) {
                     int[] origins = intersect(Consistency.ends(g, slots[1], true), Consistency.ends(g, slots[m], false));
                     slots[1] = Consistency.byEnd(g, slots[1], origins, true);
@@ -449,7 +478,7 @@ public final class ChainMiner {
                 a[1] = Consistency.byEnd(g, slots[1], at, true);
                 for (int s = 2; s <= m; s++) a[s] = Consistency.expand(g, a[s - 1], elab[s - 1], slots[s], theta, true);
                 a[m] = Consistency.byEnd(g, a[m], at, false);
-                for (int s = m - 1; s >= 1; s--) a[s] = Consistency.backward(g, a[s], a[s + 1], theta);
+                for (int s = m - 1; s >= 1; s--) a[s] = cons.backward(a[s], a[s + 1], elab[s], theta);
                 for (int s = 1; s <= m; s++) if (a[s].length == 0) return false;
                 allowed = a;
                 return true;
@@ -471,8 +500,8 @@ public final class ChainMiner {
                 }
                 a[1] = Consistency.byEnd(g, a[1], origins, true);
                 a[m] = Consistency.byEnd(g, a[m], origins, false);
-                for (int s = 2; s <= m; s++) a[s] = Consistency.forward(g, a[s - 1], a[s], theta);
-                for (int s = m - 1; s >= 1; s--) a[s] = Consistency.backward(g, a[s], a[s + 1], theta);
+                for (int s = 2; s <= m; s++) a[s] = cons.forward(a[s - 1], elab[s - 2], a[s], theta);
+                for (int s = m - 1; s >= 1; s--) a[s] = cons.backward(a[s], a[s + 1], elab[s], theta);
                 long after = 0;
                 for (int s = 1; s <= m; s++) {
                     if (a[s].length == 0) return false;
@@ -505,6 +534,10 @@ public final class ChainMiner {
                         for (int q = 0; q < n; q++) witnessed[q].set(Arrays.binarySearch(dom[q], vert[q]));
                     } else {
                         counters.searchesFailed++;
+                        if (checkFailures && filtered && !closed) {
+                            counters.failuresChecked++;
+                            if (!walkExists(pos, dom[pos][idx])) counters.failuresWithoutWalk++;
+                        }
                         rejected[pos].set(idx);
                         if (--alive[pos] < params.minSupport()) {
                             counters.earlyStops++;
@@ -522,6 +555,74 @@ public final class ChainMiner {
                 }
             }
             return img;
+        }
+
+        /**
+         * Is there a conserving walk of an open chain with this pattern's labels through account u at position pin,
+         * every other position in its domain before slot consistency? Accounts need not be distinct. Reads the graph
+         * directly (every transaction, label and amount tested here), not the slots, so it checks them independently.
+         */
+        private boolean walkExists(int pin, int u) {
+            Map<Long, Boolean> memo = new HashMap<>();
+            List<Integer> in = new ArrayList<>();
+            List<Integer> out = new ArrayList<>();
+            if (pin > 0) {
+                for (int i = g.inAll(u)[0]; i < g.inAll(u)[1]; i++) {
+                    int f = g.inSlot(i);
+                    if (g.label(f) == elab[pin - 1] && member(pin - 1, g.source(f)) && leftOk(pin, f, memo)) in.add(f);
+                }
+                if (in.isEmpty()) return false;
+            }
+            if (pin < m) {
+                for (int i = g.outAll(u)[0]; i < g.outAll(u)[1]; i++) {
+                    int e = g.outSlot(i);
+                    if (g.label(e) == elab[pin] && member(pin + 1, g.target(e)) && rightOk(pin + 1, e, memo)) out.add(e);
+                }
+                if (out.isEmpty()) return false;
+            }
+            if (pin == 0 || pin == m) return true;
+            for (int f : in) {
+                for (int e : out) if (conserves(g.amount(f), g.amount(e), params.theta())) return true;
+            }
+            return false;
+        }
+
+        /** Transaction e at edge s (ending at position s) continues to the end of the pattern. */
+        private boolean rightOk(int s, int e, Map<Long, Boolean> memo) {
+            if (s == m) return true;
+            Long key = ((long) s << 32) | e;
+            Boolean known = memo.get(key);
+            if (known != null) return known;
+            boolean ok = false;
+            int v = g.target(e);
+            for (int i = g.outAll(v)[0]; i < g.outAll(v)[1] && !ok; i++) {
+                int f = g.outSlot(i);
+                ok = g.label(f) == elab[s] && member(s + 1, g.target(f)) && conserves(g.amount(e), g.amount(f), params.theta())
+                        && rightOk(s + 1, f, memo);
+            }
+            memo.put(key, ok);
+            return ok;
+        }
+
+        /** Transaction e at edge s (starting at position s - 1) extends back to the start of the pattern. */
+        private boolean leftOk(int s, int e, Map<Long, Boolean> memo) {
+            if (s == 1) return true;
+            Long key = (-(long) s << 32) | e;
+            Boolean known = memo.get(key);
+            if (known != null) return known;
+            boolean ok = false;
+            int v = g.source(e);
+            for (int i = g.inAll(v)[0]; i < g.inAll(v)[1] && !ok; i++) {
+                int f = g.inSlot(i);
+                ok = g.label(f) == elab[s - 2] && member(s - 2, g.source(f)) && conserves(g.amount(f), g.amount(e), params.theta())
+                        && leftOk(s - 1, f, memo);
+            }
+            memo.put(key, ok);
+            return ok;
+        }
+
+        private boolean member(int position, int account) {
+            return Arrays.binarySearch(dom0[position], account) >= 0;
         }
 
         /** Position of pattern vertex s (0..m): the origin when s = m in a closed chain. */
