@@ -34,6 +34,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -202,8 +203,15 @@ def main() -> None:
                "--theta", args.theta, "--min-support", str(args.tau), "--max-length", str(args.max_length),
                "--min-cycle", str(args.min_cycle), "--out", str(table)] + ENGINES[engine]
         print(f"[performance] {engine}: started", flush=True)
-        r = run(cmd, OUT / f"raw_log_{engine}.txt", args.limit)
-        log = keep_log(OUT / f"raw_log_{engine}.txt", engine)
+        # the child writes its log on local disk: a record directory inside a synchronised folder has been read
+        # back empty right after the child closed the file, which turned a finished run into a row without numbers
+        raw = Path(tempfile.mkdtemp(prefix="chain-performance-")) / f"raw_log_{engine}.txt"
+        r = run(cmd, raw, args.limit)
+        log = keep_log(raw, engine)
+        raw.parent.rmdir()
+        complete = ELAPSED.search(log) and (engine == "enumerate" or COUNTERS.search(log))
+        if r["status"] == "ok" and not complete:
+            r["status"] = "failed (exit 0 but the log has no counters or elapsed line)"
         row = {"dataset": args.dataset, "labeling": args.labeling, "theta": args.theta, "tau": args.tau,
                "max_length": args.max_length, "min_cycle": args.min_cycle, "heap": args.heap, "engine": engine,
                "status": r["status"], "table_sha256": table_digest(table) if r["status"] == "ok" else ""}

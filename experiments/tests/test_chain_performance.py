@@ -125,3 +125,31 @@ def test_only_a_probe_skips_the_jvm_lock(tmp_path, monkeypatch):
     monkeypatch.setattr(cp, "PROBE", True)
     with pytest.raises(SystemExit, match="does not exist"):        # past the lock, stopped by the missing input
         cp.main()
+
+
+@pytest.mark.skipif(JAVA is None or not cp.JAR.is_file(), reason="needs java and the built miner jar")
+def test_a_finished_run_whose_log_comes_back_empty_is_not_ok(tmp_path, monkeypatch):
+    chain, out = tmp_path / "chain", tmp_path / "rec"
+    for d in (chain, out):
+        d.mkdir()
+    tiny_graph(chain / "T_A.tg")
+    monkeypatch.setattr(cp, "CHAIN", chain)
+    monkeypatch.setattr(cp, "OUT", out)
+    monkeypatch.setattr(cp, "TIMING", None)
+    monkeypatch.setattr(cp, "LOCK", tmp_path / "jdk.lock")
+    real_run = cp.run
+
+    def run_then_lose_the_log(cmd, log, limit):
+        r = real_run(cmd, log, limit)
+        if "--no-consistency" in cmd:
+            log.write_text("")                      # what a synchronised folder did to the first engine's log
+        return r
+
+    monkeypatch.setattr(cp, "run", run_then_lose_the_log)
+    monkeypatch.setattr(sys, "argv", ["x", "--dataset", "T", "--labeling", "A", "--tau", "2", "--max-length", "4",
+                                      "--heap", "1g", "--limit", "120", "--engines", "miner", "miner-no-filter",
+                                      "enumerate"])
+    cp.main()
+    status = {r.split(",")[7]: r.split(",")[8] for r in (out / "performance.csv").read_text().splitlines()[1:]}
+    assert status["miner"] == "ok" and status["enumerate"] == "ok"
+    assert status["miner-no-filter"].startswith("failed (exit 0 but the log")
