@@ -94,6 +94,7 @@ public final class ChainMiner {
     static final long DFS_BUDGET = 10_000;
     private long dfsBudget = DFS_BUDGET;
     private boolean useConsistency = true;
+    private int consistencyFrom = 2;
 
     /** The conservation predicate between an arriving amount and the amount that leaves. */
     public static boolean conserves(double in, double out, double theta) {
@@ -123,6 +124,13 @@ public final class ChainMiner {
     /** Switch slot consistency off (plain pinned search), to measure what it contributes; output is the same. */
     public ChainMiner consistency(boolean on) {
         this.useConsistency = on;
+        return this;
+    }
+
+    /** Apply slot consistency only to candidates of at least this many transactions (output is the same). */
+    public ChainMiner consistencyFrom(int length) {
+        if (length < 2) throw new IllegalArgumentException("candidates have at least 2 transactions");
+        this.consistencyFrom = length;
         return this;
     }
 
@@ -302,10 +310,12 @@ public final class ChainMiner {
                 return null;
             }
         }
-        Search search = new Search(cand, dom);
-        int[][] inherited = slotProbe != null && useConsistency ? inherited(cand, dom, p, q) : null;
+        boolean filtered = useConsistency && cand.length() >= consistencyFrom;
+        Search search = new Search(cand, dom, filtered);
+        int[][] inherited = slotProbe != null && filtered && p.slots() != null && q.slots() != null
+                ? inherited(cand, dom, p, q) : null;
         boolean consistent = true;
-        if (!useConsistency) {
+        if (!filtered) {
             search.plain();
         } else {
             consistent = search.consistent();
@@ -367,7 +377,10 @@ public final class ChainMiner {
         private final int[] vert;       // account at each position, -1 if unassigned
         private final int[] tx;         // transaction at each pattern edge 1..m, -1 if unassigned
 
-        Search(ChainPattern cand, int[][] dom) {
+        private final boolean filtered;   // slot consistency applied to this candidate
+
+        Search(ChainPattern cand, int[][] dom, boolean filtered) {
+            this.filtered = filtered;
             this.m = cand.length();
             this.closed = cand.closed();
             this.elab = cand.elab();
@@ -518,7 +531,7 @@ public final class ChainMiner {
 
         /** Is there a valid occurrence with account u at position pin? Leaves it in vert/tx if so. */
         boolean pinned(int pin, int u) {
-            if (!useConsistency) {
+            if (!filtered) {
                 allowed = null;
                 return attempt(pin, u, Long.MAX_VALUE);
             }

@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
  * within theta of the first transaction's amount.
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --slot-probe} prints, per length, slot sizes built from the domains against slots inherited from
- * prefix and suffix (same output; keeps the slots of one level in memory).
+ * prefix and suffix (same output; keeps the slots of one level in memory). {@code --consistency-from L}
+ * applies slot consistency only to candidates of at least L transactions (same output).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
  * output then also counts, for every image set, how many of its accounts are marked (both engines). Marking never
@@ -56,9 +57,10 @@ public final class ChainMain {
         TransactionGraph g = TransactionGraph.load(graphPath);
         System.out.printf("graph %s: %d accounts, %d transactions (%d self-transactions dropped)%n",
                 graphPath.getFileName(), g.numAccounts(), g.numTransactions(), g.droppedSelfTransactions());
-        System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s%n",
-                params.theta(), params.minSupport(), params.maxLength(), params.minCycleLength(),
-                params.closedChains(), !opt.containsKey("--no-consistency"));
+        System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s"
+                + " consistency_from=%s%n", params.theta(), params.minSupport(), params.maxLength(),
+                params.minCycleLength(), params.closedChains(), !opt.containsKey("--no-consistency"),
+                opt.getOrDefault("--consistency-from", "2"));
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {
@@ -81,6 +83,7 @@ public final class ChainMain {
         if (!engine.equals("miner")) throw new IllegalArgumentException("--engine must be miner or enumerate");
         ChainMiner miner = new ChainMiner(g, params).consistency(!opt.containsKey("--no-consistency"));
         if (opt.containsKey("--slot-probe")) miner.slotProbe(true);
+        if (opt.containsKey("--consistency-from")) miner.consistencyFrom(Integer.parseInt(opt.get("--consistency-from")));
         if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();

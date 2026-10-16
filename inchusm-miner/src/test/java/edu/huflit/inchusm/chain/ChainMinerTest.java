@@ -186,9 +186,10 @@ class ChainMinerTest {
             boolean[] marked = new boolean[x.vlab().length];
             for (int v = 0; v < marked.length; v++) marked[v] = rnd.nextBoolean();
             // every other instance forces the propagation path of closed chains (budget 0);
-            // every third one runs without slot consistency
+            // every third one runs without slot consistency; the others apply it from length 2, 3, 4 or 5
             ChainMiner miner = new ChainMiner(x.graph(), new ChainMiner.Params(theta, minSupport, maxLength, minCycle,
-                    true)).marked(marked).keepImages(true).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).consistency(it % 3 != 0);
+                    true)).marked(marked).keepImages(true).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).consistency(it % 3 != 0)
+                    .consistencyFrom(2 + (it / 3) % 4);
             Map<String, ChainMiner.Result> got = new HashMap<>();
             for (ChainMiner.Result r : miner.mine()) got.put(r.pattern().key(), r);
             Map<String, TreeSet<Integer>> roles = new HashMap<>();
