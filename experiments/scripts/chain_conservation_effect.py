@@ -91,14 +91,32 @@ def mine(graph: Path, marked: Path, theta: str, tau: int, length: int, heap: str
     return patterns, roles
 
 
-def shuffled_copy(graph: Path, seed: int, dest: Path) -> Path:
-    """The chain input with its transaction amounts permuted at random; every other byte of every line is kept."""
+def group_permutation(keys: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+    """An index array order with keys[order] == keys and order random within every group of equal keys."""
+    by_key = np.argsort(keys, kind="stable")
+    by_key_random = np.lexsort((rng.random(len(keys)), keys))
+    order = np.empty(len(keys), dtype=np.int64)
+    order[by_key] = by_key_random
+    return order
+
+
+def shuffled_copy(graph: Path, seed: int, dest: Path, within: str = "all") -> Path:
+    """The chain input with its transaction amounts permuted at random among all transactions (within = all), among
+    the transactions of the same source account (source) or of the same target account (target); every other byte
+    of every line is kept."""
     frame = pd.read_csv(graph, sep=" ", header=None, comment="#", names=["kind", "a", "b", "c", "amount"],
                         dtype={"kind": "category", "a": np.float64, "b": np.float64, "c": np.float64,
                                "amount": np.float64}, engine="c")
-    amounts = frame.loc[frame["kind"] == "e", "amount"].to_numpy(dtype=np.float64)
-    del frame
-    order = np.random.default_rng(seed).permutation(len(amounts))
+    tx = frame.loc[frame["kind"] == "e"]
+    amounts = tx["amount"].to_numpy(dtype=np.float64)
+    rng = np.random.default_rng(seed)
+    if within == "all":
+        order = rng.permutation(len(amounts))
+    elif within in ("source", "target"):
+        order = group_permutation(tx["a" if within == "source" else "b"].to_numpy(dtype=np.int64), rng)
+    else:
+        sys.exit(f"unknown shuffle scope {within}")
+    del frame, tx
     shuffled = amounts[order]
     out = dest / graph.name
     i = 0
@@ -124,6 +142,7 @@ def main() -> None:
     ap.add_argument("--max-length", type=int, default=5)
     ap.add_argument("--heap", default="16g")
     ap.add_argument("--shuffle-amounts", type=int, metavar="SEED")
+    ap.add_argument("--shuffle-within", choices=["all", "source", "target"], default="all")
     ap.add_argument("--inf-roles", metavar="RUN_ID", help="reuse theta = inf account roles from this chain-conservation-effect record")
     args = ap.parse_args()
 
@@ -153,8 +172,8 @@ def main() -> None:
 
     scratch = tempfile.TemporaryDirectory(prefix="chain-shuffle-")
     if args.shuffle_amounts is not None:
-        graph = shuffled_copy(graph, args.shuffle_amounts, Path(scratch.name))
-        print(f"amounts permuted among all transactions, seed {args.shuffle_amounts}; shuffled input sha256 {sha256(graph)}")
+        graph = shuffled_copy(graph, args.shuffle_amounts, Path(scratch.name), args.shuffle_within)
+        print(f"amounts permuted within {args.shuffle_within}, seed {args.shuffle_amounts}; shuffled input sha256 {sha256(graph)}")
     roles = {}
     for theta in THETAS:
         if theta == "inf" and args.inf_roles:
