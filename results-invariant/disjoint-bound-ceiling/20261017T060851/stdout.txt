@@ -1,0 +1,4 @@
+dataset=sweden_100K_easy, length=2, background_intermediates=47666, zero_degree_side=0, median_c=6, p_m=0.239419, ceiling=0.686949, r_B=0.941908, ceiling_over_r_B=0.729316
+dataset=sweden_100K_easy, length=3, background_intermediates=46434, zero_degree_side=0, median_c=6, p_m=0.0689529, ceiling=0.318743, r_B=0.904725, ceiling_over_r_B=0.352309
+dataset=sweden_100K_easy, length=4, background_intermediates=45369, zero_degree_side=0, median_c=6, p_m=0.0209734, ceiling=0.116135, r_B=0.864004, ceiling_over_r_B=0.134415
+dataset=sweden_100K_easy, length=5, background_intermediates=44684, zero_degree_side=0, median_c=6, p_m=0.00652327, ceiling=0.038578, r_B=0.826582, ceiling_over_r_B=0.0466717

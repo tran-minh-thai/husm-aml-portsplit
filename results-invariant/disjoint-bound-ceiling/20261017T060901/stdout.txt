@@ -1,0 +1,4 @@
+dataset=HI-Medium, length=2, background_intermediates=716703, zero_degree_side=0, median_c=4, p_m=0.0467197, ceiling=0.3652, r_B=0.348917, ceiling_over_r_B=1.04667
+dataset=HI-Medium, length=3, background_intermediates=664616, zero_degree_side=0, median_c=6, p_m=0.00259818, ceiling=0.0389469, r_B=0.141917, ceiling_over_r_B=0.274435
+dataset=HI-Medium, length=4, background_intermediates=635092, zero_degree_side=0, median_c=6, p_m=0.00015269, ceiling=0.00247669, r_B=0.0389188, ceiling_over_r_B=0.0636373
+dataset=HI-Medium, length=5, background_intermediates=618365, zero_degree_side=0, median_c=8, p_m=9.20692e-06, ceiling=0.000152761, r_B=0.00924373, ceiling_over_r_B=0.0165259

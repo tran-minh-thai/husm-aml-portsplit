@@ -1,0 +1,4 @@
+dataset=us_100K_difficult, length=2, background_intermediates=77515, zero_degree_side=0, median_c=7, p_m=0.23488, ceiling=0.738097, r_B=0.951261, ceiling_over_r_B=0.775914
+dataset=us_100K_difficult, length=3, background_intermediates=75783, zero_degree_side=0, median_c=7, p_m=0.0662539, ceiling=0.388513, r_B=0.926316, ceiling_over_r_B=0.419417
+dataset=us_100K_difficult, length=4, background_intermediates=74148, zero_degree_side=0, median_c=7, p_m=0.0197766, ceiling=0.155633, r_B=0.900132, ceiling_over_r_B=0.1729
+dataset=us_100K_difficult, length=5, background_intermediates=72864, zero_degree_side=0, median_c=7, p_m=0.00604289, ceiling=0.054911, r_B=0.876372, ceiling_over_r_B=0.0626572

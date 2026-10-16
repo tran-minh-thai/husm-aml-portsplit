@@ -1,0 +1,4 @@
+dataset=LI-Medium, length=2, background_intermediates=712194, zero_degree_side=0, median_c=4, p_m=0.0466709, ceiling=0.367183, r_B=0.35208, ceiling_over_r_B=1.0429
+dataset=LI-Medium, length=3, background_intermediates=659892, zero_degree_side=0, median_c=6, p_m=0.00259306, ceiling=0.0391819, r_B=0.142343, ceiling_over_r_B=0.275264
+dataset=LI-Medium, length=4, background_intermediates=627325, zero_degree_side=0, median_c=7, p_m=0.000152245, ceiling=0.00249565, r_B=0.0392859, ceiling_over_r_B=0.0635253
+dataset=LI-Medium, length=5, background_intermediates=605538, zero_degree_side=0, median_c=8, p_m=9.1714e-06, ceiling=0.00015429, r_B=0.00889952, ceiling_over_r_B=0.0173369
