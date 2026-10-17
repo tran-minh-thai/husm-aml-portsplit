@@ -1,0 +1,37 @@
+input LI-Medium_S.tg sha256 08048a8677f6ba0cccdc3720f62ac6834879742b91c40c63a9573006495e9c66 (28752132 transactions, 1720017 accounts)
+ground truth and export agree on all 23510 laundering accounts
+amounts permuted within all, seed 20261017; shuffled input sha256 297b499c9eb173fa5e3f04866df19246d0ae04680795c89913526a132e9a78a4
+
+[miner, theta=0.2]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 23510
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=5036348 found=3357335 failed=1679013 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 3386852634
+filter ops length 5: 2856169370
+examined transactions length 2: 13818232
+examined transactions length 3: 29487162
+examined transactions length 4: 11997475
+examined transactions length 5: 13191988
+filter auto passes: indexed=24 sorted=4
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[theta=inf account roles reused from 20261017T181436]
+
+LI-Medium labeling S: tau=10, max length 5, 23510 marked accounts
+  dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+LI-Medium        S       2                   1150 550362       12265 0.0223 0.7191 728786       16592 0.0228 1.0000 0.9784
+LI-Medium        S       3                    456 478314       10558 0.0221 0.6469 676103       16211 0.0240 1.0000 0.9188
+LI-Medium        S       4                    433 419797        8722 0.0208 0.5751 642983       15658 0.0244 1.0000 0.8501
+LI-Medium        S       5                    405 366690        7298 0.0199 0.5210 620687       15149 0.0244 1.0000 0.8117
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
