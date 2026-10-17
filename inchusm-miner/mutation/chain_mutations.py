@@ -27,6 +27,9 @@ TESTS = "Chain*Test,TransactionGraphTest,ConsistencyTest"  # Chain*Test also mat
 
 # (file, text to replace, replacement, what the fault means)
 FAULTS = [
+    (CONS, "    int[] forward(int[] prev, int prevLab, int[] next, double theta) {\n",
+     "    int[] forward(int[] prev, int prevLab, int[] next, double theta) {\n        theta = theta * 0.5;\n",
+     "forward pass of slot consistency removes too much (halved tolerance)"),
     (ENUM, "if (marked[v]) hits[0]++;", "if (!marked[v]) hits[0]++;",
      "enumerator counts unmarked accounts as marked"),
     (ENUM, "markedCounts[i] = hits[0];", "markedCounts[counts.length - 1 - i] = hits[0];",

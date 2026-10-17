@@ -71,6 +71,9 @@ public final class ChainMiner {
         /** Failed pinned searches on open chains checked for a conserving walk, and those that had none (should be 0). */
         public long failuresChecked;
         public long failuresWithoutWalk;
+        /** Accounts that slot consistency removed on open chains, checked for a conserving walk, and those that had one (should be 0). */
+        public long rejectionsChecked;
+        public long rejectionsWithWalk;
         /** Transactions examined by pinned searches (every transaction of a scanned range), per candidate length. */
         public final Map<Integer, Long> examinedByLength = new TreeMap<>();
         /** Work of the lazy mode's a priori size (adjacency lookups), per candidate length. */
@@ -166,7 +169,10 @@ public final class ChainMiner {
     /**
      * After every failed pinned search on an open chain with slot consistency, search the whole graph for a
      * conserving walk through that account (distinct accounts not required), independently of the slots; a failure
-     * without such a walk means slot consistency kept an account it should have removed. Costs time; for checks only.
+     * without such a walk means slot consistency kept an account it should have removed. Likewise every account that
+     * slot consistency removes from an open chain is searched for such a walk; one with a walk means slot consistency
+     * removed an account it should have kept. Together they check that the filter is exact for walks. Costs time; for
+     * checks only.
      */
     public ChainMiner checkFailures(boolean on) {
         this.checkFailures = on;
@@ -542,6 +548,10 @@ public final class ChainMiner {
                 for (int idx = 0; idx < dom[p].length; idx++) {
                     if (rejected[p].get(idx) || Arrays.binarySearch(d[p], dom[p][idx]) >= 0) continue;
                     if (witnessed[p].get(idx)) throw new IllegalStateException("slot consistency removed an image account");
+                    if (checkFailures && !closed) {
+                        counters.rejectionsChecked++;
+                        if (walkExists(p, dom[p][idx])) counters.rejectionsWithWalk++;
+                    }
                     rejected[p].set(idx);
                     alive[p]--;
                 }

@@ -176,6 +176,7 @@ class ChainMinerTest {
         int longCompared = 0;
         int boundaryRuns = 0;
         long failuresChecked = 0;
+        long rejectionsChecked = 0;
         long lazySwitches = 0;
         for (int it = 0; it < 3000; it++) {
             Instance x = randomInstance(rnd);
@@ -224,17 +225,20 @@ class ChainMinerTest {
             miner.accountsByRole().forEach((k, b) -> gotRoles.put(k, toSet(b.stream().toArray())));
             assertEquals(roles, gotRoles, "accounts by role, instance " + it);
             assertEquals(0, miner.counters().failuresWithoutWalk, "failed search with no conserving walk, instance " + it);
+            assertEquals(0, miner.counters().rejectionsWithWalk, "account removed by slot consistency has a conserving walk, instance " + it);
             assertEquals(0, miner.counters().invalidExpansions, "expansion of an invalid level after a lazy switch, instance " + it);
             lazySwitches += miner.counters().lazySwitches;
             failuresChecked += miner.counters().failuresChecked;
+            rejectionsChecked += miner.counters().rejectionsChecked;
             graphs++;
             if (theta == 0.25) boundaryRuns++;
         }
         // the comparison must not be vacuous
         System.out.printf("reference comparison: %d graphs, %d patterns compared, %d closed, %d of length >= 3,"
-                + " %d runs at theta 0.25, %d failed searches checked for a walk%n", graphs, compared, closedCompared,
-                longCompared, boundaryRuns, failuresChecked);
+                + " %d runs at theta 0.25, %d failed searches checked for a walk, %d removed accounts checked for a walk%n",
+                graphs, compared, closedCompared, longCompared, boundaryRuns, failuresChecked, rejectionsChecked);
         assertTrue(failuresChecked > 100, "failed searches checked: " + failuresChecked);
+        assertTrue(rejectionsChecked > 100, "removed accounts checked: " + rejectionsChecked);
         System.out.printf("lazy switches in the reference comparison: %d%n", lazySwitches);
         assertTrue(lazySwitches > 100, "lazy switches: " + lazySwitches);
         assertTrue(compared > 2000, "patterns compared: " + compared);

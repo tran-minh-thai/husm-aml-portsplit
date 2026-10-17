@@ -131,6 +131,7 @@ public final class ChainMain {
         }
         if (opt.containsKey("--check-failures")) {
             System.out.printf("failure check (open chains): checked=%d without_walk=%d%n", c.failuresChecked, c.failuresWithoutWalk);
+            System.out.printf("rejection check (open chains): checked=%d with_walk=%d%n", c.rejectionsChecked, c.rejectionsWithWalk);
         }
         if (miner.slotProbeStats() != null) {
             for (Map.Entry<Integer, long[]> e : miner.slotProbeStats().byLength.entrySet()) {
