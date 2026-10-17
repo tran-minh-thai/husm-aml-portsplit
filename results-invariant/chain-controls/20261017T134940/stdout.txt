@@ -1,0 +1,8 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+intervals checked against their point estimate: 12; not containing it: 0
+sweden_100K_easy labeling A: 32207 laundering accounts, 3500 attempts
+         dataset labeling  length  I_0.2  I_inf  P_0.2  P_inf     OR  P_degree_matched P_degree_matched_ci  OR_degree  OR_shuffled_median OR_shuffled_ci  R_0.2_point         P_0.2_ci         R_0.2_ci            OR_ci     OR_degree_ci
+sweden_100K_easy        A       2  72633  76499 0.3819 0.3769 1.0213            0.3780    [0.3747, 0.3815]     1.0164              1.0115 [1.008, 1.015]       1.0000 [0.3791, 0.3846] [1.0000, 1.0000] [1.0186, 1.0238] [1.0045, 1.0281]
+sweden_100K_easy        A       3  68754  75255 0.3905 0.3830 1.0321            0.3846    [0.3805, 0.3883]     1.0251              1.0180 [1.014, 1.023]       0.9994 [0.3876, 0.3932] [0.9984, 1.0000] [1.0284, 1.0357] [1.0128, 1.0371]
+sweden_100K_easy        A       4    558  64325 0.5018 0.4337 1.3151            0.4310    [0.3942, 0.4785]     1.3297              1.0871 [0.914, 1.291]       0.0101 [0.4643, 0.5347] [0.0057, 0.0152] [1.1314, 1.4956] [1.1444, 1.5173]
+sweden_100K_easy        A       5      0    131    NaN    NaN    NaN               NaN                 NaN        NaN                 NaN            NaN          NaN              NaN              NaN              NaN              NaN

@@ -177,7 +177,12 @@ def main() -> None:
     roles = {}
     for theta in THETAS:
         if theta == "inf" and args.inf_roles:
-            role_file = ROOT / "results-invariant" / "chain-conservation-effect" / args.inf_roles / "accounts_theta_inf.tsv.gz"
+            record = ROOT / "results-invariant" / "chain-conservation-effect" / args.inf_roles
+            # compressed once a record is committed, plain right after the run
+            role_file = next((record / n for n in ("accounts_theta_inf.tsv.gz", "accounts_theta_inf.tsv") if (record / n).is_file()),
+                             None)
+            if role_file is None:
+                sys.exit(f"{args.inf_roles}: no accounts_theta_inf.tsv(.gz) in that record")
             print(f"\n[theta=inf account roles reused from {args.inf_roles}]", flush=True)
         else:
             _, role_file = mine(graph, marked_file, theta, args.tau, args.max_length, args.heap)

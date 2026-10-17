@@ -1,0 +1,48 @@
+{
+  "run_id": "20261017T134953",
+  "note": "Exp. 4 at the final commit: conservation effect, sweden_100K_difficult labeling S",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_conservation_effect.py",
+    "--source",
+    "amlgentex",
+    "--dataset",
+    "sweden_100K_difficult",
+    "--labeling",
+    "S"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 6,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-17T13:49:53",
+  "git_commit": "51b953520707b449aa0d52dce7914d9c6681e9b7",
+  "git_tree": "clean (51 untracked result records)",
+  "code_sha256": "ab5aa884c5b8d65b4f31f78d306b3befb8c6d35de7c8dc5a3105c027031776ed",
+  "code_files": 126,
+  "engine_jar_sha256": "63f8b198914ece48d0696b6d9d6be4ea1c775a449d5acedb4f8f0aecb3435fed",
+  "data": [],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (56 untracked result records)"
+}
