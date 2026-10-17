@@ -1,0 +1,26 @@
+graph sweden_100K_difficult_S.tg: 99995 accounts, 996335 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=2 filter_impl=auto
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=510007 found=359993 failed=150014 budget_fallbacks=227 local_rejections=214 early_stops=3
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 3: 110252229
+filter ops length 4: 101688076
+filter ops length 5: 213381021
+examined transactions length 2: 739458
+examined transactions length 3: 5126408
+examined transactions length 4: 10104146
+examined transactions length 5: 20196221
+lazy: lambda=1 switches=1
+lazy overhead length 2: 2824474
+lazy overhead length 3: 3288801
+lazy overhead length 4: 3420630
+lazy overhead length 5: 3481501
+filter auto passes: indexed=140 sorted=35
+[timing redacted: machine-dependent]
+[timing redacted: machine-dependent]
+[timing redacted: machine-dependent]
+patterns written: 5 -> patterns_miner-lazy.tsv
+[timing redacted: machine-dependent]

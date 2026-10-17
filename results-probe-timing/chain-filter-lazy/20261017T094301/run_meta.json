@@ -1,0 +1,72 @@
+{
+  "run_id": "20261017T094301",
+  "note": "lazy slot consistency against always, never and from length 4 (H49, H50), HI-Medium labeling A",
+  "command": [
+    "python3",
+    "experiments/scripts/chain_performance.py",
+    "--dataset",
+    "HI-Medium",
+    "--labeling",
+    "A",
+    "--heap",
+    "24g",
+    "--engines",
+    "miner",
+    "miner-no-filter",
+    "miner-from-4",
+    "miner-lazy"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-17T09:43:01",
+  "git_commit": "329ff5670388e321cc3da30b3afa5e2021ece07c",
+  "git_tree": "clean",
+  "code_sha256": "45b7d488f6a5a65bde078939f7835582a8298188151b887f5a1baf80b5ddaf78",
+  "code_files": 126,
+  "engine_jar_sha256": "23f0d33903d1ae70fce9be3ffab3ddcc9fd4168e9d9f02e51b82180b67189d39",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_A.tg",
+      "bytes": 1085071319,
+      "sha256": "105ec0fa9c871dff7819a9b27115ddb0a7482537ead9eef0880f5d54162dcb12"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.2",
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": "3.11.1",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (15 untracked result records)",
+  "timing_kind": "probe: development machine, decides whether a change is worth making, never cited",
+  "load_average_start": [
+    4.28,
+    3.42,
+    3.0
+  ],
+  "load_average_end": [
+    5.34,
+    4.19,
+    3.54
+  ],
+  "finished_at": "2026-10-17T09:54:07",
+  "paired_with": "results-probe/chain-filter-lazy/20261017T094301"
+}
