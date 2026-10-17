@@ -11,7 +11,7 @@ For one data set, labeling and parameter set, runs ChainMain three ways:
   miner-indexed     the same miner with slot consistency built only through the amount-sorted adjacency (only
                     when named); the default miner chooses between the two for every pass
   miner-lazy        the same miner with lazy slot consistency for open chains, budget equal to the a priori slot
-                    size (only when named)
+                    size (only when named); miner-lazy-L uses L times that size (L = 4, 16, 64)
   enumerate         the baseline that enumerates every valid occurrence and aggregates image sets
 
 Every run that finishes must write exactly the same pattern table as the miner; a difference stops
@@ -53,7 +53,8 @@ PROBE = os.environ.get("RUN_TIMING_KIND", "").startswith("probe")
 ENGINES = {"miner": [], "miner-no-filter": ["--no-consistency"], "enumerate": ["--engine", "enumerate"],
            "miner-from-3": ["--consistency-from", "3"], "miner-from-4": ["--consistency-from", "4"],
            "miner-from-5": ["--consistency-from", "5"], "miner-sorted": ["--filter-impl", "sorted"],
-           "miner-indexed": ["--filter-impl", "indexed"], "miner-lazy": ["--lazy", "1"]}
+           "miner-indexed": ["--filter-impl", "indexed"], "miner-lazy": ["--lazy", "1"],
+           "miner-lazy-4": ["--lazy", "4"], "miner-lazy-16": ["--lazy", "16"], "miner-lazy-64": ["--lazy", "64"]}
 DEFAULT_ENGINES = ["miner", "miner-no-filter", "enumerate"]
 ELAPSED = re.compile(r"mining elapsed ms: (\d+)")
 COUNTERS = re.compile(r"candidates=(\d+) pruned_by_domain=(\d+) pruned_by_consistency=(\d+) searches=(\d+) "
