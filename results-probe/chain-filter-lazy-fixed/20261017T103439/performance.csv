@@ -1,0 +1,2 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+LI-Medium,S,0.2,10,5,3,24g,miner-lazy,ok,bee93392fc27562f8259c7c5903a5c32da74cbdcf606eeffe2e8f39c909f9b4f,8,0,0,3229570,616915,2612655

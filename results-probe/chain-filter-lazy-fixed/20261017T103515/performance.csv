@@ -1,0 +1,2 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+HI-Small,A,0.2,10,5,3,24g,miner-lazy,ok,519a4f4cb6d5b07d05669c837fcdfb09cd34f70fb2108827623bc6879368a2b1,1758,1419,84,5374708,213891,5160817

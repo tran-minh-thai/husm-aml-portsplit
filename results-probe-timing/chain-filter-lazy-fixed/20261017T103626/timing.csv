@@ -1,0 +1,2 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+us_100K_difficult,A,miner-lazy,ok,35841,36.737,672399360,7200.0,24g

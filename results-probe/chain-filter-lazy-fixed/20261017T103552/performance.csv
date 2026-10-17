@@ -1,0 +1,2 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+sweden_100K_easy,A,0.2,10,5,3,24g,miner-lazy,ok,19b2df30d66542e21fb75654716f51cfe6805b691f6d6fb935f6a647898872a2,279228,256675,75,5910121,872529,5037591
