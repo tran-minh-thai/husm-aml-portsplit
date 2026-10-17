@@ -1,0 +1,38 @@
+input us_100K_difficult_S.tg sha256 0635c19494d7fdb00b9ba752ab0230009a0aee5f9ad5c54d085ee708ee2a59a5 (1766449 transactions, 100000 accounts)
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 1956 laundering accounts
+amounts permuted within target, seed 20261017; shuffled input sha256 3cd8e0db5c9c0f85cd3d6f3b0826defb3206c3bf33cabeeff8802cf502d62fe0
+
+[miner, theta=0.2]
+graph us_100K_difficult_S.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=2 filter_impl=auto
+marked accounts present in the graph: 1956
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=508698 found=482121 failed=26577 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 2: 162702073
+filter ops length 3: 234335791
+filter ops length 4: 283137975
+filter ops length 5: 325756887
+filter auto passes: indexed=40 sorted=0
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[theta=inf account roles reused from 20261011T072130]
+
+us_100K_difficult labeling S: tau=10, max length 5, 1956 marked accounts
+          dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+us_100K_difficult        S       2                    423  76002        1763 0.0232 0.9551  79340        1825 0.0230 1.0000 1.0087
+us_100K_difficult        S       3                    183  72598        1737 0.0239 0.9180  77608        1825 0.0235 1.0000 1.0179
+us_100K_difficult        S       4                    183  69281        1696 0.0245 0.8907  75971        1823 0.0240 1.0000 1.0207
+us_100K_difficult        S       5                    147  66343        1653 0.0249 0.8435  74683        1819 0.0244 1.0000 1.0236
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True

@@ -1,0 +1,38 @@
+input sweden_100K_easy_S.tg sha256 1f316d932295a210939c85c9df57f27da0741f0b85fe56f07ba2db6f7a6cc901 (1037081 transactions, 99995 accounts)
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 32207 laundering accounts
+amounts permuted within target, seed 20261017; shuffled input sha256 b6fc9f5dc784bf092ceb2cb08dcb865847cbcfbfa9933068f6ea18f22dad5882
+
+[miner, theta=0.2]
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=2 filter_impl=auto
+marked accounts present in the graph: 32207
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=477114 found=457620 failed=19494 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 2: 80936917
+filter ops length 3: 108630053
+filter ops length 4: 123869894
+filter ops length 5: 134549313
+filter auto passes: indexed=40 sorted=0
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[theta=inf account roles reused from 20261011T072007]
+
+sweden_100K_easy labeling S: tau=10, max length 5, 32207 marked accounts
+         dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+sweden_100K_easy        S       2                   6861  72036       27284 0.3788 0.9382  76499       28833 0.3769 1.0000 1.0079
+sweden_100K_easy        S       3                   3184  68534       26545 0.3873 0.9174  75255       28821 0.3830 1.0000 1.0185
+sweden_100K_easy        S       4                   3166  64999       25621 0.3942 0.8752  74155       28786 0.3882 1.0000 1.0255
+sweden_100K_easy        S       5                   2806  61939       24738 0.3994 0.8332  73437       28753 0.3915 1.0000 1.0334
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True

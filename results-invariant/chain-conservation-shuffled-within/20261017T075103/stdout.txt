@@ -1,0 +1,37 @@
+input HI-Small_S.tg sha256 475c8b40dbca9b5a7fe1213f842e2f67245e9bf23b3ca7e5e1f6e80d486325d8 (4487133 transactions, 422734 accounts)
+ground truth and export agree on all 6357 laundering accounts
+amounts permuted within target, seed 20261017; shuffled input sha256 dbe03cffe5ae28c780d5c728035fadfb6e3909b2398ee97b81d0c458db8d8e1d
+
+[miner, theta=0.2]
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=2 filter_impl=auto
+marked accounts present in the graph: 6357
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=220650 found=219474 failed=1176 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 2: 301509448
+filter ops length 3: 148253423
+filter ops length 4: 41955737
+filter ops length 5: 10242626
+filter auto passes: indexed=35 sorted=5
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[theta=inf account roles reused from 20261011T072433]
+
+HI-Small labeling S: tau=10, max length 5, 6357 marked accounts
+ dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+HI-Small        S       2                    862  73845        2248 0.0304 0.6555 167183        4503 0.0269 1.0000 1.1343
+HI-Small        S       3                    341  36818        1269 0.0345 0.5689 154829        4399 0.0284 1.0000 1.2207
+HI-Small        S       4                    315  13939         617 0.0443 0.3714 147031        4229 0.0288 1.0000 1.5639
+HI-Small        S       5                    300   4288         269 0.0627 0.1833 141439        4099 0.0290 1.0000 2.2426
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): False

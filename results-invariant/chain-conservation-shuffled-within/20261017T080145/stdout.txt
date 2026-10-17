@@ -1,0 +1,37 @@
+input HI-Medium_S.tg sha256 c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393 (29336378 transactions, 1758597 accounts)
+ground truth and export agree on all 41857 laundering accounts
+amounts permuted within target, seed 20261017; shuffled input sha256 dc7ec0d05a4215012d44204674e8a2a22bafd3d50301ee9264599f957d346c1b
+
+[miner, theta=0.2]
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=2 filter_impl=auto
+marked accounts present in the graph: 41857
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=1099794 found=1089623 failed=10171 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 2: 3111094315
+filter ops length 3: 1871509744
+filter ops length 4: 480714603
+filter ops length 5: 131911421
+filter auto passes: indexed=29 sorted=11
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[theta=inf account roles reused from 20261011T075419]
+
+HI-Medium labeling S: tau=10, max length 5, 41857 marked accounts
+  dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+HI-Medium        S       2                   6401 340738       17184 0.0504 0.6632 748381       31678 0.0423 1.0000 1.2016
+HI-Medium        S       3                   2857 183550       10804 0.0589 0.5324 695818       31202 0.0448 1.0000 1.3322
+HI-Medium        S       4                   2740  76936        5287 0.0687 0.3350 665692       30600 0.0460 1.0000 1.5315
+HI-Medium        S       5                   2587  27918        2334 0.0836 0.1925 648471       30106 0.0464 1.0000 1.8738
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): False
