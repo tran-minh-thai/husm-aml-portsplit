@@ -1,0 +1,5 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+HI-Large,A,miner,ok,787827,870.217,29122113536,7200.0,48g
+HI-Large,A,miner-always,ok,1099119,1178.545,34848882688,7200.0,48g
+HI-Large,A,miner-no-filter,ok,3892146,3982.0,37967761408,7200.0,48g
+HI-Large,A,enumerate,timeout,,7200.316,,7200.0,48g
