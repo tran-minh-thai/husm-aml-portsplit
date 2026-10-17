@@ -1,0 +1,5 @@
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4 filter_impl=auto
+engine=enumerate rule=pairwise valid_occurrences=6093388335
+patterns written: 8 -> patterns_enumerate.tsv
+mining elapsed ms: 642019 (machine-dependent)
