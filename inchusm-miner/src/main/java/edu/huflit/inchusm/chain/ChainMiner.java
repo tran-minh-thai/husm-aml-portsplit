@@ -385,7 +385,9 @@ public final class ChainMiner {
         if (lazyHere) {
             long probes = g.probes;
             long u = search.aprioriSize();
-            overhead = g.probes - probes + u;                        // label lookups plus one unit per domain account summed
+            long accounts = 0;
+            for (int[] d : dom) accounts += d.length;
+            overhead = g.probes - probes + accounts;                 // label lookups plus one addition per domain account
             counters.lazyOverheadByLength.merge(cand.length(), overhead, Long::sum);
             double b = u == 0 ? 0 : lazyLambda * u;              // nothing to scan: filtering first costs nothing
             if (b <= 0) {
