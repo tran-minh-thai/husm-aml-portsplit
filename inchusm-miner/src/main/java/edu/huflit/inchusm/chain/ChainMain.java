@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
  * {@code --no-consistency} skips slot consistency (same output, for measuring what it contributes).
  * {@code --slot-probe} prints, per length, slot sizes built from the domains against slots inherited from
  * prefix and suffix (same output; keeps the slots of one level in memory). {@code --consistency-from L}
- * applies slot consistency only to candidates of at least L transactions (same output). {@code --filter-impl
+ * applies slot consistency only to candidates of at least L transactions (same output; the default is 4, and 2
+ * filters every candidate). {@code --filter-impl
  * sorted} builds slots by sorting them, {@code indexed} through the amount-sorted adjacency, and the default
  * {@code auto} chooses between the two for every pass by predicted work (same output). {@code --check-failures} checks every failed pinned search on an open chain against an
  * independent walk search over the whole graph (for checks only). {@code --lazy LAMBDA} builds the slots of an
@@ -65,7 +66,7 @@ public final class ChainMain {
         System.out.printf("params: theta=%s min_support=%d max_length=%d min_cycle=%d closed_chains=%s consistency=%s"
                 + " consistency_from=%s filter_impl=%s%n", params.theta(), params.minSupport(), params.maxLength(),
                 params.minCycleLength(), params.closedChains(), !opt.containsKey("--no-consistency"),
-                opt.getOrDefault("--consistency-from", "2"), opt.getOrDefault("--filter-impl", "auto"));
+                opt.getOrDefault("--consistency-from", "4"), opt.getOrDefault("--filter-impl", "auto"));
 
         String engine = opt.getOrDefault("--engine", "miner");
         if (engine.equals("enumerate")) {

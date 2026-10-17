@@ -3,7 +3,8 @@ slot consistency.
 
 For one data set, labeling and parameter set, runs ChainMain three ways:
 
-  miner             the level-wise miner with slot consistency
+  miner             the level-wise miner as configured in the paper: slot consistency from candidate length 4
+  miner-always      the same miner with slot consistency on every candidate
   miner-no-filter   the same miner with --no-consistency (same output; counts what the filter saves)
   miner-from-L      the same miner with slot consistency only from candidate length L (L = 3, 4, 5; only
                     when named with --engines)
@@ -51,11 +52,12 @@ OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") els
 TIMING = Path(os.environ["RUN_TIMING_DIR"]) if os.environ.get("RUN_TIMING_DIR") else None
 PROBE = os.environ.get("RUN_TIMING_KIND", "").startswith("probe")
 ENGINES = {"miner": [], "miner-no-filter": ["--no-consistency"], "enumerate": ["--engine", "enumerate"],
+           "miner-always": ["--consistency-from", "2"],
            "miner-from-3": ["--consistency-from", "3"], "miner-from-4": ["--consistency-from", "4"],
            "miner-from-5": ["--consistency-from", "5"], "miner-sorted": ["--filter-impl", "sorted"],
            "miner-indexed": ["--filter-impl", "indexed"], "miner-lazy": ["--lazy", "1"],
            "miner-lazy-4": ["--lazy", "4"], "miner-lazy-16": ["--lazy", "16"], "miner-lazy-64": ["--lazy", "64"]}
-DEFAULT_ENGINES = ["miner", "miner-no-filter", "enumerate"]
+DEFAULT_ENGINES = ["miner", "miner-always", "miner-no-filter", "enumerate"]
 ELAPSED = re.compile(r"mining elapsed ms: (\d+)")
 COUNTERS = re.compile(r"candidates=(\d+) pruned_by_domain=(\d+) pruned_by_consistency=(\d+) searches=(\d+) "
                       r"found=(\d+) failed=(\d+)")

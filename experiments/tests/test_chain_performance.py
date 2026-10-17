@@ -81,7 +81,7 @@ def test_three_engines_agree_end_to_end_and_a_different_table_is_refused(tmp_pat
     cp.main()
     assert (tmp_path / "jdk.lock").is_file() and real_lock.is_file() == existed   # the lock of the test only
     rows = (out / "performance.csv").read_text().splitlines()
-    assert len(rows) == 4 and all(",ok," in r for r in rows[1:])
+    assert len(rows) == 5 and all(",ok," in r for r in rows[1:])
     assert len({r.split(",")[9] for r in rows[1:]}) == 1                     # one table digest for all engines
     assert "mining_ms" in (timing / "timing.csv").read_text()
     assert "elapsed" not in "".join(p.read_text() for p in out.glob("log_*.txt"))
@@ -110,7 +110,7 @@ def test_per_length_filter_engines_write_the_same_table(tmp_path, monkeypatch):
     assert [r.split(",")[7] for r in rows] == engines and all(",ok," in r for r in rows)
     assert len({r.split(",")[9] for r in rows}) == 1
     # the default set is unchanged by the new engines
-    assert cp.DEFAULT_ENGINES == ["miner", "miner-no-filter", "enumerate"]
+    assert cp.DEFAULT_ENGINES == ["miner", "miner-always", "miner-no-filter", "enumerate"]
 
 
 def test_only_a_probe_skips_the_jvm_lock(tmp_path, monkeypatch):

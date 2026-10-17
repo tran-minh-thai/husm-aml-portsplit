@@ -252,7 +252,8 @@ class ChainMinerTest {
             ChainMiner.Params p = new ChainMiner.Params(THETAS[it % THETAS.length], 1 + rnd.nextInt(2),
                     3 + rnd.nextInt(2), 2 + rnd.nextInt(2), true);
             List<ChainMiner.Result> plain = new ChainMiner(x.graph(), p).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).mine();
-            ChainMiner probed = new ChainMiner(x.graph(), p).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).slotProbe(true);
+            ChainMiner probed = new ChainMiner(x.graph(), p).consistencyFrom(2).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET)
+                    .slotProbe(true);
             List<ChainMiner.Result> got = probed.mine();
             assertEquals(plain.size(), got.size(), "instance " + it);
             for (int i = 0; i < got.size(); i++) {
@@ -334,7 +335,8 @@ class ChainMinerTest {
     }
 
     private static ChainMiner run(Instance x, ChainMiner.Params p, java.util.function.UnaryOperator<ChainMiner> setup) {
-        ChainMiner m = setup.apply(new ChainMiner(x.graph(), p).recordCandidates(true).checkLazy(true));
+        // the filter must act on every candidate here (the default starts it at length 4)
+        ChainMiner m = setup.apply(new ChainMiner(x.graph(), p).consistencyFrom(2).recordCandidates(true).checkLazy(true));
         m.mine();
         assertEquals(0, m.counters().invalidExpansions, "invalid expansion after a lazy switch");
         return m;

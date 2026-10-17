@@ -111,7 +111,9 @@ public final class ChainMiner {
     static final long DFS_BUDGET = 10_000;
     private long dfsBudget = DFS_BUDGET;
     private boolean useConsistency = true;
-    private int consistencyFrom = 2;
+    // slot consistency from this candidate length on: fixed at 4 from the counted work on two probe data sets; any
+    // value gives the same output
+    private int consistencyFrom = 4;
     private Consistency.Mode filterMode = Consistency.Mode.AUTO;
     private boolean checkFailures;
     private Double lazyLambda;          // lazy slot consistency with budget lambda * (a priori slot size); null: off
