@@ -1,0 +1,26 @@
+graph us_100K_difficult_S.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=2 filter_impl=auto
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=999588 found=475426 failed=524162 budget_fallbacks=28093 local_rejections=21680 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+filter ops length 3: 319138117
+filter ops length 4: 443412097
+filter ops length 5: 779058111
+examined transactions length 2: 885052
+examined transactions length 3: 88974916
+examined transactions length 4: 217378345
+examined transactions length 5: 418907511
+lazy: lambda=4 switches=1
+lazy overhead length 2: 1505449
+lazy overhead length 3: 1851516
+lazy overhead length 4: 2071772
+lazy overhead length 5: 2269660
+filter auto passes: indexed=5060 sorted=18981
+filter elapsed ms length 3: 2827 (machine-dependent)
+filter elapsed ms length 4: 3561 (machine-dependent)
+filter elapsed ms length 5: 3552 (machine-dependent)
+patterns written: 8 -> patterns_miner-lazy-4.tsv
+mining elapsed ms: 109012 (machine-dependent)

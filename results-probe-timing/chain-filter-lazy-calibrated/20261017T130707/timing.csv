@@ -1,0 +1,2 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+sweden_100K_easy,S,miner-lazy-4,ok,8531,9.172,650461184,7200.0,24g

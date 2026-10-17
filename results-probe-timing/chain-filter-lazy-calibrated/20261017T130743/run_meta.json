@@ -1,0 +1,69 @@
+{
+  "run_id": "20261017T130743",
+  "note": "lazy slot consistency with the calibrated budget lambda = 4 (H51), us_100K_difficult labeling S",
+  "command": [
+    "python3",
+    "experiments/scripts/chain_performance.py",
+    "--dataset",
+    "us_100K_difficult",
+    "--labeling",
+    "S",
+    "--heap",
+    "24g",
+    "--engines",
+    "miner-lazy-4"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-17T13:07:43",
+  "git_commit": "6c07e8c9891d9682ee8bfb61aaac1b8bf8dcda23",
+  "git_tree": "clean (100 untracked result records)",
+  "code_sha256": "80f94dad16914f72b89492e341bb24a04087075f0a97ae4cb4e76b48883061f7",
+  "code_files": 126,
+  "engine_jar_sha256": "ad971bfb33a463e6fc3726ba5453d14794c0932a3e048279cc46ebcc232c5951",
+  "data": [
+    {
+      "path": "datasets/chain/us_100K_difficult_S.tg",
+      "bytes": 57626864,
+      "sha256": "0635c19494d7fdb00b9ba752ab0230009a0aee5f9ad5c54d085ee708ee2a59a5"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.2",
+    "pandas": null,
+    "scipy": null,
+    "sklearn": null,
+    "networkx": null,
+    "matplotlib": "3.11.1",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (106 untracked result records)",
+  "timing_kind": "probe: development machine, decides whether a change is worth making, never cited",
+  "load_average_start": [
+    5.54,
+    5.34,
+    4.89
+  ],
+  "load_average_end": [
+    4.32,
+    4.93,
+    4.78
+  ],
+  "finished_at": "2026-10-17T13:09:33",
+  "paired_with": "results-probe/chain-filter-lazy-calibrated/20261017T130743"
+}
