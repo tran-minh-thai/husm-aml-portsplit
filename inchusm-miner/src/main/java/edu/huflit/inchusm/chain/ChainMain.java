@@ -29,7 +29,9 @@ import java.util.stream.Collectors;
  * applies slot consistency only to candidates of at least L transactions (same output). {@code --filter-impl
  * sorted} builds slots by sorting them, {@code indexed} through the amount-sorted adjacency, and the default
  * {@code auto} chooses between the two for every pass by predicted work (same output). {@code --check-failures} checks every failed pinned search on an open chain against an
- * independent walk search over the whole graph (for checks only).
+ * independent walk search over the whole graph (for checks only). {@code --lazy LAMBDA} builds the slots of an
+ * open chain only after LAMBDA times its a priori slot size transactions have been examined (0: first, inf: never;
+ * same output).
  * {@code --theta inf} switches conservation off (every occurrence is valid), the reference point for
  * measuring what conservation changes. {@code --mark} names a file of account ids, one per line; the
  * output then also counts, for every image set, how many of its accounts are marked (both engines). Marking never
@@ -93,6 +95,7 @@ public final class ChainMain {
         }
         miner.filterMode(impl);
         if (opt.containsKey("--check-failures")) miner.checkFailures(true);
+        if (opt.containsKey("--lazy")) miner.lazy(parseTheta(opt.get("--lazy")));
         if (opt.containsKey("--mark")) miner.marked(markedAccounts(Path.of(opt.get("--mark")), g));
         long t0 = System.nanoTime();
         List<ChainMiner.Result> results = miner.mine();
@@ -110,6 +113,15 @@ public final class ChainMain {
         }
         for (Map.Entry<Integer, Long> e : c.filterOpsByLength.entrySet()) {
             System.out.printf("filter ops length %d: %d%n", e.getKey(), e.getValue());
+        }
+        for (Map.Entry<Integer, Long> e : c.examinedByLength.entrySet()) {
+            System.out.printf("examined transactions length %d: %d%n", e.getKey(), e.getValue());
+        }
+        if (opt.containsKey("--lazy")) {
+            System.out.printf("lazy: lambda=%s switches=%d%n", opt.get("--lazy"), c.lazySwitches);
+            for (Map.Entry<Integer, Long> e : c.lazyOverheadByLength.entrySet()) {
+                System.out.printf("lazy overhead length %d: %d%n", e.getKey(), e.getValue());
+            }
         }
         long[] auto = miner.filterAutoChoices();
         if (auto[0] + auto[1] > 0) System.out.printf("filter auto passes: indexed=%d sorted=%d%n", auto[0], auto[1]);

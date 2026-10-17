@@ -71,6 +71,16 @@ public final class ChainMiner {
         /** Failed pinned searches on open chains checked for a conserving walk, and those that had none (should be 0). */
         public long failuresChecked;
         public long failuresWithoutWalk;
+        /** Transactions examined by pinned searches (every transaction of a scanned range), per candidate length. */
+        public final Map<Integer, Long> examinedByLength = new TreeMap<>();
+        /** Work of the lazy mode's a priori size (adjacency lookups), per candidate length. */
+        public final Map<Integer, Long> lazyOverheadByLength = new TreeMap<>();
+        public long lazySwitches;
+        /** Checks only: levels found outside their slot or with an eliminated account after a lazy switch (must be 0). */
+        public long invalidExpansions;
+        /** Per candidate, when recorded: key, then examined, filter ops, lazy overhead, switched (0/1), lazy budget, steps visited, reported (0/1). */
+        public final List<String> candidateKeys = new ArrayList<>();
+        public final List<long[]> candidateCosts = new ArrayList<>();
         public final Map<Integer, long[]> frequentByLength = new TreeMap<>();   // length -> {open, closed}
 
         void frequent(ChainPattern p) {
@@ -104,6 +114,9 @@ public final class ChainMiner {
     private int consistencyFrom = 2;
     private Consistency.Mode filterMode = Consistency.Mode.AUTO;
     private boolean checkFailures;
+    private Double lazyLambda;          // lazy slot consistency with budget lambda * (a priori slot size); null: off
+    private boolean checkLazy;
+    private boolean recordCandidates;
     private Consistency cons;
 
     /** The conservation predicate between an arriving amount and the amount that leaves. */
@@ -155,6 +168,29 @@ public final class ChainMiner {
      */
     public ChainMiner checkFailures(boolean on) {
         this.checkFailures = on;
+        return this;
+    }
+
+    /**
+     * Lazy slot consistency (rule R2) for open chains: search without slots until lambda times the a
+     * priori slot size transactions have been examined, then build the slots and continue. lambda = 0
+     * filters first, lambda = infinity never filters. Closed chains are filtered first. Output is the same.
+     */
+    public ChainMiner lazy(double lambda) {
+        if (!(lambda >= 0)) throw new IllegalArgumentException("lambda must be at least 0");
+        this.lazyLambda = lambda;
+        return this;
+    }
+
+    /** Checks only: after a lazy switch, verify at every expansion that the assigned levels are still valid. */
+    ChainMiner checkLazy(boolean on) {
+        this.checkLazy = on;
+        return this;
+    }
+
+    /** Keep per-candidate costs in the counters (checks and analysis). */
+    public ChainMiner recordCandidates(boolean on) {
+        this.recordCandidates = on;
         return this;
     }
 
@@ -344,10 +380,27 @@ public final class ChainMiner {
         }
         boolean filtered = useConsistency && cand.length() >= consistencyFrom;
         Search search = new Search(cand, dom, filtered);
-        int[][] inherited = slotProbe != null && filtered && p.slots() != null && q.slots() != null
+        long overhead = 0;
+        boolean lazyHere = filtered && lazyLambda != null && !cand.closed();
+        if (lazyHere) {
+            long probes = g.probes;
+            long u = search.aprioriSize();
+            overhead = g.probes - probes + u;                        // label lookups plus one unit per domain account summed
+            counters.lazyOverheadByLength.merge(cand.length(), overhead, Long::sum);
+            double b = u == 0 ? 0 : lazyLambda * u;              // nothing to scan: filtering first costs nothing
+            if (b <= 0) {
+                lazyHere = false;                                   // budget 0: filter first
+            } else if (Double.isInfinite(b)) {
+                lazyHere = false;
+                filtered = false;                                   // never filter
+            }
+            if (lazyHere) search.lazy((long) Math.ceil(b));
+        }
+        int[][] inherited = slotProbe != null && filtered && !lazyHere && p.slots() != null && q.slots() != null
                 ? inherited(cand, dom, p, q) : null;
         boolean consistent = true;
-        if (!filtered) {
+        long opsBefore = cons.ops;
+        if (!filtered || lazyHere) {
             search.plain();
         } else {
             long before = cons.ops;
@@ -358,10 +411,13 @@ public final class ChainMiner {
             if (inherited != null) probe(cand, inherited, search);
             if (!consistent) {
                 counters.prunedByConsistency++;
+                record(cand, search, cons.ops - opsBefore, overhead, false);
                 return null;
             }
         }
         int[][] img = search.images();
+        counters.examinedByLength.merge(cand.length(), search.examined, Long::sum);
+        record(cand, search, cons.ops - opsBefore, overhead, img != null);
         if (img == null) return null;
         int[][] kept = null;
         if (inherited != null && !cand.closed()) {
@@ -371,6 +427,14 @@ public final class ChainMiner {
             slotProbe.at(cand.length())[5] += n;
         }
         return new Entry(cand, img, kept);
+    }
+
+    private void record(ChainPattern cand, Search search, long filterOps, long overhead, boolean reported) {
+        if (!recordCandidates) return;
+        counters.candidateKeys.add(cand.key());
+        counters.candidateCosts.add(new long[] {search.examined, filterOps, overhead,
+                search.lazyBudget > 0 && !search.lazyPending ? 1 : 0, search.lazyBudget, search.stepsVisited,
+                reported ? 1 : 0});
     }
 
     /** Slots of the candidate inherited from its prefix p (edges 1..k) and suffix q (edges 2..k+1), within the domains. */
@@ -409,6 +473,17 @@ public final class ChainMiner {
         private final int[][] slots;    // transactions allowed at each pattern edge 1..m after consistency
         private final int[] fresh;      // slot sizes built from the domains, before propagation (slot probe)
         private int[][] allowed;        // transactions allowed in the current pinned search
+        private BitSet[] witnessed;     // per position: accounts already found in an occurrence
+        private int[] alive;            // per position: accounts not eliminated
+        private boolean slotsActive;    // slots built; searches use them
+        private boolean lazyPending;    // lazy mode, slots not built yet
+        private long lazyBudget;        // examined transactions after which the lazy mode builds the slots
+        long examined;                  // transactions examined by the searches of this candidate (all of a scanned range)
+        long stepsVisited;              // steps of the fixed order visited, searched or skipped
+        private boolean stopped;        // the candidate cannot reach the minimum support (found at a lazy switch)
+        private boolean abortAttempt;   // the pinned account itself was eliminated at a lazy switch
+        private int abandonDepth = -1;  // unwinding: frames deeper than this return
+        private int pin;                // position of the current pinned search
         private long steps;             // transactions tried in the current depth-first attempt
         private long budget;            // abandon the attempt (not the question) past this many
         private final int[] vert;       // account at each position, -1 if unassigned
@@ -431,11 +506,14 @@ public final class ChainMiner {
 
         /**
          * Reduce every slot to the transactions that lie on a complete conserving walk with the
-         * pattern's labels and domains (and, for a closed chain, one that starts and ends at an
-         * account of the origin domain), then shrink the domains to the accounts those transactions
-         * use. False when a domain falls below the minimum support.
+         * pattern's labels and the initial domains (and, for a closed chain, one that starts and ends
+         * at an account of the origin domain), then record every pair (position, account) of the
+         * initial domains that no remaining transaction uses as eliminated; the domains themselves are
+         * not replaced, so the order of the steps does not depend on the filter. False when fewer than
+         * the minimum support accounts remain at some position.
          */
         boolean consistent() {
+            ensureState();
             double theta = params.theta();
             for (int s = 1; s <= m; s++) {
                 slots[s] = cons.slot(dom[s - 1], elab[s - 1], dom[pos(s)]);
@@ -455,17 +533,57 @@ public final class ChainMiner {
             int[][] d = new int[dom.length][];
             d[0] = Consistency.ends(g, slots[1], true);
             for (int p = 1; p < dom.length; p++) d[p] = Consistency.ends(g, slots[p], false);
-            for (int[] x : d) if (x.length < params.minSupport()) return false;
-            dom = d;
-            rejected = new BitSet[dom.length];
-            for (int i = 0; i < dom.length; i++) rejected[i] = new BitSet(dom[i].length);
-            return true;
+            boolean enough = true;
+            for (int p = 0; p < dom.length; p++) {
+                for (int idx = 0; idx < dom[p].length; idx++) {
+                    if (rejected[p].get(idx) || Arrays.binarySearch(d[p], dom[p][idx]) >= 0) continue;
+                    if (witnessed[p].get(idx)) throw new IllegalStateException("slot consistency removed an image account");
+                    rejected[p].set(idx);
+                    alive[p]--;
+                }
+                if (alive[p] < params.minSupport()) enough = false;
+            }
+            slotsActive = true;
+            return enough;
         }
 
         /** Without consistency: domains as given, every transaction allowed. */
         void plain() {
+            ensureState();
+        }
+
+        private void ensureState() {
+            if (rejected != null) return;
             rejected = new BitSet[dom.length];
-            for (int i = 0; i < dom.length; i++) rejected[i] = new BitSet(dom[i].length);
+            witnessed = new BitSet[dom.length];
+            alive = new int[dom.length];
+            for (int i = 0; i < dom.length; i++) {
+                rejected[i] = new BitSet(dom[i].length);
+                witnessed[i] = new BitSet(dom[i].length);
+                alive[i] = dom[i].length;
+            }
+        }
+
+        /**
+         * Lazy slot consistency (rule R2): search without slots until budget transactions have been
+         * examined, then build the slots and continue the search in progress on them.
+         */
+        void lazy(long budget) {
+            ensureState();
+            lazyBudget = budget;
+            lazyPending = true;
+        }
+
+        /** Transactions an unconstrained slot build would examine: label-matching out-transactions of every source domain. */
+        long aprioriSize() {
+            long u = 0;
+            for (int s = 1; s <= m; s++) {
+                for (int a : dom[s - 1]) {
+                    int[] r = g.outByLabel(a, elab[s - 1]);
+                    u += r[1] - r[0];
+                }
+            }
+            return u;
         }
 
         private long size() {
@@ -524,26 +642,29 @@ public final class ChainMiner {
 
         /** Exact image sets, or null as soon as one position cannot reach the minimum support. */
         int[][] images() {
+            ensureState();
             int n = dom.length;
-            BitSet[] witnessed = new BitSet[n];
-            int[] alive = new int[n];
             Integer[] order = new Integer[n];
-            for (int i = 0; i < n; i++) {
-                witnessed[i] = new BitSet(dom[i].length);
-                alive[i] = dom[i].length;
-                order[i] = i;
-            }
+            for (int i = 0; i < n; i++) order[i] = i;
+            // the step order comes from the domains as given, which slot consistency never replaces
             Arrays.sort(order, Comparator.comparingInt((Integer i) -> dom[i].length).thenComparingInt(i -> i));
             for (int pos : order) {
                 for (int idx = 0; idx < dom[pos].length; idx++) {
+                    stepsVisited++;
                     if (witnessed[pos].get(idx) || rejected[pos].get(idx)) continue;
                     counters.searches++;
-                    if (pinned(pos, dom[pos][idx])) {
+                    boolean found = pinned(pos, dom[pos][idx]);
+                    if (stopped) {
+                        counters.earlyStops++;
+                        return null;
+                    }
+                    if (found) {
                         counters.searchesFound++;
                         for (int q = 0; q < n; q++) witnessed[q].set(Arrays.binarySearch(dom[q], vert[q]));
                     } else {
                         counters.searchesFailed++;
-                        if (checkFailures && filtered && !closed) {
+                        if (rejected[pos].get(idx)) continue;        // eliminated by the filter built during this search
+                        if (checkFailures && slotsActive && !closed) {
                             counters.failuresChecked++;
                             if (!walkExists(pos, dom[pos][idx])) counters.failuresWithoutWalk++;
                         }
@@ -641,7 +762,7 @@ public final class ChainMiner {
 
         /** Is there a valid occurrence with account u at position pin? Leaves it in vert/tx if so. */
         boolean pinned(int pin, int u) {
-            if (!filtered) {
+            if (!slotsActive) {
                 allowed = null;
                 return attempt(pin, u, Long.MAX_VALUE);
             }
@@ -663,16 +784,87 @@ public final class ChainMiner {
         private boolean attempt(int pin, int u, long budget) {
             this.budget = budget;
             this.steps = 0;
+            this.pin = pin;
+            abandonDepth = -1;
+            abortAttempt = false;
             Arrays.fill(vert, -1);
             Arrays.fill(tx, -1);
             vert[pin] = u;
             return right(pin + 1, pin);
         }
 
+        /**
+         * Count one examined transaction; at the lazy budget, build the slots and decide how much of
+         * the search in progress survives. False when the frame at this depth must return at once.
+         */
+        private boolean examine(int depth) {
+            examined++;
+            // checks only: after a switch, no transaction may be examined below a level that the filter invalidated
+            if (checkLazy && !lazyPending && lazyBudget > 0) checkPrefix();
+            if (!lazyPending || examined < lazyBudget) return true;
+            switchToFilter();
+            return !(stopped || abortAttempt || (abandonDepth >= 0 && abandonDepth < depth));
+        }
+
+        /**
+         * Rule R2: build the slots, record the filtered-out pairs as eliminated, test the early stop,
+         * then unwind: find the shallowest assigned level whose transaction is outside its slot or
+         * whose account is now eliminated; every deeper frame returns and that level moves on.
+         */
+        private void switchToFilter() {
+            lazyPending = false;
+            counters.lazySwitches++;
+            long before = cons.ops;
+            consistent();
+            counters.filterOpsByLength.merge(m, cons.ops - before, Long::sum);
+            allowed = slots;
+            for (int p = 0; p < dom.length; p++) {
+                if (alive[p] < params.minSupport()) {
+                    stopped = true;
+                    return;
+                }
+            }
+            if (rejected[pin].get(Arrays.binarySearch(dom[pin], vert[pin]))) {
+                abortAttempt = true;
+                return;
+            }
+            int depth = 0;
+            for (int s = pin + 1; s <= m && tx[s] >= 0; s++, depth++) {
+                if (!validStep(s, s)) {
+                    abandonDepth = depth;
+                    return;
+                }
+            }
+            if (pin + 1 <= m && tx[m] < 0) return;                  // still on the right side
+            for (int s = pin; s >= 1 && tx[s] >= 0; s--, depth++) {
+                if (!validStep(s, s - 1)) {
+                    abandonDepth = depth;
+                    return;
+                }
+            }
+        }
+
+        /** Transaction s is in its slot and the account it brought at position p is not eliminated. */
+        private boolean validStep(int s, int p) {
+            if (Arrays.binarySearch(slots[s], tx[s]) < 0) return false;
+            int idx = Arrays.binarySearch(dom[p], vert[p]);
+            return idx >= 0 && !rejected[p].get(idx);
+        }
+
+        /** After returning from a deeper level: whether this frame continues its loop. */
+        private boolean resume(int depth) {
+            if (stopped || abortAttempt) return false;
+            if (abandonDepth < 0) return true;
+            if (abandonDepth < depth) return false;
+            if (abandonDepth == depth) abandonDepth = -1;
+            return true;
+        }
+
         /** Choose transaction s (from position s-1 to s) for s = pin+1 .. m, then go left. */
         private boolean right(int s, int pin) {
             if (s > m) return left(pin);
             final double theta = params.theta();
+            final int depth = s - pin - 1;
             int[] range = g.outByLabel(vert[s - 1], elab[s - 1]);
             if (s - 1 > pin) {                          // intermediate position whose arrival is known
                 double a = g.amount(tx[s - 1]);
@@ -683,6 +875,7 @@ public final class ChainMiner {
             int tp = pos(s);
             for (int i = range[0]; i < range[1]; i++) {
                 int e = g.outSlot(i);
+                if (!examine(depth)) return false;
                 if (allowed != null && Arrays.binarySearch(allowed[s], e) < 0) continue;
                 if (++steps > budget) return false;
                 int t = g.target(e);
@@ -693,6 +886,7 @@ public final class ChainMiner {
                 if (right(s + 1, pin)) return true;
                 tx[s] = -1;
                 if (assign) vert[tp] = -1;
+                if (!resume(depth)) return false;
             }
             return false;
         }
@@ -701,6 +895,7 @@ public final class ChainMiner {
         private boolean left(int s) {
             if (s < 1) return true;
             final double theta = params.theta();
+            final int depth = (m - pin) + (pin - s);
             int[] range = g.inByLabel(vert[s], elab[s - 1]);
             if (s <= m - 1 && tx[s + 1] >= 0) {        // position s is intermediate; what leaves it is known
                 double b = g.amount(tx[s + 1]);
@@ -709,6 +904,7 @@ public final class ChainMiner {
             int fp = s - 1;
             for (int i = range[0]; i < range[1]; i++) {
                 int e = g.inSlot(i);
+                if (!examine(depth)) return false;
                 if (allowed != null && Arrays.binarySearch(allowed[s], e) < 0) continue;
                 if (++steps > budget) return false;
                 int f = g.source(e);
@@ -719,8 +915,15 @@ public final class ChainMiner {
                 if (left(s - 1)) return true;
                 tx[s] = -1;
                 if (assign) vert[fp] = -1;
+                if (!resume(depth)) return false;
             }
             return false;
+        }
+
+        /** Checks only: every assigned level is in its slot with a non-eliminated account (note 07b, check 12). */
+        private void checkPrefix() {
+            for (int s = pin + 1; s <= m && tx[s] >= 0; s++) if (!validStep(s, s)) counters.invalidExpansions++;
+            for (int s = pin; s >= 1 && tx[s] >= 0; s--) if (!validStep(s, s - 1)) counters.invalidExpansions++;
         }
 
         private boolean admissible(int p, int v) {

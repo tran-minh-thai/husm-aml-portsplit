@@ -176,6 +176,7 @@ class ChainMinerTest {
         int longCompared = 0;
         int boundaryRuns = 0;
         long failuresChecked = 0;
+        long lazySwitches = 0;
         for (int it = 0; it < 3000; it++) {
             Instance x = randomInstance(rnd);
             double theta = THETAS[it % THETAS.length];
@@ -191,6 +192,7 @@ class ChainMinerTest {
             ChainMiner miner = new ChainMiner(x.graph(), new ChainMiner.Params(theta, minSupport, maxLength, minCycle,
                     true)).marked(marked).keepImages(true).dfsBudget(it % 2 == 0 ? 0 : ChainMiner.DFS_BUDGET).consistency(it % 3 != 0)
                     .consistencyFrom(2 + (it / 3) % 4).filterMode(new String[] {"auto", "indexed", "sorted"}[(it / 5) % 3]).checkFailures(true);
+            if ((it / 7) % 2 == 0) miner.lazy(LAMBDAS[(it / 14) % LAMBDAS.length]).checkLazy(true);
             Map<String, ChainMiner.Result> got = new HashMap<>();
             for (ChainMiner.Result r : miner.mine()) got.put(r.pattern().key(), r);
             Map<String, TreeSet<Integer>> roles = new HashMap<>();
@@ -222,6 +224,8 @@ class ChainMinerTest {
             miner.accountsByRole().forEach((k, b) -> gotRoles.put(k, toSet(b.stream().toArray())));
             assertEquals(roles, gotRoles, "accounts by role, instance " + it);
             assertEquals(0, miner.counters().failuresWithoutWalk, "failed search with no conserving walk, instance " + it);
+            assertEquals(0, miner.counters().invalidExpansions, "expansion of an invalid level after a lazy switch, instance " + it);
+            lazySwitches += miner.counters().lazySwitches;
             failuresChecked += miner.counters().failuresChecked;
             graphs++;
             if (theta == 0.25) boundaryRuns++;
@@ -231,6 +235,8 @@ class ChainMinerTest {
                 + " %d runs at theta 0.25, %d failed searches checked for a walk%n", graphs, compared, closedCompared,
                 longCompared, boundaryRuns, failuresChecked);
         assertTrue(failuresChecked > 100, "failed searches checked: " + failuresChecked);
+        System.out.printf("lazy switches in the reference comparison: %d%n", lazySwitches);
+        assertTrue(lazySwitches > 100, "lazy switches: " + lazySwitches);
         assertTrue(compared > 2000, "patterns compared: " + compared);
         assertTrue(closedCompared > 100, "closed chains compared: " + closedCompared);
         assertTrue(longCompared > 300, "chains of length >= 3 compared: " + longCompared);
@@ -267,6 +273,71 @@ class ChainMinerTest {
         System.out.printf("slot inheritance: %d candidates, %d consistent slot transactions checked%n", candidates, consistent);
         assertTrue(candidates > 2000, "candidates checked: " + candidates);
         assertTrue(consistent > 5000, "consistent slot transactions checked: " + consistent);
+    }
+
+    static final double[] LAMBDAS = {0.0, 0.25, 1.0, 4.0, Double.POSITIVE_INFINITY};
+
+    private static Map<String, long[]> costs(ChainMiner miner) {
+        Map<String, long[]> out = new HashMap<>();
+        for (int i = 0; i < miner.counters().candidateKeys.size(); i++) {
+            out.put(miner.counters().candidateKeys.get(i), miner.counters().candidateCosts.get(i));
+        }
+        return out;
+    }
+
+    /**
+     * The inequalities of the lazy-filter analysis, per open-chain candidate: lazy with lambda 0 costs exactly what
+     * filtering first costs and lambda infinity exactly what never filtering costs; filtering first examines no more
+     * transactions than not filtering and visits no more steps (early stop); and the lazy run with the a priori budget
+     * stays within max(2, 1 + k) times the better of the two, plus one, with k = filter cost / a priori size.
+     */
+    @Test
+    void lazyFilteringMeetsItsBoundsOnEveryOpenCandidate() {
+        Random rnd = new Random(20261017L);
+        int compared = 0;
+        int switched = 0;
+        double worst = 0;
+        for (int it = 0; it < 1500; it++) {
+            Instance x = randomInstance(rnd);
+            ChainMiner.Params p = new ChainMiner.Params(THETAS[it % 4], 1 + rnd.nextInt(2), 3 + rnd.nextInt(2), 2, true);
+            Map<String, long[]> n = costs(run(x, p, m -> m.consistency(false)));
+            Map<String, long[]> f = costs(run(x, p, m -> m));
+            Map<String, long[]> l0 = costs(run(x, p, m -> m.lazy(0)));
+            Map<String, long[]> linf = costs(run(x, p, m -> m.lazy(Double.POSITIVE_INFINITY)));
+            Map<String, long[]> l1 = costs(run(x, p, m -> m.lazy(1)));
+            for (Map.Entry<String, long[]> e : f.entrySet()) {
+                String key = e.getKey();
+                if (!key.startsWith("O")) continue;                        // open chains only
+                long[] cf = e.getValue();
+                long[] cn = n.get(key);
+                assertArrayEquals(new long[] {cf[0], cf[1], cf[5], cf[6]}, new long[] {l0.get(key)[0], l0.get(key)[1],
+                        l0.get(key)[5], l0.get(key)[6]}, "lambda 0 against filtering first, " + key + ", instance " + it);
+                assertArrayEquals(new long[] {cn[0], cn[1], cn[5], cn[6]}, new long[] {linf.get(key)[0], linf.get(key)[1],
+                        linf.get(key)[5], linf.get(key)[6]}, "lambda infinity against not filtering, " + key + ", instance " + it);
+                assertTrue(cf[0] <= cn[0], "filtering examined more transactions, " + key + ", instance " + it);
+                assertTrue(cf[5] <= cn[5], "filtering visited more steps, " + key + ", instance " + it);
+                long[] cl = l1.get(key);
+                long apriori = cl[4] > 0 ? cl[4] : 0;
+                if (apriori == 0) continue;
+                double k = (double) cf[1] / apriori;
+                double opt = Math.min(cn[0], cf[1] + cf[0]);
+                double lazyCost = cl[0] + cl[1];
+                assertTrue(lazyCost <= Math.max(2, 1 + k) * opt + 1, "lazy bound, " + key + ", instance " + it + ": "
+                        + lazyCost + " > " + Math.max(2, 1 + k) + " * " + opt + " + 1");
+                if (opt > 0) worst = Math.max(worst, lazyCost / opt);
+                compared++;
+                if (cl[3] == 1) switched++;
+            }
+        }
+        System.out.printf("lazy bounds: %d open candidates compared, %d switched, worst lazy / best %.3f%n", compared, switched, worst);
+        assertTrue(compared > 1000 && switched > 100, compared + " compared, " + switched + " switched");
+    }
+
+    private static ChainMiner run(Instance x, ChainMiner.Params p, java.util.function.UnaryOperator<ChainMiner> setup) {
+        ChainMiner m = setup.apply(new ChainMiner(x.graph(), p).recordCandidates(true).checkLazy(true));
+        m.mine();
+        assertEquals(0, m.counters().invalidExpansions, "invalid expansion after a lazy switch");
+        return m;
     }
 
     static TreeSet<Integer> toSet(int[] a) {
