@@ -1,0 +1,28 @@
+unmodified copy: pass
+fault 1: caught - enumerator counts unmarked accounts as marked
+fault 2: caught - enumerator writes marked counts to the wrong positions
+fault 3: caught - lower conservation bound made strict when extending to the right
+fault 4: caught - upper conservation bound made strict when extending to the left
+fault 5: caught - accounts of an occurrence no longer required to be distinct
+fault 6: caught - a closed chain may end at any account instead of its origin
+fault 7: caught - support taken as the largest image set instead of the smallest
+fault 8: caught - join takes the new transaction label from the wrong chain
+fault 9: caught - early stop discards chains whose support equals the threshold
+fault 10: caught - conservation at the last intermediate account skipped in the leftward search
+fault 11: caught - conservation skipped at the first intermediate account reached when extending to the right
+fault 12: caught - transactions sorted by decreasing amount, so the range search reads the wrong slots
+fault 13: caught - merge step of the sort reversed, so accounts with many transactions are out of order
+fault 14: caught - the first account of a chain reported as intermediate
+fault 15: caught - marked counts count the unmarked accounts
+fault 16: caught - forward consistency drops transactions at the lower conservation bound
+fault 17: caught - backward consistency drops transactions at the upper conservation bound
+fault 18: caught - closed-chain consistency filters the returning transaction by its source instead of its target
+fault 19: caught - local propagation of a closed chain expands leftwards with the wrong transaction label
+fault 20: caught - enumeration baseline may revisit the second account of an occurrence
+fault 21: caught - enumeration baseline makes the lower conservation bound strict
+fault 22: caught - the anchored rule compares with the previous transaction instead of the first
+fault 23: caught - the enumeration baseline reports the first account of a chain as intermediate
+fault 24: NOT LANDED (2 matches) - leftward local propagation makes the upper conservation bound strict
+fault 25: NOT LANDED (2 matches) - rightward local propagation makes the lower conservation bound strict
+
+23 of 25 faults caught; 0 survived; 2 did not land

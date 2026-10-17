@@ -1,0 +1,1 @@
+random graphs: 200; (chain, threshold) cells compared by length: {1: 771, 2: 610, 3: 389, 4: 199}, total 1969; disagreements: 0
