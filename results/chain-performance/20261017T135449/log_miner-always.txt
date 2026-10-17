@@ -1,0 +1,23 @@
+graph LI-Small_S.tg: 576781 accounts, 6119572 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=2 filter_impl=auto
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=189371 found=185603 failed=3768 budget_fallbacks=0 local_rejections=0 early_stops=1
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 0 closed
+filter ops length 2: 412204835
+filter ops length 3: 176666371
+filter ops length 4: 26757346
+filter ops length 5: 6100423
+examined transactions length 2: 1759152
+examined transactions length 3: 712249
+examined transactions length 4: 1213082
+examined transactions length 5: 3291323
+filter auto passes: indexed=97 sorted=5
+filter elapsed ms length 2: 2250 (machine-dependent)
+filter elapsed ms length 3: 916 (machine-dependent)
+filter elapsed ms length 4: 159 (machine-dependent)
+filter elapsed ms length 5: 38 (machine-dependent)
+patterns written: 7 -> patterns_miner-always.tsv
+mining elapsed ms: 4575 (machine-dependent)
