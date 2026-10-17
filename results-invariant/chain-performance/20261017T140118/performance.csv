@@ -1,0 +1,5 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+sweden_100K_easy,A,0.2,10,5,3,48g,miner,ok,19b2df30d66542e21fb75654716f51cfe6805b691f6d6fb935f6a647898872a2,279228,256675,13,10727561,872472,9855089
+sweden_100K_easy,A,0.2,10,5,3,48g,miner-always,ok,19b2df30d66542e21fb75654716f51cfe6805b691f6d6fb935f6a647898872a2,279228,256675,501,973085,870186,102899
+sweden_100K_easy,A,0.2,10,5,3,48g,miner-no-filter,ok,19b2df30d66542e21fb75654716f51cfe6805b691f6d6fb935f6a647898872a2,279228,256675,0,10728376,872530,9855846
+sweden_100K_easy,A,0.2,10,5,3,48g,enumerate,ok,19b2df30d66542e21fb75654716f51cfe6805b691f6d6fb935f6a647898872a2,,,,,,

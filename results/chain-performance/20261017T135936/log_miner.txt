@@ -1,0 +1,19 @@
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4 filter_impl=auto
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=957031 found=457478 failed=499553 budget_fallbacks=614 local_rejections=570 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+filter ops length 4: 298193985
+filter ops length 5: 308023347
+examined transactions length 2: 716552
+examined transactions length 3: 13760243
+examined transactions length 4: 18532591
+examined transactions length 5: 41090967
+filter auto passes: indexed=152 sorted=106
+filter elapsed ms length 4: 1778 (machine-dependent)
+filter elapsed ms length 5: 1632 (machine-dependent)
+patterns written: 8 -> patterns_miner.tsv
+mining elapsed ms: 7344 (machine-dependent)
