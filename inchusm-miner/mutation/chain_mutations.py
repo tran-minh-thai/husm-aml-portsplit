@@ -82,9 +82,14 @@ FAULTS = [
     (ENUM, "for (int i = 1; i < m; i++) a.images[i].forEach(mid::set);",
      "for (int i = 0; i < m; i++) a.images[i].forEach(mid::set);",
      "the enumeration baseline reports the first account of a chain as intermediate"),
-    (CONS, "a -> (1 + theta) * a >= b", "a -> (1 + theta) * a > b",
+    (CONS, "g.inByLabel(g.source(f), lab), a -> (1 + theta) * a >= b", "g.inByLabel(g.source(f), lab), a -> (1 + theta) * a > b",
      "leftward local propagation makes the upper conservation bound strict"),
-    (CONS, "b -> b >= lo", "b -> b > lo", "rightward local propagation makes the lower conservation bound strict"),
+    (CONS, "g.outByLabel(g.target(f), lab), b -> b >= lo", "g.outByLabel(g.target(f), lab), b -> b > lo",
+     "rightward local propagation makes the lower conservation bound strict"),
+    (CONS, "g.inByLabel(g.source(e), prevLab), a -> (1 + theta) * a >= b", "g.inByLabel(g.source(e), prevLab), a -> (1 + theta) * a > b",
+     "the indexed forward pass makes the upper conservation bound strict"),
+    (CONS, "g.outByLabel(g.target(e), nextLab), b -> b >= lo", "g.outByLabel(g.target(e), nextLab), b -> b > lo",
+     "the indexed backward pass makes the lower conservation bound strict"),
 ]
 
 
