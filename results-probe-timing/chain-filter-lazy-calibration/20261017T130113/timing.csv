@@ -1,0 +1,4 @@
+dataset,labeling,engine,status,mining_ms,wall_s,peak_bytes,limit_s,heap
+LI-Medium,A,miner-lazy-4,ok,65805,76.925,6233047040,7200.0,24g
+LI-Medium,A,miner-lazy-16,ok,69128,79.719,5752832000,7200.0,24g
+LI-Medium,A,miner-lazy-64,ok,85339,96.105,6222495744,7200.0,24g

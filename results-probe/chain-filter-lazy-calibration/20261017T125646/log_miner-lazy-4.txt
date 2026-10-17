@@ -1,0 +1,27 @@
+graph HI-Medium_A.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=2 filter_impl=auto
+candidates=3658 pruned_by_domain=3017 pruned_by_consistency=113 searches=35489127 found=1135915 failed=34353212 budget_fallbacks=0 local_rejections=0 early_stops=15
+length 1: 6 open, 0 closed
+length 2: 28 open, 0 closed
+length 3: 123 open, 2 closed
+length 4: 293 open, 1 closed
+length 5: 59 open, 1 closed
+filter ops length 2: 135626167
+filter ops length 3: 168073752
+filter ops length 4: 261703233
+filter ops length 5: 12400447
+examined transactions length 2: 308653185
+examined transactions length 3: 188773683
+examined transactions length 4: 1160607564
+examined transactions length 5: 83109135
+lazy: lambda=4 switches=100
+lazy overhead length 2: 163545560
+lazy overhead length 3: 33335428
+lazy overhead length 4: 6945502
+lazy overhead length 5: 671793
+filter auto passes: indexed=1244 sorted=230
+[timing redacted: machine-dependent]
+[timing redacted: machine-dependent]
+[timing redacted: machine-dependent]
+patterns written: 513 -> patterns_miner-lazy-4.tsv
+[timing redacted: machine-dependent]
