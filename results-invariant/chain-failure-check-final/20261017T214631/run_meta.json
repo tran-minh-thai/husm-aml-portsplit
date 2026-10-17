@@ -1,0 +1,65 @@
+{
+  "run_id": "20261017T214631",
+  "note": "Exp. 1 at the final commit: slot filter checked against conserving walks (failed searches and removed accounts), filter from length 4, us_100K_difficult labeling A",
+  "command": [
+    "java",
+    "-Xmx24g",
+    "-cp",
+    "inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar",
+    "edu.huflit.inchusm.chain.ChainMain",
+    "--graph",
+    "datasets/chain/us_100K_difficult_A.tg",
+    "--theta",
+    "0.2",
+    "--min-support",
+    "10",
+    "--max-length",
+    "5",
+    "--min-cycle",
+    "3",
+    "--consistency-from",
+    "4",
+    "--out",
+    "/dev/null",
+    "--check-failures"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 3,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-17T21:46:31",
+  "git_commit": "879a8ed006d7be59fc9f152dcc78f84347371d8e",
+  "git_tree": "clean (66 untracked result records)",
+  "code_sha256": "40f2204526cabe3ffbb32ea0a01fa2bdb1cc8d5d74247d7dcabe8450b25c8dbc",
+  "code_files": 126,
+  "engine_jar_sha256": "cc4fd5d7748f9066c088d204e37dcefe9828448838530c563f471a14cec6a336",
+  "data": [
+    {
+      "path": "datasets/chain/us_100K_difficult_A.tg",
+      "bytes": 57626864,
+      "sha256": "ee7fd20cd57c68f6a9c755c2afc54c8a3dcdf3625c476df8025e0deb9bc7987d"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}

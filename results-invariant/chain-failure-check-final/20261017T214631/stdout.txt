@@ -1,0 +1,21 @@
+graph us_100K_difficult_A.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4 filter_impl=auto
+candidates=198009 pruned_by_domain=161046 pruned_by_consistency=3143 searches=8933435 found=1729116 failed=7204319 budget_fallbacks=0 local_rejections=0 early_stops=462
+length 1: 100 open, 0 closed
+length 2: 1000 open, 0 closed
+length 3: 10000 open, 0 closed
+length 4: 22249 open, 0 closed
+length 5: 9 open, 0 closed
+filter ops length 4: 2658728893
+filter ops length 5: 985948
+examined transactions length 2: 96135449
+examined transactions length 3: 396216936
+examined transactions length 4: 76374754
+examined transactions length 5: 37264
+filter auto passes: indexed=76498 sorted=228517
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+failure check (open chains): checked=3417 without_walk=0
+rejection check (open chains): checked=2243087 with_walk=0
+patterns written: 33358 -> null
+[timing redacted: machine-dependent, not kept in this tree]

@@ -1,0 +1,31 @@
+unmodified copy: pass
+fault 1: caught - forward pass of slot consistency removes too much (halved tolerance)
+fault 2: caught - enumerator counts unmarked accounts as marked
+fault 3: caught - enumerator writes marked counts to the wrong positions
+fault 4: caught - lower conservation bound made strict when extending to the right
+fault 5: caught - upper conservation bound made strict when extending to the left
+fault 6: caught - accounts of an occurrence no longer required to be distinct
+fault 7: caught - a closed chain may end at any account instead of its origin
+fault 8: caught - support taken as the largest image set instead of the smallest
+fault 9: caught - join takes the new transaction label from the wrong chain
+fault 10: caught - early stop discards chains whose support equals the threshold
+fault 11: caught - conservation at the last intermediate account skipped in the leftward search
+fault 12: caught - conservation skipped at the first intermediate account reached when extending to the right
+fault 13: caught - transactions sorted by decreasing amount, so the range search reads the wrong slots
+fault 14: caught - merge step of the sort reversed, so accounts with many transactions are out of order
+fault 15: caught - the first account of a chain reported as intermediate
+fault 16: caught - marked counts count the unmarked accounts
+fault 17: caught - forward consistency drops transactions at the lower conservation bound
+fault 18: caught - backward consistency drops transactions at the upper conservation bound
+fault 19: caught - closed-chain consistency filters the returning transaction by its source instead of its target
+fault 20: caught - local propagation of a closed chain expands leftwards with the wrong transaction label
+fault 21: caught - enumeration baseline may revisit the second account of an occurrence
+fault 22: caught - enumeration baseline makes the lower conservation bound strict
+fault 23: caught - the anchored rule compares with the previous transaction instead of the first
+fault 24: caught - the enumeration baseline reports the first account of a chain as intermediate
+fault 25: caught - leftward local propagation makes the upper conservation bound strict
+fault 26: caught - rightward local propagation makes the lower conservation bound strict
+fault 27: caught - the indexed forward pass makes the upper conservation bound strict
+fault 28: caught - the indexed backward pass makes the lower conservation bound strict
+
+28 of 28 faults caught; 0 survived; 0 did not land
