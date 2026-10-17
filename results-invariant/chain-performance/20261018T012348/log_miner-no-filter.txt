@@ -1,0 +1,14 @@
+graph HI-Large_S.tg: 1927631 accounts, 168807013 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=false consistency_from=4 filter_impl=auto
+candidates=8 pruned_by_domain=0 pruned_by_consistency=0 searches=8261164 found=2707073 failed=5554091 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 1 closed
+length 4: 1 open, 1 closed
+length 5: 1 open, 1 closed
+examined transactions length 2: 193323215
+examined transactions length 3: 34118056720
+examined transactions length 4: 85611073670
+examined transactions length 5: 322328915917
+patterns written: 8 -> patterns_miner-no-filter.tsv
+[timing redacted: machine-dependent]

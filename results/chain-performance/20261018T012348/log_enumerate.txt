@@ -1,0 +1,2 @@
+graph HI-Large_S.tg: 1927631 accounts, 168807013 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=5 min_cycle=3 closed_chains=true consistency=true consistency_from=4 filter_impl=auto
