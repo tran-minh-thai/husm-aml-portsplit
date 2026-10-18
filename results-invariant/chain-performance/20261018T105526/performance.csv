@@ -1,0 +1,5 @@
+dataset,labeling,theta,tau,max_length,min_cycle,heap,engine,status,table_sha256,candidates,pruned_by_domain,pruned_by_consistency,searches,found,failed
+LI-Large,S,0.2,10,5,3,48g,miner,ok,c649bf5b41cbc66e6f17124eac02ba7d2692b738f124909e7c25b84eec142f46,8,0,0,6747501,2499912,4247589
+LI-Large,S,0.2,10,5,3,48g,miner-always,ok,c649bf5b41cbc66e6f17124eac02ba7d2692b738f124909e7c25b84eec142f46,8,0,0,3293809,2499912,793897
+LI-Large,S,0.2,10,5,3,48g,miner-no-filter,ok,c649bf5b41cbc66e6f17124eac02ba7d2692b738f124909e7c25b84eec142f46,8,0,0,7731934,2499912,5232022
+LI-Large,S,0.2,10,5,3,48g,enumerate,timeout,,,,,,,
