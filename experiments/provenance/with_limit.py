@@ -6,6 +6,10 @@ Exit status: the command's own, or 124 when the limit was reached (as GNU timeou
 process group (session on POSIX, new process group on Windows), so a Java child started by a Python driver is
 stopped with it rather than left running. Meant to sit between run_and_record.py and the command, so a run that
 hits the limit still leaves a record, with exit code 124 and the line printed below.
+
+The limit is measured on the monotonic clock of subprocess.wait, which does not advance while the machine sleeps:
+on a laptop that sleeps during a run, the limit counts awake time, so the wall-clock duration can be longer.
+Keep the machine awake (caffeinate -i on macOS) for runs whose limit should mean wall-clock time.
 """
 from __future__ import annotations
 
