@@ -1,0 +1,66 @@
+input sweden_100K_easy_S.tg sha256 1f316d932295a210939c85c9df57f27da0741f0b85fe56f07ba2db6f7a6cc901 (1037081 transactions, 99995 accounts)
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 32207 laundering accounts
+
+[miner, theta=0.2]
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=10 max_length=6 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 32207
+candidates=6 pruned_by_domain=0 pruned_by_consistency=0 searches=629954 found=569025 failed=60929 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+length 6: 1 open, 0 closed
+filter ops length 4: 123559212
+filter ops length 5: 134328359
+filter ops length 6: 142199098
+examined transactions length 2: 716552
+examined transactions length 3: 1374190
+examined transactions length 4: 1241370
+examined transactions length 5: 1769489
+examined transactions length 6: 3337779
+filter auto passes: indexed=48 sorted=0
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 6 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=6 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 32207
+candidates=6 pruned_by_domain=0 pruned_by_consistency=0 searches=823243 found=794640 failed=28603 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+length 6: 1 open, 0 closed
+filter ops length 4: 182039440
+filter ops length 5: 222594760
+filter ops length 6: 261933391
+examined transactions length 2: 540302
+examined transactions length 3: 1116753
+examined transactions length 4: 2742352
+examined transactions length 5: 17776447
+examined transactions length 6: 151140582
+filter auto passes: indexed=48 sorted=0
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 6 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+sweden_100K_easy labeling S: tau=10, max length 6, 32207 marked accounts
+         dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+sweden_100K_easy        S       2                   6861  72633       27736 0.3819 1.0000  76499       28833 0.3769 1.0000 1.0213
+sweden_100K_easy        S       3                   3184  68882       26872 0.3901 1.0000  75255       28821 0.3830 1.0000 1.0306
+sweden_100K_easy        S       4                   3166  65163       25964 0.3984 1.0000  74155       28786 0.3882 1.0000 1.0439
+sweden_100K_easy        S       5                   2806  62003       25068 0.4043 1.0000  73437       28753 0.3915 1.0000 1.0548
+sweden_100K_easy        S       6                   2442  59477       24305 0.4086 1.0000  72942       28719 0.3937 1.0000 1.0641
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
