@@ -1,0 +1,16 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex us_100K_difficult: longest planted chain per attempt (transactions)
+          dataset   kind  length  attempts  share_at_most  attempts_of_kind
+us_100K_difficult closed       5         9         0.3000                30
+us_100K_difficult closed       6         2         0.3667                30
+us_100K_difficult closed       7         4         0.5000                30
+us_100K_difficult closed       8         8         0.7667                30
+us_100K_difficult closed       9         6         0.9667                30
+us_100K_difficult closed      10         1         1.0000                30
+us_100K_difficult   open       2        30         0.5000                60
+us_100K_difficult   open       4         9         0.6500                60
+us_100K_difficult   open       5         2         0.6833                60
+us_100K_difficult   open       6         4         0.7500                60
+us_100K_difficult   open       7         8         0.8833                60
+us_100K_difficult   open       8         6         0.9833                60
+us_100K_difficult   open       9         1         1.0000                60

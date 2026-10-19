@@ -1,0 +1,14 @@
+dataset,kind,length,attempts,share_at_most,attempts_of_kind
+us_100K_difficult,closed,5,9,0.3,30
+us_100K_difficult,closed,6,2,0.36666666666666664,30
+us_100K_difficult,closed,7,4,0.5,30
+us_100K_difficult,closed,8,8,0.7666666666666667,30
+us_100K_difficult,closed,9,6,0.9666666666666667,30
+us_100K_difficult,closed,10,1,1.0,30
+us_100K_difficult,open,2,30,0.5,60
+us_100K_difficult,open,4,9,0.65,60
+us_100K_difficult,open,5,2,0.6833333333333333,60
+us_100K_difficult,open,6,4,0.75,60
+us_100K_difficult,open,7,8,0.8833333333333333,60
+us_100K_difficult,open,8,6,0.9833333333333333,60
+us_100K_difficult,open,9,1,1.0,60

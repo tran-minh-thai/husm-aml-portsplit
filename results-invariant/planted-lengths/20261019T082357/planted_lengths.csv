@@ -1,0 +1,15 @@
+dataset,kind,length,attempts,share_at_most,attempts_of_kind
+sweden_100K_easy,closed,5,88,0.18448637316561844,477
+sweden_100K_easy,closed,6,69,0.32914046121593293,477
+sweden_100K_easy,closed,7,72,0.480083857442348,477
+sweden_100K_easy,closed,8,88,0.6645702306079665,477
+sweden_100K_easy,closed,9,72,0.8155136268343816,477
+sweden_100K_easy,closed,10,88,1.0,477
+sweden_100K_easy,open,2,497,0.49849548645937813,997
+sweden_100K_easy,open,3,5,0.5035105315947843,997
+sweden_100K_easy,open,4,92,0.5957873620862588,997
+sweden_100K_easy,open,5,75,0.6710130391173521,997
+sweden_100K_easy,open,6,75,0.7462387161484454,997
+sweden_100K_easy,open,7,92,0.8385155466399198,997
+sweden_100K_easy,open,8,72,0.9107321965897693,997
+sweden_100K_easy,open,9,89,1.0,997

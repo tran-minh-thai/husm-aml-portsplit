@@ -1,0 +1,25 @@
+amlworld HI-Medium: longest planted chain per attempt (transactions)
+  dataset   kind  length  attempts  share_at_most  attempts_of_kind
+HI-Medium closed       2       104         0.2834               367
+HI-Medium closed       3        33         0.3733               367
+HI-Medium closed       4        27         0.4469               367
+HI-Medium closed       5        23         0.5095               367
+HI-Medium closed       6        24         0.5749               367
+HI-Medium closed       7        27         0.6485               367
+HI-Medium closed       8        20         0.7030               367
+HI-Medium closed       9        22         0.7629               367
+HI-Medium closed      10        14         0.8011               367
+HI-Medium closed      11        26         0.8719               367
+HI-Medium closed      12        23         0.9346               367
+HI-Medium closed      13        24         1.0000               367
+HI-Medium   open       2       528         0.5350               987
+HI-Medium   open       3        61         0.5968               987
+HI-Medium   open       4        55         0.6525               987
+HI-Medium   open       5        48         0.7011               987
+HI-Medium   open       6        50         0.7518               987
+HI-Medium   open       7        35         0.7872               987
+HI-Medium   open       8        39         0.8267               987
+HI-Medium   open       9        38         0.8652               987
+HI-Medium   open      10        46         0.9119               987
+HI-Medium   open      11        49         0.9615               987
+HI-Medium   open      12        38         1.0000               987

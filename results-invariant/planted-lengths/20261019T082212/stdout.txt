@@ -1,0 +1,25 @@
+amlworld LI-Medium: longest planted chain per attempt (transactions)
+  dataset   kind  length  attempts  share_at_most  attempts_of_kind
+LI-Medium closed       2        11         0.2391                46
+LI-Medium closed       3         6         0.3696                46
+LI-Medium closed       4         1         0.3913                46
+LI-Medium closed       5         3         0.4565                46
+LI-Medium closed       6         4         0.5435                46
+LI-Medium closed       7         5         0.6522                46
+LI-Medium closed       8         2         0.6957                46
+LI-Medium closed       9         3         0.7609                46
+LI-Medium closed      10         2         0.8043                46
+LI-Medium closed      11         7         0.9565                46
+LI-Medium closed      12         1         0.9783                46
+LI-Medium closed      13         1         1.0000                46
+LI-Medium   open       2       101         0.5941               170
+LI-Medium   open       3         8         0.6412               170
+LI-Medium   open       4         9         0.6941               170
+LI-Medium   open       5         8         0.7412               170
+LI-Medium   open       6         7         0.7824               170
+LI-Medium   open       7         6         0.8176               170
+LI-Medium   open       8         7         0.8588               170
+LI-Medium   open       9         3         0.8765               170
+LI-Medium   open      10        12         0.9471               170
+LI-Medium   open      11         3         0.9647               170
+LI-Medium   open      12         6         1.0000               170

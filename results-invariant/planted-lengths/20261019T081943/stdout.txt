@@ -1,0 +1,22 @@
+amlworld HI-Small: longest planted chain per attempt (transactions)
+ dataset   kind  length  attempts  share_at_most  attempts_of_kind
+HI-Small closed       2        14         0.2593                54
+HI-Small closed       3         9         0.4259                54
+HI-Small closed       4         7         0.5556                54
+HI-Small closed       5         3         0.6111                54
+HI-Small closed       6         1         0.6296                54
+HI-Small closed       7         5         0.7222                54
+HI-Small closed       8         4         0.7963                54
+HI-Small closed      10         6         0.9074                54
+HI-Small closed      11         4         0.9815                54
+HI-Small closed      12         1         1.0000                54
+HI-Small   open       2        74         0.5736               129
+HI-Small   open       3        11         0.6589               129
+HI-Small   open       4         4         0.6899               129
+HI-Small   open       5         3         0.7132               129
+HI-Small   open       6         7         0.7674               129
+HI-Small   open       7         5         0.8062               129
+HI-Small   open       8         7         0.8605               129
+HI-Small   open       9         8         0.9225               129
+HI-Small   open      10         7         0.9767               129
+HI-Small   open      11         3         1.0000               129

@@ -1,0 +1,60 @@
+{
+  "run_id": "20261019T085140",
+  "note": "tau sensitivity, HI-Medium, labeling S, tau 25, limit 2 h",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/provenance/with_limit.py",
+    "7200",
+    "--",
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_conservation_effect.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "HI-Medium",
+    "--labeling",
+    "S",
+    "--tau",
+    "25"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 6,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-19T08:51:40",
+  "git_commit": "94cd66a4d5b68e55fcc66d83684db05f978dad9a",
+  "git_tree": "clean (100 untracked result records)",
+  "code_sha256": "5fadc3256f89e4c230702a4d16384043c06401d4eedae2ea0f22eea09038744d",
+  "code_files": 129,
+  "engine_jar_sha256": "cc4fd5d7748f9066c088d204e37dcefe9828448838530c563f471a14cec6a336",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_S.tg",
+      "bytes": 1085071319,
+      "sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (105 untracked result records)"
+}

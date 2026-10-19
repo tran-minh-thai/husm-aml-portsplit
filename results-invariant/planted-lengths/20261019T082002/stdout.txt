@@ -1,0 +1,19 @@
+amlworld LI-Small: longest planted chain per attempt (transactions)
+ dataset   kind  length  attempts  share_at_most  attempts_of_kind
+LI-Small closed       2         2         0.1667                12
+LI-Small closed       3         2         0.3333                12
+LI-Small closed       4         2         0.5000                12
+LI-Small closed       7         1         0.5833                12
+LI-Small closed      10         1         0.6667                12
+LI-Small closed      11         2         0.8333                12
+LI-Small closed      13         2         1.0000                12
+LI-Small   open       2        25         0.5682                44
+LI-Small   open       3         3         0.6364                44
+LI-Small   open       4         2         0.6818                44
+LI-Small   open       5         1         0.7045                44
+LI-Small   open       6         3         0.7727                44
+LI-Small   open       7         2         0.8182                44
+LI-Small   open       9         1         0.8409                44
+LI-Small   open      10         4         0.9318                44
+LI-Small   open      11         1         0.9545                44
+LI-Small   open      12         2         1.0000                44

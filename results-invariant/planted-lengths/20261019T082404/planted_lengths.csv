@@ -1,0 +1,14 @@
+dataset,kind,length,attempts,share_at_most,attempts_of_kind
+sweden_100K_difficult,closed,5,6,0.2,30
+sweden_100K_difficult,closed,6,3,0.3,30
+sweden_100K_difficult,closed,7,11,0.6666666666666666,30
+sweden_100K_difficult,closed,8,4,0.8,30
+sweden_100K_difficult,closed,9,2,0.8666666666666667,30
+sweden_100K_difficult,closed,10,4,1.0,30
+sweden_100K_difficult,open,2,30,0.5,60
+sweden_100K_difficult,open,4,6,0.6,60
+sweden_100K_difficult,open,5,3,0.65,60
+sweden_100K_difficult,open,6,11,0.8333333333333334,60
+sweden_100K_difficult,open,7,4,0.9,60
+sweden_100K_difficult,open,8,2,0.9333333333333333,60
+sweden_100K_difficult,open,9,4,1.0,60

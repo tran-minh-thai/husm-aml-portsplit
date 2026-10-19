@@ -1,0 +1,17 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy: longest planted chain per attempt (transactions)
+         dataset   kind  length  attempts  share_at_most  attempts_of_kind
+sweden_100K_easy closed       5        88         0.1845               477
+sweden_100K_easy closed       6        69         0.3291               477
+sweden_100K_easy closed       7        72         0.4801               477
+sweden_100K_easy closed       8        88         0.6646               477
+sweden_100K_easy closed       9        72         0.8155               477
+sweden_100K_easy closed      10        88         1.0000               477
+sweden_100K_easy   open       2       497         0.4985               997
+sweden_100K_easy   open       3         5         0.5035               997
+sweden_100K_easy   open       4        92         0.5958               997
+sweden_100K_easy   open       5        75         0.6710               997
+sweden_100K_easy   open       6        75         0.7462               997
+sweden_100K_easy   open       7        92         0.8385               997
+sweden_100K_easy   open       8        72         0.9107               997
+sweden_100K_easy   open       9        89         1.0000               997

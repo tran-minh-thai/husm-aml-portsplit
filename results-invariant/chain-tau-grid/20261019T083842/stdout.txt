@@ -1,0 +1,56 @@
+input LI-Medium_S.tg sha256 08048a8677f6ba0cccdc3720f62ac6834879742b91c40c63a9573006495e9c66 (28752132 transactions, 1720017 accounts)
+ground truth and export agree on all 23510 laundering accounts
+
+[miner, theta=0.2]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=100 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 23510
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=3524886 found=616018 failed=2908868 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 145894913
+filter ops length 5: 29776561
+examined transactions length 2: 44683333
+examined transactions length 3: 48480544
+examined transactions length 4: 7586801
+examined transactions length 5: 31329370
+filter auto passes: indexed=20 sorted=8
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=100 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 23510
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=6619862 found=5610363 failed=1009499 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 10508927821
+filter ops length 5: 10166802648
+examined transactions length 2: 9606233
+examined transactions length 3: 78522282
+examined transactions length 4: 89204485
+examined transactions length 5: 137530565
+filter auto passes: indexed=16 sorted=12
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+LI-Medium labeling S: tau=100, max length 5, 23510 marked accounts
+  dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+LI-Medium        S       2                   1150 258385        7636 0.0296 0.9896 728786       16592 0.0228 1.0000 1.3072
+LI-Medium        S       3                    456  97436        3505 0.0360 0.9759 676103       16211 0.0240 1.0000 1.5189
+LI-Medium        S       4                    433  25959        1314 0.0506 0.9885 642983       15658 0.0244 1.0000 2.1361
+LI-Medium        S       5                    405   6071         682 0.1123 0.9728 620687       15149 0.0244 1.0000 5.0586
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): True; H12 (R with conservation >= half of R without): True
