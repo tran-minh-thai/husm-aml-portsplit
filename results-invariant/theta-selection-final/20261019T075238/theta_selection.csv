@@ -1,0 +1,5 @@
+dataset,theta,planted_pairs,planted_within,background_pairs,background_within
+sweden_100K_difficult,0.05,412,0.5509708737864077,200000,0.07317
+sweden_100K_difficult,0.1,412,0.7645631067961165,200000,0.134735
+sweden_100K_difficult,0.2,412,1.0,200000,0.25439
+sweden_100K_difficult,0.5,412,1.0,200000,0.57327

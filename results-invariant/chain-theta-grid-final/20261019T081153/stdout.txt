@@ -1,0 +1,25 @@
+graph us_100K_difficult_S.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.05 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=441938 found=325275 failed=116663 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 169114510
+filter ops length 5: 159830716
+examined transactions length 2: 1164907
+examined transactions length 3: 2617704
+examined transactions length 4: 1548147
+examined transactions length 5: 2245095
+filter auto passes: indexed=28 sorted=0
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.05.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+          dataset  theta  length  I_theta  I_inf  P_theta  P_inf     OR  R_theta  planted_intermediates
+us_100K_difficult 0.0500       2    67891  79340   0.0237 0.0230 1.0311   0.9314                    423
+us_100K_difficult 0.0500       3    56347  77608   0.0250 0.0235 1.0627   0.7213                    183
+us_100K_difficult 0.0500       4    46414  75971   0.0254 0.0240 1.0620   0.5847                    183
+us_100K_difficult 0.0500       5    38977  74683   0.0260 0.0244 1.0699   0.5170                    147

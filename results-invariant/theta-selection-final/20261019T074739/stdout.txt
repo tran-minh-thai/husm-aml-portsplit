@@ -1,0 +1,6 @@
+amlworld HI-Small: pairs at intermediate accounts within theta (planted: open chains of length 2; background: 200000 walks, 138430 discarded)
+ dataset  theta  planted_pairs  planted_within  background_pairs  background_within
+HI-Small 0.0500            887          0.5908            200000             0.0113
+HI-Small 0.1000            887          0.8253            200000             0.0227
+HI-Small 0.2000            887          0.9673            200000             0.0460
+HI-Small 0.5000            887          0.9966            200000             0.1234

@@ -1,0 +1,7 @@
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex us_100K_difficult: pairs at intermediate accounts within theta (planted: open chains of length 2; background: 200000 walks, 58736 discarded)
+          dataset  theta  planted_pairs  planted_within  background_pairs  background_within
+us_100K_difficult 0.0500            429          0.5734            200000             0.0668
+us_100K_difficult 0.1000            429          0.7716            200000             0.1246
+us_100K_difficult 0.2000            429          1.0000            200000             0.2408
+us_100K_difficult 0.5000            429          1.0000            200000             0.5567

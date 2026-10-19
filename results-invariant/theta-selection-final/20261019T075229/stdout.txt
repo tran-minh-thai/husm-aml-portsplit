@@ -1,0 +1,7 @@
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+amlgentex sweden_100K_easy: pairs at intermediate accounts within theta (planted: open chains of length 2; background: 200000 walks, 79306 discarded)
+         dataset  theta  planted_pairs  planted_within  background_pairs  background_within
+sweden_100K_easy 0.0500           6937          0.5334            200000             0.0723
+sweden_100K_easy 0.1000           6937          0.7534            200000             0.1318
+sweden_100K_easy 0.2000           6937          0.9988            200000             0.2518
+sweden_100K_easy 0.5000           6937          0.9991            200000             0.5692

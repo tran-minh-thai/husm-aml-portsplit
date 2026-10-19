@@ -1,0 +1,5 @@
+dataset,theta,planted_pairs,planted_within,background_pairs,background_within
+us_100K_difficult,0.05,429,0.5734265734265734,200000,0.06683
+us_100K_difficult,0.1,429,0.7715617715617715,200000,0.124605
+us_100K_difficult,0.2,429,1.0,200000,0.24083
+us_100K_difficult,0.5,429,1.0,200000,0.55675

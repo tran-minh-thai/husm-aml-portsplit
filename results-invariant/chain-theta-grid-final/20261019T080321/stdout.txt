@@ -1,0 +1,24 @@
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.05 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=3339005 found=247988 failed=3091017 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 12059448
+filter ops length 5: 5132768
+examined transactions length 2: 61555293
+examined transactions length 3: 20970240
+examined transactions length 4: 13350959
+examined transactions length 5: 2357376
+filter auto passes: indexed=24 sorted=4
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.05.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+  dataset  theta  length  I_theta  I_inf  P_theta  P_inf      OR  R_theta  planted_intermediates
+LI-Medium 0.0500       2   105013 728786   0.0341 0.0228  1.5172   0.6861                   1150
+LI-Medium 0.0500       3    15008 676103   0.0597 0.0240  2.5845   0.5899                    456
+LI-Medium 0.0500       4     1192 642983   0.2122 0.0244 10.7947   0.4388                    433
+LI-Medium 0.0500       5      215 620687   0.6512 0.0244 74.6147   0.3037                    405

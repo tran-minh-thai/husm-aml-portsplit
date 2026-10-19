@@ -1,0 +1,24 @@
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped)
+params: theta=0.05 min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=790138 found=53136 failed=737002 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 1609052
+filter ops length 5: 477923
+examined transactions length 2: 9791314
+examined transactions length 3: 2826764
+examined transactions length 4: 359728
+examined transactions length 5: 1652
+filter auto passes: indexed=25 sorted=3
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns_theta_0.05.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+ dataset  theta  length  I_theta  I_inf  P_theta  P_inf       OR  R_theta  planted_intermediates
+HI-Small 0.0500       2    23597 167183   0.0523 0.0269   1.9952   0.6879                    862
+HI-Small 0.0500       3     3278 154829   0.1184 0.0284   4.5911   0.5894                    341
+HI-Small 0.0500       4      353 147031   0.4703 0.0288  29.9753   0.4127                    315
+HI-Small 0.0500       5       98 141439   0.9592 0.0290 787.3847   0.2767                    300
