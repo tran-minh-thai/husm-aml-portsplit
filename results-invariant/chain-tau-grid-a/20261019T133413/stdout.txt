@@ -1,0 +1,35 @@
+input sweden_100K_easy_A.tg sha256 8c56530c0edf70e8ea5ef310a63ec4c1ae9a9b6d2465226e1d22240993e8912d (1037081 transactions, 99995 accounts)
+  rows 7,803,219; dropped 6,766,138 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 32207 laundering accounts
+
+[miner, theta=0.2]
+graph sweden_100K_easy_A.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=100 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 32207
+candidates=22584 pruned_by_domain=20712 pruned_by_consistency=0 searches=4380478 found=322667 failed=4057811 budget_fallbacks=0 local_rejections=0 early_stops=1
+length 1: 144 open, 0 closed
+length 2: 1727 open, 0 closed
+examined transactions length 2: 66922423
+patterns written: 1871 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph sweden_100K_easy_A.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=100 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 32207
+candidates=22608 pruned_by_domain=20736 pruned_by_consistency=0 searches=4214259 found=475535 failed=3738724 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 144 open, 0 closed
+length 2: 1728 open, 0 closed
+examined transactions length 2: 63760750
+patterns written: 1872 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+sweden_100K_easy labeling A: tau=100, max length 5, 32207 marked accounts
+         dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+sweden_100K_easy        A       2                   6861  72622       27736 0.3819 1.0000  76499       28833 0.3769 1.0000 1.0215
+sweden_100K_easy        A       3                   3184      0           0    NaN 0.0000      0           0    NaN 0.0000    NaN
+sweden_100K_easy        A       4                   3166      0           0    NaN 0.0000      0           0    NaN 0.0000    NaN
+sweden_100K_easy        A       5                   2806      0           0    NaN 0.0000      0           0    NaN 0.0000    NaN
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): None; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): None; H12 (R with conservation >= half of R without): True

@@ -1,0 +1,44 @@
+input us_100K_difficult_A.tg sha256 ee7fd20cd57c68f6a9c755c2afc54c8a3dcdf3625c476df8025e0deb9bc7987d (1766449 transactions, 100000 accounts)
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 1956 laundering accounts
+
+[miner, theta=0.2]
+graph us_100K_difficult_A.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=25 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 1956
+candidates=108912 pruned_by_domain=97869 pruned_by_consistency=0 searches=8239190 found=1091749 failed=7147441 budget_fallbacks=0 local_rejections=0 early_stops=54
+length 1: 100 open, 0 closed
+length 2: 1000 open, 0 closed
+length 3: 9889 open, 0 closed
+examined transactions length 2: 96135449
+examined transactions length 3: 388818286
+patterns written: 10989 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph us_100K_difficult_A.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=25 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 1956
+candidates=111100 pruned_by_domain=99977 pruned_by_consistency=5 searches=8820317 found=1406165 failed=7414152 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 100 open, 0 closed
+length 2: 1000 open, 0 closed
+length 3: 10000 open, 0 closed
+length 4: 18 open, 0 closed
+filter ops length 4: 4592107
+examined transactions length 2: 92035927
+examined transactions length 3: 294576916
+examined transactions length 4: 211047
+filter auto passes: indexed=1 sorted=161
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 11118 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+us_100K_difficult labeling A: tau=25, max length 5, 1956 marked accounts
+          dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+us_100K_difficult        A       2                    423  75508        1771 0.0235 1.0000  79340        1825 0.0230 1.0000 1.0201
+us_100K_difficult        A       3                    183  71864        1741 0.0242 1.0000  77608        1825 0.0235 1.0000 1.0310
+us_100K_difficult        A       4                    183      0           0    NaN 0.0000   1220          72 0.0590 0.0328    NaN
+us_100K_difficult        A       5                    147      0           0    NaN 0.0000      0           0    NaN 0.0000    NaN
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): None; H12 (R with conservation >= half of R without): False

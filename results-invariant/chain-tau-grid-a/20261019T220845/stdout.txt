@@ -1,0 +1,57 @@
+input us_100K_difficult_A.tg sha256 ee7fd20cd57c68f6a9c755c2afc54c8a3dcdf3625c476df8025e0deb9bc7987d (1766449 transactions, 100000 accounts)
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+ground truth and export agree on all 1956 laundering accounts
+
+[miner, theta=0.2]
+graph us_100K_difficult_A.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=5 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 1956
+candidates=880227 pruned_by_domain=753568 pruned_by_consistency=2995 searches=10484814 found=3277949 failed=7206865 budget_fallbacks=0 local_rejections=0 early_stops=17
+length 1: 100 open, 0 closed
+length 2: 1000 open, 0 closed
+length 3: 10000 open, 0 closed
+length 4: 87236 open, 0 closed
+length 5: 25311 open, 0 closed
+filter ops length 4: 6744512513
+filter ops length 5: 1633555524
+examined transactions length 2: 96135449
+examined transactions length 3: 392343703
+examined transactions length 4: 220990440
+examined transactions length 5: 62369305
+filter auto passes: indexed=430346 sorted=1063886
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 123647 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph us_100K_difficult_A.tg: 100000 accounts, 1766449 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=5 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 1956
+candidates=1084113 pruned_by_domain=820351 pruned_by_consistency=488 searches=14477126 found=7039355 failed=7437771 budget_fallbacks=0 local_rejections=0 early_stops=43
+length 1: 100 open, 0 closed
+length 2: 1000 open, 0 closed
+length 3: 10000 open, 0 closed
+length 4: 98620 open, 0 closed
+length 5: 153511 open, 0 closed
+filter ops length 4: 7902154917
+filter ops length 5: 7484615476
+examined transactions length 2: 92035927
+examined transactions length 3: 294576916
+examined transactions length 4: 517572584
+examined transactions length 5: 895176982
+filter auto passes: indexed=128271 sorted=1753901
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 263231 -> patterns_theta_inf.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+us_100K_difficult labeling A: tau=5, max length 5, 1956 marked accounts
+          dataset labeling  length  planted_intermediates  I_0.2  marked_0.2  P_0.2  R_0.2  I_inf  marked_inf  P_inf  R_inf     OR
+us_100K_difficult        A       2                    423  75508        1771 0.0235 1.0000  79340        1825 0.0230 1.0000 1.0201
+us_100K_difficult        A       3                    183  71940        1741 0.0242 1.0000  77608        1825 0.0235 1.0000 1.0299
+us_100K_difficult        A       4                    183  68047        1707 0.0251 0.9945  75956        1823 0.0240 1.0000 1.0464
+us_100K_difficult        A       5                    147  41023        1291 0.0315 0.8367  67700        1806 0.0267 1.0000 1.1855
+  length 2: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 3: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True
+  length 4: H11 (OR >= 2): False; H12 (R with conservation >= half of R without): True

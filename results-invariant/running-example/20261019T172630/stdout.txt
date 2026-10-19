@@ -1,0 +1,8 @@
+theta 0.2, tau 2; frequent chains, brute force = miner: [('open', 1), ('open', 2), ('open', 3)]; 7 chain tables compared (tau 2 and 1)
+  open m=1: 10 occurrences, 10 valid, images [['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']], support 8
+  open m=2: 12 occurrences, 5 valid, images [['a', 'b', 'c', 'e', 'f'], ['b', 'c', 'd', 'f', 'g'], ['a', 'c', 'd', 'h']], support 4
+  open m=3: 15 occurrences, 2 valid, images [['a', 'b'], ['b', 'c'], ['c', 'd'], ['a', 'd']], support 2
+  open m=4: 10 occurrences, 0 valid, images [[], [], [], [], []], support 0
+  closed m=3: 0 occurrences, 0 valid, images [[], [], []], support 0
+  closed m=4: 8 occurrences, 1 valid, images [['a'], ['b'], ['c'], ['d']], support 1
+  slot filter, length 3: domains [['a', 'b', 'c', 'e', 'f'], ['b', 'c', 'f'], ['c', 'd'], ['a', 'c', 'd', 'h']]; kept [['a', 'b'], ['b', 'c'], ['c', 'd'], ['a', 'd']]; removed [[0, 'c'], [0, 'e'], [0, 'f'], [1, 'f'], [3, 'c'], [3, 'h']]

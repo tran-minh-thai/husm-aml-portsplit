@@ -1,0 +1,60 @@
+{
+  "run_id": "20261019T092841",
+  "note": "tau sensitivity, LI-Small, labeling A, tau 100, limit 2 h",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/provenance/with_limit.py",
+    "7200",
+    "--",
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/chain_conservation_effect.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "LI-Small",
+    "--labeling",
+    "A",
+    "--tau",
+    "100"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 6,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-19T09:28:41",
+  "git_commit": "d67b5f9d058ad455d8aad82fdfcf08cf391243a1",
+  "git_tree": "clean (8 untracked result records)",
+  "code_sha256": "5fadc3256f89e4c230702a4d16384043c06401d4eedae2ea0f22eea09038744d",
+  "code_files": 129,
+  "engine_jar_sha256": "cc4fd5d7748f9066c088d204e37dcefe9828448838530c563f471a14cec6a336",
+  "data": [
+    {
+      "path": "datasets/chain/LI-Small_A.tg",
+      "bytes": 222233745,
+      "sha256": "53ab17e6891b1bb3f2f025d5947c49529085ccc822a620728465760519ee75ff"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (13 untracked result records)"
+}

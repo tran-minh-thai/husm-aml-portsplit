@@ -1,0 +1,5 @@
+dataset,labeling,length,planted_intermediates,I_0.2,marked_0.2,P_0.2,R_0.2,I_inf,marked_inf,P_inf,R_inf,OR
+sweden_100K_easy,A,2,6861,72622,27736,0.38192283330120347,1.0,76499,28833,0.37690688767173425,1.0,1.0215315872701083
+sweden_100K_easy,A,3,3184,0,0,,0.0,0,0,,0.0,
+sweden_100K_easy,A,4,3166,0,0,,0.0,0,0,,0.0,
+sweden_100K_easy,A,5,2806,0,0,,0.0,0,0,,0.0,

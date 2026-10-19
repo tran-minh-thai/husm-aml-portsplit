@@ -1,0 +1,30 @@
+input LI-Medium_A.tg sha256 6d722807c0aaf1b3c439c3e2e523a33118587e4a4d799d5af1fdd5a529824356 (28752132 transactions, 1720017 accounts)
+ground truth and export agree on all 23510 laundering accounts
+
+[miner, theta=0.2]
+graph LI-Medium_A.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=0.2 min_support=25 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 23510
+candidates=1183 pruned_by_domain=876 pruned_by_consistency=2 searches=34956280 found=1027670 failed=33928610 budget_fallbacks=0 local_rejections=0 early_stops=2
+length 1: 6 open, 0 closed
+length 2: 28 open, 0 closed
+length 3: 118 open, 0 closed
+length 4: 147 open, 0 closed
+length 5: 4 open, 0 closed
+filter ops length 4: 286370137
+filter ops length 5: 1666840
+examined transactions length 2: 308983003
+examined transactions length 3: 196203231
+examined transactions length 4: 494549112
+examined transactions length 5: 7875
+filter auto passes: indexed=1755 sorted=101
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 303 -> patterns_theta_0.2.tsv
+[timing redacted: machine-dependent, not kept in this tree]
+
+[miner, theta=inf]
+graph LI-Medium_A.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=25 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+marked accounts present in the graph: 23510
+time limit of 7200 s reached; the command and its children were stopped

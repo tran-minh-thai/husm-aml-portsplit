@@ -1,0 +1,5 @@
+dataset,labeling,length,planted_intermediates,I_0.2,marked_0.2,P_0.2,R_0.2,I_inf,marked_inf,P_inf,R_inf,OR
+us_100K_difficult,A,2,423,75508,1771,0.023454468400699265,1.0,79340,1825,0.023002268716914544,1.0,1.0201310804542096
+us_100K_difficult,A,3,183,0,0,,0.0,0,0,,0.0,
+us_100K_difficult,A,4,183,0,0,,0.0,0,0,,0.0,
+us_100K_difficult,A,5,147,0,0,,0.0,0,0,,0.0,
