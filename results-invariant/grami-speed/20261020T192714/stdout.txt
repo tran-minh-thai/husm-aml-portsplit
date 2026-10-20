@@ -1,0 +1,33 @@
+[grami] prefix 10000: 10386 accounts, 6151 pairs
+[grami] prefix 10000 miner: ok; chains 12, missing 0, added 0
+[grami] prefix 10000 grami-path: ok; chains 12, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache: ok; chains 12, missing 0, added 0
+[grami] prefix 30000: 30771 accounts, 18337 pairs
+[grami] prefix 30000 miner: ok; chains 25, missing 0, added 0
+[grami] prefix 30000 grami-path: ok; chains 24, missing 1, added 0
+[grami] prefix 30000 grami-path-nocache: ok; chains 25, missing 0, added 0
+[grami] prefix 100000: 100599 accounts, 61452 pairs
+[grami] prefix 100000 miner: ok; chains 41, missing 0, added 0
+[grami] prefix 100000 grami-path: timeout; chains , missing , added 
+[grami] prefix 100000 grami-path-nocache: timeout; chains , missing , added 
+[grami] prefix 300000: 304975 accounts, 187640 pairs
+[grami] prefix 300000 miner: ok; chains 65, missing 0, added 0
+[grami] prefix 300000 grami-path: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 300000 grami-path-nocache: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 1000000: 692076 accounts, 540996 pairs
+[grami] prefix 1000000 miner: ok; chains 143, missing 0, added 0
+[grami] prefix 1000000 grami-path: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 1000000 grami-path-nocache: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 3000000: 1178824 accounts, 1406152 pairs
+[grami] prefix 3000000 miner: ok; chains 284, missing 0, added 0
+[grami] prefix 3000000 grami-path: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 3000000 grami-path-nocache: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 10000000: 1600356 accounts, 2244495 pairs
+[grami] prefix 10000000 miner: ok; chains 370, missing 0, added 0
+[grami] prefix 10000000 grami-path: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 10000000 grami-path-nocache: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 30000000: 1720017 accounts, 2918161 pairs
+[grami] prefix 30000000 miner: ok; chains 410, missing 0, added 0
+[grami] prefix 30000000 grami-path: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 30000000 grami-path-nocache: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] timing written to the paired measurement record
