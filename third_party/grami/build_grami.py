@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import shutil
 import subprocess
 import sys
@@ -71,6 +72,18 @@ def apply(src: Path, patch: Path) -> None:
         path.write_bytes(text.encode("ISO-8859-1"))
 
 
+def javac() -> str:
+    """javac on PATH, else from JAVA_HOME (Maven can run with JAVA_HOME set and no javac on PATH)."""
+    found = shutil.which("javac")
+    if found:
+        return found
+    home = os.environ.get("JAVA_HOME")
+    for name in ("javac.exe", "javac"):
+        if home and (Path(home) / "bin" / name).is_file():
+            return str(Path(home) / "bin" / name)
+    sys.exit("javac not found: not on PATH and not under JAVA_HOME/bin")
+
+
 def tree_digest(root: Path) -> str:
     h = hashlib.sha256()
     for p in sorted(root.rglob("*.java")):
@@ -99,7 +112,7 @@ def main() -> None:
         argfile = dest / "sources.txt"
         argfile.write_text("\n".join('"' + s.replace("\\", "/") + '"' for s in sources) + "\n", encoding="utf-8")
         (dest / "bin").mkdir()
-        subprocess.run(["javac", "-nowarn", "-encoding", "ISO-8859-1", "-d", str(dest / "bin"), f"@{argfile}"], check=True)
+        subprocess.run([javac(), "-nowarn", "-encoding", "ISO-8859-1", "-d", str(dest / "bin"), f"@{argfile}"], check=True)
         if not (dest / "bin" / "Dijkstra" / "main.class").is_file():
             sys.exit(f"{variant}: javac did not write Dijkstra/main.class")
         print(f"{variant}: {len(sources)} sources, source tree sha256 {tree_digest(dest / 'src')}")
