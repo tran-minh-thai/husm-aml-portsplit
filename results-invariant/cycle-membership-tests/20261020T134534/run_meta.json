@@ -1,0 +1,42 @@
+{
+  "run_id": "20261020T134534",
+  "note": "cycle membership: unit tests against the definition, then fault injection",
+  "command": [
+    "sh",
+    "-c",
+    "mvn -B -q -f inchusm-miner/pom.xml test -Dtest=CycleMembershipTest && cat inchusm-miner/target/surefire-reports/edu.huflit.inchusm.cycles.CycleMembershipTest.txt && python3 inchusm-miner/mutation/cycle_mutations.py"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 2,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-20T13:45:34",
+  "git_commit": "6d9d67b0c6588796bdb92b975f5d86682fcbec04",
+  "git_tree": "clean",
+  "code_sha256": "7a60825693cd2e9773dc5c7cfabc0dce723fba19945b92e74bc28b481d2c87ef",
+  "code_files": 133,
+  "engine_jar_sha256": "277a4879b5df7bf276ad920fbaa7d6667cb376382e4eb1bb7f148583d8a900b7",
+  "data": [],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)"
+}

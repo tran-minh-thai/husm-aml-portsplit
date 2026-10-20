@@ -1,0 +1,33 @@
+graph HI-Small_S.tg: 422734 accounts, 4487133 transactions (0 self-transactions dropped), 647939 distinct ordered pairs
+strongly connected part: 23247 accounts, 31411 pairs
+params: min_length=3 max_length=5 min_support=10 orientation=auto
+length 3: 748 accounts on a simple cycle (support 748, reported); searches=22765 found=266 examined=27201
+length 4: 122 accounts on a simple cycle (support 122, reported); searches=23164 found=39 examined=80684
+length 5: 83 accounts on a simple cycle (support 83, reported); searches=23188 found=24 examined=111527
+[timing redacted: machine-dependent, not kept in this tree]
+HI-Small (record 20261018T035145, miner commit 879a8ed): miner rows by length {'3': 1496, '4': 244, '5': 166}; cycle membership 1906 rows; only cycle membership 0, only miner 0
+graph LI-Small_S.tg: 576781 accounts, 6119572 transactions (0 self-transactions dropped), 880800 distinct ordered pairs
+strongly connected part: 26355 accounts, 34135 pairs
+params: min_length=3 max_length=5 min_support=10 orientation=auto
+length 3: 861 accounts on a simple cycle (support 861, reported); searches=25799 found=305 examined=29490
+length 4: 130 accounts on a simple cycle (support 130, reported); searches=26260 found=35 examined=82001
+length 5: 49 accounts on a simple cycle (support 49, reported); searches=26317 found=11 examined=113117
+[timing redacted: machine-dependent, not kept in this tree]
+LI-Small (record 20261018T035307, miner commit 879a8ed): miner rows by length {'3': 1722, '4': 260, '5': 98}; cycle membership 2080 rows; only cycle membership 0, only miner 0
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped), 2998917 distinct ordered pairs
+strongly connected part: 167625 accounts, 260854 pairs
+params: min_length=3 max_length=5 min_support=10 orientation=auto
+length 3: 9142 accounts on a simple cycle (support 9142, reported); searches=161814 found=3331 examined=225072
+length 4: 1613 accounts on a simple cycle (support 1613, reported); searches=166504 found=492 examined=788373
+length 5: 554 accounts on a simple cycle (support 554, reported); searches=167250 found=179 examined=1116776
+[timing redacted: machine-dependent, not kept in this tree]
+HI-Medium (record 20261018T035449, miner commit 879a8ed): miner rows by length {'3': 18284, '4': 3226, '5': 1108}; cycle membership 22618 rows; only cycle membership 0, only miner 0
+graph LI-Medium_S.tg: 1720017 accounts, 28752132 transactions (0 self-transactions dropped), 2918161 distinct ordered pairs
+strongly connected part: 150516 accounts, 220500 pairs
+params: min_length=3 max_length=5 min_support=10 orientation=auto
+length 3: 8422 accounts on a simple cycle (support 8422, reported); searches=145138 found=3044 examined=187062
+length 4: 1345 accounts on a simple cycle (support 1345, reported); searches=149536 found=365 examined=609185
+length 5: 272 accounts on a simple cycle (support 272, reported); searches=150309 found=65 examined=865483
+[timing redacted: machine-dependent, not kept in this tree]
+LI-Medium (record 20261018T044606, miner commit 879a8ed): miner rows by length {'3': 16844, '4': 2690, '5': 544}; cycle membership 20078 rows; only cycle membership 0, only miner 0
+rows compared: 46682; records: 4; differences: 0
