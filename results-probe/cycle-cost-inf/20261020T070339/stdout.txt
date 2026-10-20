@@ -1,0 +1,19 @@
+graph HI-Medium_S.tg: 1758597 accounts, 29336378 transactions (0 self-transactions dropped)
+params: theta=Infinity min_support=10 max_length=5 min_cycle=3 closed_chains=false consistency=true consistency_from=4 filter_impl=auto
+candidates=5 pruned_by_domain=0 pruned_by_consistency=0 searches=6909209 found=5902332 failed=1006877 budget_fallbacks=0 local_rejections=0 early_stops=0
+length 1: 1 open, 0 closed
+length 2: 1 open, 0 closed
+length 3: 1 open, 0 closed
+length 4: 1 open, 0 closed
+length 5: 1 open, 0 closed
+filter ops length 4: 13822013962
+filter ops length 5: 15123427083
+examined transactions length 2: 9784642
+examined transactions length 3: 235836199
+examined transactions length 4: 475753813
+examined transactions length 5: 749992957
+filter auto passes: indexed=10 sorted=18
+[timing redacted: machine-dependent, not kept in this tree]
+[timing redacted: machine-dependent, not kept in this tree]
+patterns written: 5 -> patterns.tsv
+[timing redacted: machine-dependent, not kept in this tree]

@@ -1,8 +1,11 @@
 """What pairwise conservation changes for closed chains (rooted cycles), labeling S.
 
 The miner runs with closed chains of 3 to 5 transactions (the pair at the origin is not
-constrained), at theta = 0.2 and with no amount constraint (theta = inf). For a closed-chain
-length m:
+constrained), at theta = 0.2 and with no amount constraint (theta = inf). With --inf-engine cycles the
+sets at theta = inf come instead from CycleMembership, which computes them directly: with one account
+label and one transaction label and no amount constraint, the accounts of the reported closed chains of
+length m are the accounts on a simple cycle of m transactions, when there are at least tau of them
+(cycle_membership_check.py compares the two on recorded miner runs). For a closed-chain length m:
 
   I_c(m)  accounts at any position (origin or intermediate) of a reported closed chain of length m
   C_c(m)  accounts of the planted cycles (typology CYCLE) with exactly m transactions
@@ -10,7 +13,7 @@ length m:
   R(m)    |I_c(m) & C_c(m)| / |C_c(m)|
   OR(m)   odds of P at theta 0.2 over odds of P at theta inf
 
-Run: python experiments/scripts/chain_cycle_effect.py --source amlworld --dataset HI-Small
+Run: python experiments/scripts/chain_cycle_effect.py --source amlworld --dataset HI-Small [--inf-engine cycles]
 """
 from __future__ import annotations
 
@@ -68,6 +71,17 @@ def effect(sets: dict, marked: set, planted: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def cycles(dataset: str, heap: str) -> Path:
+    """The theta = inf sets of closed chains from CycleMembership (labeling S only)."""
+    roles = OUT / "accounts_theta_inf.tsv"
+    cmd = ["java", f"-Xmx{heap}", "-cp", str(JAR), "edu.huflit.inchusm.cycles.CycleMembership",
+           "--graph", str(CHAIN / f"{dataset}_S.tg"), "--min-support", str(TAU), "--min-length", str(MIN_CYCLE),
+           "--max-length", str(MAX_LENGTH), "--out", str(roles)]
+    print("\n[cycle membership, theta=inf]", flush=True)
+    subprocess.run(cmd, check=True)
+    return roles
+
+
 def mine(dataset: str, theta: str, heap: str) -> Path:
     roles = OUT / f"accounts_theta_{theta}.tsv"
     cmd = ["java", f"-Xmx{heap}", "-cp", str(JAR), "edu.huflit.inchusm.chain.ChainMain",
@@ -85,16 +99,21 @@ def main() -> None:
     ap.add_argument("--source", choices=["amlworld", "amlgentex"], required=True)
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--heap", default="16g")
+    ap.add_argument("--inf-engine", choices=["miner", "cycles"], default="miner",
+                    help="what computes the closed chains at theta = inf (same sets)")
     args = ap.parse_args()
     marked = set(np.loadtxt(CHAIN / f"{args.dataset}_laundering_accounts.txt", dtype=np.int64, ndmin=1).tolist())
     _, ptx, _ = load(args.source, args.dataset)
     planted = planted_cycle_accounts(pc.planted_chains(ptx, MAX_LENGTH))
-    sets = {theta: closed_sets(mine(args.dataset, theta, args.heap)) for theta in ("0.2", "inf")}
+    sets = {"0.2": closed_sets(mine(args.dataset, "0.2", args.heap)),
+            "inf": closed_sets(cycles(args.dataset, args.heap) if args.inf_engine == "cycles"
+                               else mine(args.dataset, "inf", args.heap))}
     table = effect(sets, marked, planted)
     table.insert(0, "dataset", args.dataset)
     table.to_csv(OUT / "cycle_effect.csv", index=False)
     pd.set_option("display.width", 220)
-    print(f"\n{args.dataset}, closed chains, labeling S, tau {TAU}, {len(marked)} laundering accounts")
+    print(f"\n{args.dataset}, closed chains, labeling S, tau {TAU}, {len(marked)} laundering accounts; "
+          f"theta = inf by {args.inf_engine}")
     print(table.to_string(index=False, float_format=lambda v: f"{v:.4f}"))
     for _, r in table.iterrows():
         if r["planted_accounts"] >= MIN_PLANTED:

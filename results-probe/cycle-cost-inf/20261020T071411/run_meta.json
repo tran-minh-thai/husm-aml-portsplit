@@ -1,0 +1,50 @@
+{
+  "run_id": "20261020T071411",
+  "note": "probe closed-max4: cost of theta=inf on HI-Medium S, for Exp 7 on the Large sets",
+  "command": [
+    "sh",
+    "-c",
+    "java -Xmx24g -cp inchusm-miner/target/inchusm-miner-0.1.0-SNAPSHOT.jar edu.huflit.inchusm.chain.ChainMain --graph datasets/chain/HI-Medium_S.tg --theta inf --min-support 10 --min-cycle 3 --max-length 4 --out \"$RUN_RECORD_DIR/patterns.tsv\""
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 2,
+  "absolute_paths_scrubbed": 0,
+  "exit_code": 0,
+  "started_at": "2026-10-20T07:14:11",
+  "git_commit": "9f9c3288627e09546a95f155877c78a9ea338b14",
+  "git_tree": "clean (5 untracked result records)",
+  "code_sha256": "cc8bd3621dcb465ae1a384b35cc0ac7559ddd0f405c904847c6760fbdacb1300",
+  "code_files": 130,
+  "engine_jar_sha256": "cc4fd5d7748f9066c088d204e37dcefe9828448838530c563f471a14cec6a336",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Medium_S.tg",
+      "bytes": 1085071319,
+      "sha256": "c589acce5d942f422bbe87d37c3c9848e16cfbeee41bd1766b7743d024dd9393"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (6 untracked result records)",
+  "paired_timing_record": "results-probe-timing/cycle-cost-inf/20261020T071411"
+}

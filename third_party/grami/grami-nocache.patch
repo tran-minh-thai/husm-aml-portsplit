@@ -1,0 +1,12 @@
+diff -ruN GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/utilities/Settings.java GraMi-path-nocache/GRAMI_DIRECTED_SUBGRAPHS/src/utilities/Settings.java
+--- GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/utilities/Settings.java	2026-10-20 13:15:52
++++ GraMi-path-nocache/GRAMI_DIRECTED_SUBGRAPHS/src/utilities/Settings.java	2026-10-20 13:15:52
+@@ -30,7 +30,7 @@
+ 	
+ 	public static boolean isDecomposeOn= true;
+ 
+-	public static boolean CACHING = true;
++	public static boolean CACHING = false;
+ 	
+ 	public static boolean DISTINCTLABELS = true;
+ 	
