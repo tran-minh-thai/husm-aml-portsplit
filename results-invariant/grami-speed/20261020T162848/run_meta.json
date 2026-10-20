@@ -1,0 +1,57 @@
+{
+  "run_id": "20261020T162848",
+  "note": "grami speed LI-Small A length 4",
+  "command": [
+    "<home>\\.venvs\\husm-aml-portsplit\\Scripts\\python.exe",
+    "experiments\\scripts\\grami_speed.py",
+    "--dataset",
+    "LI-Small",
+    "--labeling",
+    "A",
+    "--max-length",
+    "4",
+    "--grami-build",
+    "<home>\\work\\grami-build"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-20T16:28:48",
+  "git_commit": "fce97af84159654ed42e20b23a3b1a84fe3c4bbc",
+  "git_tree": "clean",
+  "code_sha256": "7a60825693cd2e9773dc5c7cfabc0dce723fba19945b92e74bc28b481d2c87ef",
+  "code_files": 133,
+  "engine_jar_sha256": "97e3caea807450fd0c02a2905ade45e786e27dcdd0962ec85b734ccef0e3ba58",
+  "data": [
+    {
+      "path": "datasets/chain/LI-Small_A.tg",
+      "bytes": 222233745,
+      "sha256": "53ab17e6891b1bb3f2f025d5947c49529085ccc822a620728465760519ee75ff"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "5f434a5d45c5",
+  "machine_description": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "memory": "unavailable",
+    "logical_cpus": 32
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18 LTS",
+  "maven": "unavailable",
+  "git_tree_after_run": "clean (3 untracked result records)",
+  "paired_timing_record": "results/grami-speed/20261020T162848"
+}
