@@ -8,6 +8,7 @@ Run: python experiments/scripts/windowed_effect_check.py windowed_effect.csv <op
 """
 from __future__ import annotations
 
+import math
 import sys
 from pathlib import Path
 
@@ -22,7 +23,11 @@ CLOSED = (("planted_accounts", "planted"), ("I_0.2", "I_0.2"), ("I_inf", "I_inf"
 def same(a, b) -> bool:
     if pd.isna(a) and pd.isna(b):
         return True
-    return not (pd.isna(a) or pd.isna(b)) and abs(float(a) - float(b)) <= 1e-12 * max(1.0, abs(float(a)))
+    if not (pd.isna(a) or pd.isna(b)) and float(a) == float(b):     # equal values, infinite ones included
+        return True
+    if pd.isna(a) or pd.isna(b) or math.isinf(float(a)) or math.isinf(float(b)):
+        return False                                                  # unequal, one of them missing or infinite
+    return abs(float(a) - float(b)) <= 1e-12 * max(1.0, abs(float(a)))
 
 
 def main() -> None:
