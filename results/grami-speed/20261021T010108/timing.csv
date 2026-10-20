@@ -1,0 +1,22 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+HI-Small,A,10000,10000,10205,6076,10,5,miner,ok,0.123,0.029,113860608,1800.0,48g
+HI-Small,A,10000,10000,10205,6076,10,5,grami-path,ok,118.73,107.964,7339675648,1800.0,48g
+HI-Small,A,10000,10000,10205,6076,10,5,grami-path-nocache,ok,143.15,142.715,7821430784,1800.0,48g
+HI-Small,A,30000,30000,29937,18365,10,5,miner,ok,0.174,0.046,147148800,1800.0,48g
+HI-Small,A,30000,30000,29937,18365,10,5,grami-path,ok,755.73,754.179,9206972416,1800.0,48g
+HI-Small,A,30000,30000,29937,18365,10,5,grami-path-nocache,ok,952.891,950.778,9290289152,1800.0,48g
+HI-Small,A,100000,100000,97655,61245,10,5,miner,ok,0.279,0.088,355815424,1800.0,48g
+HI-Small,A,100000,100000,97655,61245,10,5,grami-path,timeout,1810.431,,,1800.0,48g
+HI-Small,A,100000,100000,97655,61245,10,5,grami-path-nocache,timeout,1801.759,,,1800.0,48g
+HI-Small,A,300000,300000,193705,160030,10,5,miner,ok,0.558,0.278,577273856,1800.0,48g
+HI-Small,A,300000,300000,193705,160030,10,5,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,300000,300000,193705,160030,10,5,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,1000000,1000000,338222,411933,10,5,miner,ok,2.24,1.825,736808960,1800.0,48g
+HI-Small,A,1000000,1000000,338222,411933,10,5,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,1000000,1000000,338222,411933,10,5,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,3000000,3000000,410846,589259,10,5,miner,ok,4.375,3.883,1215746048,1800.0,48g
+HI-Small,A,3000000,3000000,410846,589259,10,5,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,3000000,3000000,410846,589259,10,5,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,10000000,4487133,422734,647939,10,5,miner,ok,5.253,4.74,1552510976,1800.0,48g
+HI-Small,A,10000000,4487133,422734,647939,10,5,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+HI-Small,A,10000000,4487133,422734,647939,10,5,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
