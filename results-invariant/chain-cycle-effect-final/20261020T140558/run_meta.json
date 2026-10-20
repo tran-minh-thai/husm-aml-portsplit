@@ -1,0 +1,61 @@
+{
+  "run_id": "20261020T140558",
+  "note": "closed-chain conservation effect, labeling S, HI-Large, theta = inf by cycle membership",
+  "command": [
+    "<home>\\.venvs\\husm-aml-portsplit\\Scripts\\python.exe",
+    "experiments\\scripts\\chain_cycle_effect.py",
+    "--source",
+    "amlworld",
+    "--dataset",
+    "HI-Large",
+    "--heap",
+    "48g",
+    "--inf-engine",
+    "cycles"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 4,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-20T14:05:58",
+  "git_commit": "032819c443a5ca602282a9f9edcce00e5cfb315c",
+  "git_tree": "clean",
+  "code_sha256": "7a60825693cd2e9773dc5c7cfabc0dce723fba19945b92e74bc28b481d2c87ef",
+  "code_files": 133,
+  "engine_jar_sha256": "97e3caea807450fd0c02a2905ade45e786e27dcdd0962ec85b734ccef0e3ba58",
+  "data": [
+    {
+      "path": "datasets/chain/HI-Large_S.tg",
+      "bytes": 6148827811,
+      "sha256": "6473a89d09fe4a9bebe48196a6962dc417ec79ead3fe91bfe3b7e4d434305232"
+    },
+    {
+      "path": "datasets/chain/HI-Large_laundering_accounts.txt",
+      "bytes": 1627534,
+      "sha256": "e217cef368957e822be687f45878f09f0f9257632f3d09907b3e3c54d71524af"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "5f434a5d45c5",
+  "machine_description": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "memory": "unavailable",
+    "logical_cpus": 32
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18 LTS",
+  "maven": "unavailable",
+  "git_tree_after_run": "clean (4 untracked result records)"
+}

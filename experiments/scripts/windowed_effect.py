@@ -12,7 +12,9 @@ chain_cycle_effect.py --inf-engine cycles.
 For every kind (open, closed) and length m the returned sets I_theta(m) of the windows are pooled as pairs
 (window, account), and so are the marked accounts and the planted accounts: P, R, OR, and the retention ratios
 r_L = |I_0.2 & L| / |I_inf & L| and r_B (likewise on the other accounts) of the pooled sets are written next to
-the values of every window. One window covering the whole data set reproduces chain_conservation_effect.py
+the values of every window. The pooled odds ratio gets the 95% interval of effect_intervals.py (bootstrap over
+laundering attempts, here over pairs (window, attempt): the accounts of the attempt's transactions in that window),
+and the pooled recovery its Clopper-Pearson interval. One window covering the whole data set reproduces chain_conservation_effect.py
 (open) and chain_cycle_effect.py (closed) on the full chain input.
 
 Run: python experiments/scripts/windowed_effect.py --dataset HI-Large --window-days 16 [--tau 10] [--max-length 5]
@@ -38,6 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from inchusm_aml.data.chain_input import write_tg  # noqa: E402
 from inchusm_aml.eval import planted_chains as pc  # noqa: E402
 from round2_measurements import load  # noqa: E402
+from effect_intervals import clopper_pearson, or_interval  # noqa: E402
 
 JAR = ROOT / "inchusm-miner" / "target" / "inchusm-miner-0.1.0-SNAPSHOT.jar"
 OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else ROOT / "experiments" / "results"
@@ -115,7 +118,7 @@ def main() -> None:
     attempt_span = ptx.groupby("attempt")["time"].agg(["min", "max"])
     pooled = {k: {m: [set(), set(), set(), set()] for m in range(2 if k == "open" else 3, args.max_length + 1)}
               for k in ("open", "closed")}
-    rows = []
+    rows, groups = [], []
     for w in range(count):
         a, b = t0 + w * width, t0 + (w + 1) * width
         inside = (t >= a) & (t < b)
@@ -125,6 +128,8 @@ def main() -> None:
         ids = np.union1d(e["src"].to_numpy(), e["dst"].to_numpy())
         marked = set(np.intersect1d(laund_all, ids).tolist())
         attempts = attempt_span.index[(attempt_span["min"] >= a) & (attempt_span["max"] < b)]
+        tw = ptx[(ptx["time"] >= a) & (ptx["time"] < b)]
+        groups += [{(w, x) for x in set(g["src"]) | set(g["dst"])} for _, g in tw.groupby("attempt", sort=True)]
         planted = pc.planted_chains(ptx[ptx["attempt"].isin(attempts)], args.max_length)
         planted_open = {m: set(x for acc in g["accounts"] for x in acc[1:-1])
                         for m, g in planted[planted["kind"] == "open"].groupby("length")}
@@ -152,10 +157,14 @@ def main() -> None:
                       flush=True)
     for kind in ("open", "closed"):
         for m, (i02, iinf, marked, c) in pooled[kind].items():
-            rows.append({"window": "pooled", "start_day": 0.0, "end_day": count * width / DAY, "kind": kind,
-                         "length": m, **scores(i02, iinf, marked, c)})
+            row = {"window": "pooled", "start_day": 0.0, "end_day": count * width / DAY, "kind": kind, "length": m,
+                   **scores(i02, iinf, marked, c)}
+            row["OR_lo"], row["OR_hi"] = or_interval(i02, iinf, marked, groups) if i02 and iinf else (float("nan"),) * 2
+            row["R_lo"], row["R_hi"] = clopper_pearson(len(i02 & c), len(c))
+            rows.append(row)
             print(f"pooled {kind} {m}: " + ", ".join(f"{k} {v:.4g}" if isinstance(v, float) else f"{k} {v}"
-                  for k, v in rows[-1].items() if k in ("planted", "I_0.2", "I_inf", "P_0.2", "P_inf", "R_0.2", "OR", "r_L", "r_B")),
+                  for k, v in rows[-1].items() if k in ("planted", "I_0.2", "I_inf", "P_0.2", "P_inf", "R_0.2", "R_lo", "OR", "OR_lo",
+                                                             "OR_hi", "r_L", "r_B")),
                   flush=True)
     table = pd.DataFrame(rows)
     table.insert(0, "window_days", args.window_days)

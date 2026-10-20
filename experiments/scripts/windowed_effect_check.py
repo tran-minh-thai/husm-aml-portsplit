@@ -4,7 +4,11 @@ Compares the pooled rows of windowed_effect.csv with conservation_effect.csv (op
 and cycle_effect.csv (closed chains, chain_cycle_effect.py), value by value: planted accounts, returned set sizes,
 marked accounts or shares, recoveries and odds ratios. Exits non-zero on any difference or when nothing is compared.
 
-Run: python experiments/scripts/windowed_effect_check.py windowed_effect.csv <open record dir> <closed record dir>
+With two further arguments, the effect_intervals.csv of effect_intervals.py on the same two records (open, closed),
+also compares the interval bounds of the odds ratio and of the recovery.
+
+Run: python experiments/scripts/windowed_effect_check.py windowed_effect.csv <open record dir> <closed record dir> \
+         [<open effect_intervals.csv> <closed effect_intervals.csv>]
 """
 from __future__ import annotations
 
@@ -48,6 +52,15 @@ def main() -> None:
                 compared += 1
                 if not same(r[a], x.iloc[0][b]):
                     bad.append(f"{kind} length {r['length']} {a}: record {r[a]}, windowed {x.iloc[0][b]}")
+    if len(sys.argv) == 6:
+        for kind, path in (("open", sys.argv[4]), ("closed", sys.argv[5])):
+            for _, r in pd.read_csv(path).iterrows():
+                x = w[(w["kind"] == kind) & (w["length"] == r["length"])]
+                for col in ("OR_lo", "OR_hi", "R_lo", "R_hi"):
+                    compared += 1
+                    if len(x) != 1 or not same(r[col], x.iloc[0][col]):
+                        bad.append(f"{kind} length {r['length']} {col}: intervals {r[col]}, windowed "
+                                   f"{x.iloc[0][col] if len(x) == 1 else 'missing'}")
     print(f"values compared: {compared}; differences: {len(bad)}")
     for b in bad:
         print("  " + b)
