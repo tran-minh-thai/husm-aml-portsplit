@@ -20,14 +20,21 @@ Apply it to a copy of `GRAMI_DIRECTED_SUBGRAPHS/src` (`patch -p1` from the paren
 GraMi-path; set `GRAMI_BIN` and `GRAMI_PATH_BIN` to the two `bin` directories.
 
 GraMi-path-nocache is GraMi-path with GraMi's own constant `Settings.CACHING` set to `false` (`grami-nocache.patch`,
-one line). With caching on, GraMi passes one shared table of values found not to extend (`nonCandidates`) from a
-pattern to the patterns grown from it, instead of a copy; on prefixes of AMLworld HI-Small under labeling A the
-published setting reports fewer frequent directed paths than the chain miner and than an independent count from
-the definition, and the setting off reports the same paths. `experiments/scripts/grami_speed.py` times the chain
-miner against both variants.
+one line). With caching on, GraMi imports values found not to extend (`nonCandidates`) from cached patterns one
+edge smaller (`Decomposer`, `DfscodesCache`); on prefixes of AMLworld HI-Small under labeling A the published
+setting reports fewer frequent directed paths than the chain miner and than an independent count from the
+definition, and the setting off reports the same paths
+(`results-invariant/grami-cache-diagnosis/`).
+
+GraMi starts every search for one value of the first pattern vertex by creating a new `java.util.Timer`, which is a
+new thread, and cancels it when the search ends (`CSP/DFSSearch.java`). `grami-sharedtimer.patch` schedules the same
+five- and seven-second stops on one shared daemon thread instead (`ScheduledThreadPoolExecutor`, cancelled stops
+removed at once); nothing else changes. The variants `grami-path-sharedtimer` and `grami-path-nocache-sharedtimer`
+measure how much of GraMi's time goes to creating these threads. `experiments/scripts/grami_speed.py` times the
+chain miner against any of the four variants (`--engines`).
 
 `build_grami.py` applies the patches of this directory by exact replacement (no `patch` program; the line endings of
-the checkout do not matter), refuses a checkout other than commit `d2875ae`, and compiles both variants:
+the checkout do not matter), refuses a checkout other than commit `d2875ae`, and compiles the four variants:
 
     git clone https://github.com/ehab-abdelhamid/GraMi && git -C GraMi checkout d2875ae
     python third_party/grami/build_grami.py --grami GraMi --out <directory>

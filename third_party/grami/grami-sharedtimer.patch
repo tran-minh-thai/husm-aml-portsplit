@@ -1,0 +1,54 @@
+--- GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/CSP/DFSSearch.java	2026-10-21 21:42:49
++++ GraMi-path-sharedtimer/GRAMI_DIRECTED_SUBGRAPHS/src/CSP/DFSSearch.java	2026-10-21 21:42:49
+@@ -74,6 +74,18 @@
+ 	private SearchOrder sOrder;
+ 	private int minFreqThreshold;
+ 	private Timer timer;
++	// one daemon thread for every search instead of a new Timer thread per search; cancelled stops are removed at once
++	private static final java.util.concurrent.ScheduledThreadPoolExecutor STOPPER = newStopper();
++	private java.util.concurrent.ScheduledFuture<?> stop;
++	private static java.util.concurrent.ScheduledThreadPoolExecutor newStopper() {
++		java.util.concurrent.ScheduledThreadPoolExecutor s = new java.util.concurrent.ScheduledThreadPoolExecutor(1, r -> {
++			Thread th = new Thread(r, "grami-stopper");
++			th.setDaemon(true);
++			return th;
++		});
++		s.setRemoveOnCancelPolicy(true);
++		return s;
++	}
+ 	private Query qry;
+ 	private BigInteger numberOfIterations;
+ 	private BigDecimal worst;
+@@ -430,8 +442,7 @@
+ 					System.out.println(instance);
+ 				
+ 				
+-		        timer = new Timer(true);
+-		        timer.schedule(new StopTask(), 5*1000);
++		        stop = STOPPER.schedule(new StopTask(), 5*1000, java.util.concurrent.TimeUnit.MILLISECONDS);
+ 		        
+ 		        int value=-1;
+ 		        
+@@ -464,7 +475,7 @@
+ 						System.out.println("passed the time threshold!!");
+ 					isStopped=false;
+ 				}
+-				timer.cancel();
++				stop.cancel(false);
+ 				
+ 				if(value==-2) //not Found!!!
+ 				{
+@@ -772,11 +783,10 @@
+ 	{
+ 		sOrder.reset();
+ 		setVariableVisitingOrder(orderINdex);
+-		timer = new Timer(true);
+-        timer.schedule(new StopTask(), 7*1000);
++		stop = STOPPER.schedule(new StopTask(), 7*1000, java.util.concurrent.TimeUnit.MILLISECONDS);
+ 		int value=searchExistances(instance);
+ 		isStopped=false;
+-		timer.cancel();
++		stop.cancel(false);
+ 		if(value==-2) return false;
+ 		else return true;
+ 		

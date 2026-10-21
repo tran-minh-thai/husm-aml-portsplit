@@ -1,9 +1,13 @@
-"""Build the two GraMi variants used as a same-output speed baseline, on any operating system.
+"""Build the GraMi variants used as a same-output speed baseline, on any operating system.
 
-    grami-path          GraMi restricted to directed paths (grami-path.patch)
-    grami-path-nocache  the same with GraMi's own constant Settings.CACHING set to false (grami-nocache.patch):
-                        with caching on, GraMi shares one table of rejected values between patterns instead of
-                        giving each pattern a copy
+    grami-path                      GraMi restricted to directed paths (grami-path.patch)
+    grami-path-nocache              the same with GraMi's own constant Settings.CACHING set to false
+                                    (grami-nocache.patch): with caching on, GraMi imports values found not to
+                                    extend from cached patterns one edge smaller, and on AMLworld under
+                                    labeling A this makes it miss frequent directed paths
+    grami-path-sharedtimer          grami-path with one shared timer thread for the five-second stop of every
+    grami-path-nocache-sharedtimer  search instead of a new java.util.Timer thread per search
+                                    (grami-sharedtimer.patch); the stop and the output are unchanged
 
 Applies the patches of this directory by exact replacement (no patch program needed; line endings of the
 checkout do not matter), refuses a GraMi checkout other than the pinned commit, and compiles each variant with
@@ -24,7 +28,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 COMMIT = "d2875ae80afa2f141323a3f6b89a387787fcda38"
 SRC = "GRAMI_DIRECTED_SUBGRAPHS/src"
-VARIANTS = {"grami-path": ["grami-path.patch"], "grami-path-nocache": ["grami-path.patch", "grami-nocache.patch"]}
+VARIANTS = {"grami-path": ["grami-path.patch"], "grami-path-nocache": ["grami-path.patch", "grami-nocache.patch"],
+            "grami-path-sharedtimer": ["grami-path.patch", "grami-sharedtimer.patch"],
+            "grami-path-nocache-sharedtimer": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch"]}
 
 
 def hunks(patch: Path):

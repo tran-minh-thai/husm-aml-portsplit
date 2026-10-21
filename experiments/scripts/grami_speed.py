@@ -4,15 +4,19 @@ GraMi (Elseidy et al., PVLDB 2014) mines frequent subgraphs of one graph under t
 support. Restricted to directed paths it computes exactly the frequent open chains at theta = inf, which the
 chain miner computes with --theta inf --no-closed. GraMi takes a simple graph, so both programs read the same
 graph: a prefix of the transactions in time order, self-transactions dropped and parallel transactions merged
-(grami_crosscheck.prefix_graph). Three programs run on every prefix:
+(grami_crosscheck.prefix_graph). The miner and the GraMi variants of --engines run on every prefix:
 
-  miner               ChainMain --theta inf --no-closed
-  grami-path          GraMi restricted to directed paths of at most --max-length transactions, as published otherwise
-  grami-path-nocache  the same with GraMi's constant Settings.CACHING set to false
+  miner                           ChainMain --theta inf --no-closed
+  grami-path                      GraMi restricted to directed paths of at most --max-length transactions,
+                                  as published otherwise
+  grami-path-nocache              the same with GraMi's constant Settings.CACHING set to false
+  grami-path-sharedtimer          grami-path and grami-path-nocache with one shared timer thread instead of a
+  grami-path-nocache-sharedtimer  new java.util.Timer thread per search
 
 Built by third_party/grami/build_grami.py. The frequent chains of every program that finishes are compared
-with the miner's: grami-path-nocache must report the same set (a difference stops the tool with exit status 1);
-for grami-path the chains it misses and the chains it adds are counted (an added chain also stops the tool).
+with the miner's: a nocache variant must report the same set (a difference stops the tool with exit status 1);
+for the others the chains they miss and the chains they add are counted (an added chain also stops the tool),
+and a shared-timer variant must report the same set as its variant with a thread per search when both ran.
 A GraMi variant that reaches the time limit is not run on the larger prefixes of the same data set.
 
 Machine-independent output (the record directory): grami_speed.csv, one row per prefix and program, with the
@@ -21,7 +25,8 @@ graph size, status, number of frequent chains, and missing and added chains. Mac
 (the miner: mining only; GraMi: loading and mining), the peak resident memory, and the JVM.
 
 Run: python experiments/scripts/grami_speed.py --dataset HI-Small --labeling A --grami-build <dir> \\
-         [--prefixes 10000,30000,...] [--tau 10] [--max-length 4] [--limit 1800] [--heap 48g]
+         [--prefixes 10000,30000,...] [--tau 10] [--max-length 4] [--limit 1800] [--heap 48g] \\
+         [--engines grami-path,grami-path-nocache]
 """
 from __future__ import annotations
 
@@ -44,7 +49,8 @@ OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") els
 TIMING = Path(os.environ["RUN_TIMING_DIR"]) if os.environ.get("RUN_TIMING_DIR") else None
 PROBE = os.environ.get("RUN_TIMING_KIND", "").startswith("probe")
 PREFIXES = "10000,30000,100000,300000,1000000,3000000,10000000,30000000"
-GRAMI = ("grami-path", "grami-path-nocache")
+GRAMI = ("grami-path", "grami-path-nocache", "grami-path-sharedtimer", "grami-path-nocache-sharedtimer")
+ENGINES = "grami-path,grami-path-nocache"
 ELAPSED = re.compile(r"mining elapsed ms: (\d+)")
 KEYS = ["dataset", "labeling", "prefix", "transactions_read", "accounts", "pairs", "tau", "max_length", "engine",
         "status", "chains", "missing", "added"]
@@ -121,6 +127,7 @@ def main() -> None:
     ap.add_argument("--max-length", type=int, default=4)
     ap.add_argument("--limit", type=float, default=1800.0, help="seconds per run")
     ap.add_argument("--heap", default="48g")
+    ap.add_argument("--engines", default=ENGINES, help="GraMi variants to run, in this order, comma separated")
     args = ap.parse_args()
 
     identity = cp.jvm_identity()
@@ -131,7 +138,11 @@ def main() -> None:
     graph = cp.CHAIN / f"{args.dataset}_{args.labeling}.tg"
     if not graph.is_file():
         sys.exit(f"refusing to run: {graph.relative_to(ROOT).as_posix()} does not exist (export the chain input first)")
-    binaries = {g: Path(args.grami_build).resolve() / g / "bin" for g in GRAMI}
+    engines = args.engines.split(",")
+    unknown = [g for g in engines if g not in GRAMI]
+    if unknown or len(set(engines)) != len(engines):
+        sys.exit(f"--engines must name distinct variants of {', '.join(GRAMI)}; got {args.engines}")
+    binaries = {g: Path(args.grami_build).resolve() / g / "bin" for g in engines}
     for g, b in binaries.items():
         if not (b / "Dijkstra" / "main.class").is_file():
             sys.exit(f"refusing to run: {g} is not built under {args.grami_build} (run third_party/grami/build_grami.py)")
@@ -156,7 +167,7 @@ def main() -> None:
         if mine is None:
             sys.exit(f"the miner did not finish on prefix {k} ({r['status']}):\n{log[-2000:]}")
         results = [("miner", r, mine)]
-        for g in GRAMI:
+        for g in engines:
             if g in timed_out:
                 results.append((g, {"status": "skipped (timeout on a smaller prefix)", "wall_s": "", "peak_bytes": None,
                                     "reported_s": ""}, None))
@@ -186,10 +197,15 @@ def main() -> None:
                 w = csv.DictWriter(f, fieldnames=list(timing[0]))
                 w.writeheader()
                 w.writerows(timing)
-        bad = [x for x in rows[-3:] if x["engine"] == "grami-path-nocache" and x["chains"] != "" and (x["missing"] or x["added"])]
-        added = [x for x in rows[-3:] if x["engine"] == "grami-path" and x["added"]]
-        if bad or added:
-            sys.exit(f"OUTPUT DIFFERS on prefix {k}: {bad + added}")
+        here = rows[-len(results):]
+        bad = [x for x in here if "nocache" in x["engine"] and x["chains"] != "" and (x["missing"] or x["added"])]
+        added = [x for x in here if "nocache" not in x["engine"] and x["added"]]
+        found = {engine: chains for engine, _, chains in results}
+        timer = [f"{g} and {g.replace('-sharedtimer', '')} report different chains" for g in engines
+                 if g.endswith("-sharedtimer") and found.get(g) is not None
+                 and found.get(g.replace("-sharedtimer", "")) is not None and found[g] != found[g.replace("-sharedtimer", "")]]
+        if bad or added or timer:
+            sys.exit(f"OUTPUT DIFFERS on prefix {k}: {bad + added + timer}")
         if last:
             break
     if TIMING is not None:
