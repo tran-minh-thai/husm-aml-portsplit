@@ -1,0 +1,3 @@
+HI-Small closed m=3: OR 2.4565 [1.7473, 3.1386]; R 1.0000 [0.8723, 1.0000] of 27 planted
+HI-Small closed m=4: OR 7.7419 [4.9220, 10.3934]; R 1.0000 [0.8766, 1.0000] of 28 planted
+HI-Small closed m=5: OR inf [inf, inf]; R 1.0000 [0.7820, 1.0000] of 15 planted

@@ -1,0 +1,43 @@
+HI-Large: 179,702,229 transactions over 164.70 days; 5 windows of 32 days; 4.70 days at the end left out
+window 0 open 2: planted 780, I_0.2 343425, I_inf 899495, P_0.2 0.07932, P_inf 0.05648, OR 1.439, r_L 0.5363, r_B 0.3726
+window 0 open 3: planted 554, I_0.2 139996, I_inf 856333, P_0.2 0.1023, P_inf 0.05875, OR 1.826, r_L 0.2847, r_B 0.1559
+window 0 open 4: planted 469, I_0.2 42805, I_inf 818209, P_0.2 0.1479, P_inf 0.06051, OR 2.695, r_L 0.1279, r_B 0.04745
+window 0 open 5: planted 402, I_0.2 12532, I_inf 793182, P_0.2 0.2627, P_inf 0.06154, OR 5.433, r_L 0.06744, r_B 0.01241
+window 0 closed 3: planted 49, I_0.2 7622, I_inf 43997, P_0.2 0.1668, P_inf 0.131, OR 1.327, r_L 0.2205, r_B 0.1661
+window 0 closed 4: planted 48, I_0.2 1808, I_inf 11803, P_0.2 0.2362, P_inf 0.1461, OR 1.806, r_L 0.2475, r_B 0.137
+window 0 closed 5: planted 50, I_0.2 586, I_inf 3160, P_0.2 0.43, P_inf 0.2082, OR 2.869, r_L 0.383, r_B 0.1335
+window 1 open 2: planted 1013, I_0.2 342444, I_inf 889047, P_0.2 0.1175, P_inf 0.08126, OR 1.506, r_L 0.5572, r_B 0.37
+window 1 open 3: planted 631, I_0.2 142073, I_inf 848675, P_0.2 0.155, P_inf 0.0843, OR 1.992, r_L 0.3078, r_B 0.1545
+window 1 open 4: planted 561, I_0.2 45849, I_inf 812465, P_0.2 0.2333, P_inf 0.08684, OR 3.199, r_L 0.1516, r_B 0.04738
+window 1 open 5: planted 499, I_0.2 15482, I_inf 788172, P_0.2 0.3852, P_inf 0.08839, OR 6.463, r_L 0.08561, r_B 0.01325
+window 1 closed 3: planted 58, I_0.2 8090, I_inf 45023, P_0.2 0.2023, P_inf 0.1636, OR 1.297, r_L 0.2222, r_B 0.1714
+window 1 closed 4: planted 40, I_0.2 1921, I_inf 12291, P_0.2 0.2827, P_inf 0.1852, OR 1.734, r_L 0.2386, r_B 0.1376
+window 1 closed 5: planted 30, I_0.2 639, I_inf 3450, P_0.2 0.4554, P_inf 0.2516, OR 2.487, r_L 0.3353, r_B 0.1348
+window 2 open 2: planted 903, I_0.2 345890, I_inf 893134, P_0.2 0.1268, P_inf 0.0886, OR 1.494, r_L 0.5545, r_B 0.371
+window 2 open 3: planted 557, I_0.2 143341, I_inf 849584, P_0.2 0.167, P_inf 0.09216, OR 1.975, r_L 0.3057, r_B 0.1548
+window 2 open 4: planted 488, I_0.2 46052, I_inf 811797, P_0.2 0.2407, P_inf 0.09509, OR 3.017, r_L 0.1436, r_B 0.0476
+window 2 open 5: planted 400, I_0.2 15270, I_inf 787724, P_0.2 0.3904, P_inf 0.09675, OR 5.98, r_L 0.07823, r_B 0.01308
+window 2 closed 3: planted 63, I_0.2 8466, I_inf 45874, P_0.2 0.2223, P_inf 0.1864, OR 1.247, r_L 0.22, r_B 0.1764
+window 2 closed 4: planted 45, I_0.2 2048, I_inf 12693, P_0.2 0.2979, P_inf 0.2115, OR 1.582, r_L 0.2273, r_B 0.1437
+window 2 closed 5: planted 25, I_0.2 609, I_inf 3707, P_0.2 0.5123, P_inf 0.2827, OR 2.665, r_L 0.2977, r_B 0.1117
+window 3 open 2: planted 280, I_0.2 24729, I_inf 99077, P_0.2 0.2259, P_inf 0.108, OR 2.41, r_L 0.5221, r_B 0.2166
+window 3 open 3: planted 143, I_0.2 4108, I_inf 54379, P_0.2 0.5981, P_inf 0.1531, OR 8.235, r_L 0.2952, r_B 0.03585
+window 3 open 4: planted 135, I_0.2 1937, I_inf 27174, P_0.2 0.9319, P_inf 0.2198, OR 48.53, r_L 0.3021, r_B 0.006226
+window 3 open 5: planted 124, I_0.2 1515, I_inf 13955, P_0.2 0.9934, P_inf 0.3142, OR 328.6, r_L 0.3433, r_B 0.001045
+window 3 closed 3: planted 12, I_0.2 158, I_inf 234, P_0.2 1, P_inf 0.9744, OR inf, r_L 0.693, r_B 0
+window 3 closed 4: planted 8, I_0.2 131, I_inf 226, P_0.2 1, P_inf 1, OR nan, r_L 0.5796, r_B nan
+window 3 closed 5: planted 0, I_0.2 117, I_inf 225, P_0.2 1, P_inf 0.9956, OR inf, r_L 0.5223, r_B 0
+window 4 open 2: planted 0, I_0.2 24, I_inf 45, P_0.2 1, P_inf 1, OR nan, r_L 0.5333, r_B nan
+window 4 open 3: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+window 4 open 4: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+window 4 open 5: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+window 4 closed 3: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+window 4 closed 4: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+window 4 closed 5: planted 0, I_0.2 0, I_inf 0, P_0.2 nan, P_inf nan, OR nan, r_L nan, r_B nan
+pooled open 2: planted 2976, I_0.2 1056512, I_inf 2780798, P_0.2 0.1107, R_0.2 0.994, P_inf 0.07657, OR 1.502, r_L 0.5494, r_B 0.3659, OR_lo 1.496, OR_hi 1.507, R_lo 0.9905
+pooled open 3: planted 1885, I_0.2 429518, I_inf 2608971, P_0.2 0.1461, R_0.2 0.9862, P_inf 0.07991, OR 1.97, r_L 0.3009, r_B 0.1528, OR_lo 1.953, OR_hi 1.984, R_lo 0.9799
+pooled open 4: planted 1653, I_0.2 136643, I_inf 2469645, P_0.2 0.219, R_0.2 0.9812, P_inf 0.08229, OR 3.126, r_L 0.1472, r_B 0.04709, OR_lo 3.073, OR_hi 3.176, R_lo 0.9735
+pooled open 5: planted 1425, I_0.2 44799, I_inf 2383033, P_0.2 0.3733, R_0.2 0.9705, P_inf 0.08354, OR 6.534, r_L 0.084, r_B 0.01286, OR_lo 6.354, OR_hi 6.7, R_lo 0.9604
+pooled closed 3: planted 182, I_0.2 24336, I_inf 135128, P_0.2 0.2033, R_0.2 1, P_inf 0.1622, OR 1.319, r_L 0.2258, r_B 0.1712, OR_lo 1.303, OR_hi 1.334, R_lo 0.9799
+pooled closed 4: planted 141, I_0.2 5908, I_inf 37013, P_0.2 0.2896, R_0.2 0.9433, P_inf 0.1867, OR 1.776, r_L 0.2476, r_B 0.1394, OR_lo 1.733, OR_hi 1.821, R_lo 0.8913
+pooled closed 5: planted 105, I_0.2 1951, I_inf 10542, P_0.2 0.4982, R_0.2 0.9048, P_inf 0.2654, OR 2.748, r_L 0.3474, r_B 0.1264, OR_lo 2.641, OR_hi 2.864, R_lo 0.8318

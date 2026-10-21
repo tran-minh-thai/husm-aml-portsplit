@@ -1,0 +1,16 @@
+HI-Small: 5,078,345 transactions over 17.68 days; 1 windows of 0 days; 0.00 days at the end left out
+window 0 open 2: planted 862, I_0.2 59177, I_inf 167183, P_0.2 0.03951, P_inf 0.02693, OR 1.486, r_L 0.5192, r_B 0.3494
+window 0 open 3: planted 341, I_0.2 21629, I_inf 154829, P_0.2 0.05571, P_inf 0.02841, OR 2.018, r_L 0.2739, r_B 0.1358
+window 0 open 4: planted 315, I_0.2 5760, I_inf 147031, P_0.2 0.1137, P_inf 0.02876, OR 4.333, r_L 0.1549, r_B 0.03575
+window 0 open 5: planted 300, I_0.2 1440, I_inf 141439, P_0.2 0.3, P_inf 0.02898, OR 14.36, r_L 0.1054, r_B 0.007339
+window 0 closed 3: planted 27, I_0.2 121, I_inf 748, P_0.2 0.2975, P_inf 0.1471, OR 2.456, r_L 0.3273, r_B 0.1332
+window 0 closed 4: planted 28, I_0.2 36, I_inf 122, P_0.2 0.8889, P_inf 0.5082, OR 7.742, r_L 0.5161, r_B 0.06667
+window 0 closed 5: planted 15, I_0.2 20, I_inf 83, P_0.2 1, P_inf 0.5181, OR inf, r_L 0.4651, r_B 0
+pooled open 2: planted 862, I_0.2 59177, I_inf 167183, P_0.2 0.03951, R_0.2 0.9884, P_inf 0.02693, OR 1.486, r_L 0.5192, r_B 0.3494, OR_lo 1.434, OR_hi 1.539, R_lo 0.9788
+pooled open 3: planted 341, I_0.2 21629, I_inf 154829, P_0.2 0.05571, R_0.2 0.9971, P_inf 0.02841, OR 2.018, r_L 0.2739, r_B 0.1358, OR_lo 1.861, OR_hi 2.181, R_lo 0.9838
+pooled open 4: planted 315, I_0.2 5760, I_inf 147031, P_0.2 0.1137, R_0.2 0.9968, P_inf 0.02876, OR 4.333, r_L 0.1549, r_B 0.03575, OR_lo 3.727, OR_hi 4.961, R_lo 0.9824
+pooled open 5: planted 300, I_0.2 1440, I_inf 141439, P_0.2 0.3, R_0.2 0.9967, P_inf 0.02898, OR 14.36, r_L 0.1054, r_B 0.007339, OR_lo 11.45, OR_hi 17.53, R_lo 0.9816
+pooled closed 3: planted 27, I_0.2 121, I_inf 748, P_0.2 0.2975, R_0.2 1, P_inf 0.1471, OR 2.456, r_L 0.3273, r_B 0.1332, OR_lo 1.747, OR_hi 3.139, R_lo 0.8723
+pooled closed 4: planted 28, I_0.2 36, I_inf 122, P_0.2 0.8889, R_0.2 1, P_inf 0.5082, OR 7.742, r_L 0.5161, r_B 0.06667, OR_lo 4.922, OR_hi 10.39, R_lo 0.8766
+pooled closed 5: planted 15, I_0.2 20, I_inf 83, P_0.2 1, R_0.2 1, P_inf 0.5181, OR inf, r_L 0.4651, r_B 0, OR_lo inf, OR_hi inf, R_lo 0.782
+values compared: 84; differences: 0

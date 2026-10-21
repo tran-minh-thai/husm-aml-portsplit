@@ -1,0 +1,3 @@
+HI-Medium closed m=3: OR 2.3752 [2.2193, 2.5455]; R 1.0000 [0.9611, 1.0000] of 93 planted
+HI-Medium closed m=4: OR 6.6864 [6.0485, 7.2876]; R 1.0000 [0.9638, 1.0000] of 100 planted
+HI-Medium closed m=5: OR 10.9035 [9.7125, 12.0788]; R 1.0000 [0.9684, 1.0000] of 115 planted

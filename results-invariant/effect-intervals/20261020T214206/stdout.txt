@@ -1,0 +1,3 @@
+LI-Small closed m=3: OR 1.4950 [0.7223, 2.4893]; R 1.0000 [0.5407, 1.0000] of 6 planted
+LI-Small closed m=4: OR 5.0989 [0.0000, 7.6484]; R 1.0000 [0.6306, 1.0000] of 8 planted
+LI-Small closed m=5: OR nan [nan, nan]; R nan [nan, nan] of 0 planted

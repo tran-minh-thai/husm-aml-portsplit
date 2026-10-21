@@ -1,0 +1,4 @@
+HI-Medium open m=2: OR 1.5978 [1.5778, 1.6186]; R 0.9933 [0.9910, 0.9951] of 6401 planted
+HI-Medium open m=3: OR 2.2486 [2.1947, 2.3045]; R 0.9923 [0.9884, 0.9952] of 2857 planted
+HI-Medium open m=4: OR 4.5377 [4.3229, 4.7547]; R 0.9894 [0.9848, 0.9929] of 2740 planted
+HI-Medium open m=5: OR 12.8965 [11.9559, 13.8636]; R 0.9822 [0.9764, 0.9870] of 2587 planted

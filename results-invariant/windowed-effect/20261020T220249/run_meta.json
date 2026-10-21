@@ -1,0 +1,59 @@
+{
+  "run_id": "20261020T220249",
+  "note": "windowed effect with intervals HI-Large, 16-day windows",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/windowed_effect.py",
+    "--dataset",
+    "HI-Large",
+    "--window-days",
+    "16",
+    "--heap",
+    "20g"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 1,
+  "exit_code": 0,
+  "started_at": "2026-10-20T22:02:49",
+  "git_commit": "78134f755a951f7860d266336b77739c0874b751",
+  "git_tree": "clean (40 untracked result records)",
+  "code_sha256": "aa7f7ba964f50fb3977ddb6facb2b0484ea997b3919e520a905f9b2d652d3084",
+  "code_files": 136,
+  "engine_jar_sha256": "277a4879b5df7bf276ad920fbaa7d6667cb376382e4eb1bb7f148583d8a900b7",
+  "data": [
+    {
+      "path": "(outside the repository)",
+      "bytes": 17052760651,
+      "sha256": "d13635e297c64673826217631fb88d635c4f506052e1bde833895eda2a65c3f2"
+    },
+    {
+      "path": "(outside the repository)",
+      "bytes": 13807473,
+      "sha256": "bcf815a1931cfdcefd5d6d9feaa8f95dbc33cfd6ef8cd52d9a41e8d994c22820"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (41 untracked result records)"
+}

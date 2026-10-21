@@ -1,0 +1,16 @@
+HI-Medium: 31,898,238 transactions over 27.67 days; 1 windows of 0 days; 0.00 days at the end left out
+window 0 open 2: planted 6401, I_0.2 267730, I_inf 748381, P_0.2 0.06596, P_inf 0.04233, OR 1.598, r_L 0.5575, r_B 0.3489
+window 0 open 3: planted 2857, I_0.2 104277, I_inf 695818, P_0.2 0.09549, P_inf 0.04484, OR 2.249, r_L 0.3191, r_B 0.1419
+window 0 open 4: planted 2740, I_0.2 30121, I_inf 665692, P_0.2 0.1794, P_inf 0.04597, OR 4.538, r_L 0.1766, r_B 0.03892
+window 0 open 5: planted 2587, I_0.2 9305, I_inf 648471, P_0.2 0.3857, P_inf 0.04643, OR 12.9, r_L 0.1192, r_B 0.009244
+window 0 closed 3: planted 93, I_0.2 1270, I_inf 9142, P_0.2 0.278, P_inf 0.1395, OR 2.375, r_L 0.2769, r_B 0.1166
+window 0 closed 4: planted 100, I_0.2 332, I_inf 1613, P_0.2 0.7078, P_inf 0.266, OR 6.686, r_L 0.5478, r_B 0.08193
+window 0 closed 5: planted 115, I_0.2 242, I_inf 554, P_0.2 0.938, P_inf 0.5812, OR 10.9, r_L 0.705, r_B 0.06466
+pooled open 2: planted 6401, I_0.2 267730, I_inf 748381, P_0.2 0.06596, R_0.2 0.9933, P_inf 0.04233, OR 1.598, r_L 0.5575, r_B 0.3489, OR_lo 1.578, OR_hi 1.619, R_lo 0.991
+pooled open 3: planted 2857, I_0.2 104277, I_inf 695818, P_0.2 0.09549, R_0.2 0.9923, P_inf 0.04484, OR 2.249, r_L 0.3191, r_B 0.1419, OR_lo 2.195, OR_hi 2.304, R_lo 0.9884
+pooled open 4: planted 2740, I_0.2 30121, I_inf 665692, P_0.2 0.1794, R_0.2 0.9894, P_inf 0.04597, OR 4.538, r_L 0.1766, r_B 0.03892, OR_lo 4.323, OR_hi 4.755, R_lo 0.9848
+pooled open 5: planted 2587, I_0.2 9305, I_inf 648471, P_0.2 0.3857, R_0.2 0.9822, P_inf 0.04643, OR 12.9, r_L 0.1192, r_B 0.009244, OR_lo 11.96, OR_hi 13.86, R_lo 0.9764
+pooled closed 3: planted 93, I_0.2 1270, I_inf 9142, P_0.2 0.278, R_0.2 1, P_inf 0.1395, OR 2.375, r_L 0.2769, r_B 0.1166, OR_lo 2.219, OR_hi 2.546, R_lo 0.9611
+pooled closed 4: planted 100, I_0.2 332, I_inf 1613, P_0.2 0.7078, R_0.2 1, P_inf 0.266, OR 6.686, r_L 0.5478, r_B 0.08193, OR_lo 6.049, OR_hi 7.288, R_lo 0.9638
+pooled closed 5: planted 115, I_0.2 242, I_inf 554, P_0.2 0.938, R_0.2 1, P_inf 0.5812, OR 10.9, r_L 0.705, r_B 0.06466, OR_lo 9.713, OR_hi 12.08, R_lo 0.9684
+values compared: 84; differences: 0
