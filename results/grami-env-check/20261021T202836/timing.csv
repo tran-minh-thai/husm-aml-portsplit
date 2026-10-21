@@ -1,0 +1,7 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+HI-Small,A,10000,10000,10205,6076,10,4,miner,ok,0.126,0.031,105357312,1800.0,24g
+HI-Small,A,10000,10000,10205,6076,10,4,grami-path,ok,131.007,127.985,11108347904,1800.0,24g
+HI-Small,A,10000,10000,10205,6076,10,4,grami-path-nocache,ok,133.244,131.776,9466212352,1800.0,24g
+HI-Small,A,30000,30000,29937,18365,10,4,miner,ok,0.187,0.046,134754304,1800.0,24g
+HI-Small,A,30000,30000,29937,18365,10,4,grami-path,ok,692.952,686.871,7671291904,1800.0,24g
+HI-Small,A,30000,30000,29937,18365,10,4,grami-path-nocache,ok,791.509,780.525,8910823424,1800.0,24g
