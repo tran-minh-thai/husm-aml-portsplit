@@ -1,0 +1,7 @@
+HI-Small A, prefix 10000: 10205 accounts, 6076 pairs
+miner: 14 frequent chains
+grami-path: ok; 11 chains, missing 3, added 0: O 0 >3 0 >3 0 >3 0 | O 0 >3 0 >3 0 >4 0 | O 0 >3 0 >4 0 >3 0
+grami-path-nocache: ok; 14 chains, missing 0, added 0
+no-automorphism: ok; 11 chains, missing 3, added 0: O 0 >3 0 >3 0 >3 0 | O 0 >3 0 >3 0 >4 0 | O 0 >3 0 >4 0 >3 0
+no-inheritance: ok; 14 chains, missing 0, added 0
+no-import: ok; 14 chains, missing 0, added 0

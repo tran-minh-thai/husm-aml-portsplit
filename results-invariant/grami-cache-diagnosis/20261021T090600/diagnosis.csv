@@ -1,0 +1,6 @@
+dataset,labeling,prefix,variant,status,chains,miner_chains,missing,added,missing_chains,added_chains
+HI-Small,A,30000,grami-path,ok,28,29,1,0,O 0 >3 0 >3 0 >3 0 >3 0,
+HI-Small,A,30000,grami-path-nocache,ok,29,29,0,0,,
+HI-Small,A,30000,no-automorphism,ok,28,29,1,0,O 0 >3 0 >3 0 >3 0 >3 0,
+HI-Small,A,30000,no-inheritance,ok,29,29,0,0,,
+HI-Small,A,30000,no-import,ok,29,29,0,0,,
