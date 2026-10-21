@@ -1,0 +1,21 @@
+[grami] prefix 10000: 17862 accounts, 9708 pairs
+[grami] prefix 10000 miner: ok; chains 3, missing 0, added 0
+[grami] prefix 10000 grami-path: ok; chains 3, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache: ok; chains 3, missing 0, added 0
+[grami] prefix 30000: 47347 accounts, 29098 pairs
+[grami] prefix 30000 miner: ok; chains 4, missing 0, added 0
+[grami] prefix 30000 grami-path: ok; chains 4, missing 0, added 0
+[grami] prefix 30000 grami-path-nocache: ok; chains 4, missing 0, added 0
+[grami] prefix 100000: 97102 accounts, 86467 pairs
+[grami] prefix 100000 miner: ok; chains 4, missing 0, added 0
+[grami] prefix 100000 grami-path: ok; chains 4, missing 0, added 0
+[grami] prefix 100000 grami-path-nocache: ok; chains 4, missing 0, added 0
+[grami] prefix 300000: 99261 accounts, 122531 pairs
+[grami] prefix 300000 miner: ok; chains 4, missing 0, added 0
+[grami] prefix 300000 grami-path: ok; chains 4, missing 0, added 0
+[grami] prefix 300000 grami-path-nocache: ok; chains 4, missing 0, added 0
+[grami] prefix 1000000: 99995 accounts, 168847 pairs
+[grami] prefix 1000000 miner: ok; chains 4, missing 0, added 0
+[grami] prefix 1000000 grami-path: ok; chains 4, missing 0, added 0
+[grami] prefix 1000000 grami-path-nocache: ok; chains 4, missing 0, added 0
+[grami] timing written to the paired measurement record

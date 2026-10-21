@@ -1,0 +1,25 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+LI-Medium,A,10000,10000,10386,6151,10,4,miner,ok,0.125,0.029,112726016,1800.0,48g
+LI-Medium,A,10000,10000,10386,6151,10,4,grami-path,ok,99.623,95.006,6589460480,1800.0,48g
+LI-Medium,A,10000,10000,10386,6151,10,4,grami-path-nocache,ok,101.13,98.905,6255026176,1800.0,48g
+LI-Medium,A,30000,30000,30771,18337,10,4,miner,ok,0.179,0.044,148017152,1800.0,48g
+LI-Medium,A,30000,30000,30771,18337,10,4,grami-path,ok,641.387,640.069,9444851712,1800.0,48g
+LI-Medium,A,30000,30000,30771,18337,10,4,grami-path-nocache,ok,852.127,839.666,9268015104,1800.0,48g
+LI-Medium,A,100000,100000,100599,61452,10,4,miner,ok,0.279,0.085,360865792,1800.0,48g
+LI-Medium,A,100000,100000,100599,61452,10,4,grami-path,timeout,1802.205,,,1800.0,48g
+LI-Medium,A,100000,100000,100599,61452,10,4,grami-path-nocache,timeout,1801.201,,,1800.0,48g
+LI-Medium,A,300000,300000,304975,187640,10,4,miner,ok,0.47,0.159,584597504,1800.0,48g
+LI-Medium,A,300000,300000,304975,187640,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,300000,300000,304975,187640,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,1000000,1000000,692076,540996,10,4,miner,ok,1.2,0.652,879595520,1800.0,48g
+LI-Medium,A,1000000,1000000,692076,540996,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,1000000,1000000,692076,540996,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,3000000,3000000,1178824,1406152,10,4,miner,ok,5.721,4.764,1994485760,1800.0,48g
+LI-Medium,A,3000000,3000000,1178824,1406152,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,3000000,3000000,1178824,1406152,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,10000000,10000000,1600356,2244495,10,4,miner,ok,12.76,11.533,2106978304,1800.0,48g
+LI-Medium,A,10000000,10000000,1600356,2244495,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,10000000,10000000,1600356,2244495,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,30000000,28752132,1720017,2918161,10,4,miner,ok,20.892,19.454,3507163136,1800.0,48g
+LI-Medium,A,30000000,28752132,1720017,2918161,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+LI-Medium,A,30000000,28752132,1720017,2918161,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g

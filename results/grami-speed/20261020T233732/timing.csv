@@ -1,0 +1,19 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+us_100K_difficult,A,10000,10000,13782,9563,10,4,miner,ok,0.124,0.021,118181888,1800.0,48g
+us_100K_difficult,A,10000,10000,13782,9563,10,4,grami-path,ok,0.54,0.487,540700672,1800.0,48g
+us_100K_difficult,A,10000,10000,13782,9563,10,4,grami-path-nocache,ok,0.574,0.521,538476544,1800.0,48g
+us_100K_difficult,A,30000,30000,36490,28571,10,4,miner,ok,0.191,0.052,179056640,1800.0,48g
+us_100K_difficult,A,30000,30000,36490,28571,10,4,grami-path,ok,2.72,2.658,976707584,1800.0,48g
+us_100K_difficult,A,30000,30000,36490,28571,10,4,grami-path-nocache,ok,2.706,2.646,737890304,1800.0,48g
+us_100K_difficult,A,100000,100000,85305,95007,10,4,miner,ok,0.465,0.257,486604800,1800.0,48g
+us_100K_difficult,A,100000,100000,85305,95007,10,4,grami-path,ok,1315.842,1315.538,7540613120,1800.0,48g
+us_100K_difficult,A,100000,100000,85305,95007,10,4,grami-path-nocache,timeout,1801.467,,,1800.0,48g
+us_100K_difficult,A,300000,300000,100000,147790,10,4,miner,ok,1.205,0.943,565288960,1800.0,48g
+us_100K_difficult,A,300000,300000,100000,147790,10,4,grami-path,timeout,1800.28,,,1800.0,48g
+us_100K_difficult,A,300000,300000,100000,147790,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+us_100K_difficult,A,1000000,1000000,100000,159835,10,4,miner,ok,1.603,1.331,688910336,1800.0,48g
+us_100K_difficult,A,1000000,1000000,100000,159835,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+us_100K_difficult,A,1000000,1000000,100000,159835,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
+us_100K_difficult,A,3000000,1766449,100000,185628,10,4,miner,ok,4.178,3.87,747409408,1800.0,48g
+us_100K_difficult,A,3000000,1766449,100000,185628,10,4,grami-path,skipped (timeout on a smaller prefix),,,,1800.0,48g
+us_100K_difficult,A,3000000,1766449,100000,185628,10,4,grami-path-nocache,skipped (timeout on a smaller prefix),,,,1800.0,48g
