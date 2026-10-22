@@ -69,56 +69,68 @@ class Graph:
             self.inn[(v, l)].append(u)
 
 
-def images_at_least(g: Graph, key: str, tau: int, budget: int):
-    """(frequent, images, steps): images is the exact number of images of the first position with fewer than tau,
-    or tau when the chain is frequent; frequent is None when the search passes the budget."""
-    vl, el = parse_key(key)
-    k = len(el)
-    steps = 0
+class Budget:
+    def __init__(self, limit: int):
+        self.limit, self.steps = limit, 0
 
-    def extend(assign: dict, start: int, order: list, j: int) -> bool:
-        nonlocal steps
+
+def has_occurrence(g: Graph, vl: tuple, el: tuple, i: int, x: int, budget: Budget) -> bool:
+    """Whether account x is the image of position i in some occurrence; raises TimeoutError past the budget."""
+    k = len(el)
+    if g.vlab[x] != vl[i]:
+        return False
+    order = list(range(i + 1, k + 1)) + list(range(i - 1, -1, -1))
+
+    def extend(assign: dict, j: int) -> bool:
         if j == len(order):
             return True
         p = order[j]
         # right of the start the account before is assigned, left of it the account after
-        cands = g.out.get((assign[p - 1], el[p - 1]), ()) if p > start else g.inn.get((assign[p + 1], el[p]), ())
+        cands = g.out.get((assign[p - 1], el[p - 1]), ()) if p > i else g.inn.get((assign[p + 1], el[p]), ())
         used = set(assign.values())
         for w in cands:
-            steps += 1
-            if steps > budget:
+            budget.steps += 1
+            if budget.steps > budget.limit:
                 raise TimeoutError
             if g.vlab[w] != vl[p] or w in used:
                 continue
             assign[p] = w
-            if extend(assign, start, order, j + 1):
+            if extend(assign, j + 1):
                 del assign[p]
                 return True
             del assign[p]
         return False
 
+    return extend({i: x}, 0)
+
+
+def images_at_least(g: Graph, key: str, tau: int, budget: int):
+    """(frequent, images, steps): images is the exact number of images of the first position with fewer than tau,
+    or tau when the chain is frequent; frequent is None when the search passes the budget."""
+    vl, el = parse_key(key)
+    k = len(el)
+    b = Budget(budget)
     try:
         for i in range(k + 1):
-            order = list(range(i + 1, k + 1)) + list(range(i - 1, -1, -1))
             found = 0
             for x in range(len(g.vlab)):
                 if g.vlab[x] != vl[i]:
                     continue
                 if (i < k and not g.out.get((x, el[i]))) or (i > 0 and not g.inn.get((x, el[i - 1]))):
                     continue
-                if extend({i: x}, i, order, 0):
+                if has_occurrence(g, vl, el, i, x, b):
                     found += 1
                     if found >= tau:
                         break
             if found < tau:
-                return False, found, steps
+                return False, found, b.steps
     except TimeoutError:
-        return None, "", steps
-    return True, tau, steps
+        return None, "", b.steps
+    return True, tau, b.steps
 
 
-def brute_supports(vlab, edges, max_edges: int) -> dict:
-    """Minimum image support of every chain with an occurrence, by enumerating every simple path (small graphs)."""
+def brute_images(vlab, edges, max_edges: int) -> dict:
+    """Images of every position of every chain with an occurrence, by enumerating every simple path (small graphs)."""
     out = defaultdict(list)
     for u, v, l in edges:
         out[u].append((v, l))
@@ -135,24 +147,36 @@ def brute_supports(vlab, edges, max_edges: int) -> dict:
                 grow(path + [w], key + f" >{l} {vlab[w]}")
     for v in range(len(vlab)):
         grow([v], f"O {vlab[v]}")
-    return {key: min(len(s) for s in img.values()) for key, img in images.items()}
+    return images
+
+
+def brute_supports(vlab, edges, max_edges: int) -> dict:
+    """Minimum image support of every chain with an occurrence."""
+    return {key: min(len(s) for s in img.values()) for key, img in brute_images(vlab, edges, max_edges).items()}
 
 
 def self_test() -> None:
     rnd = random.Random(7)
-    compared = disagree = frequent = 0
+    compared = disagree = frequent = accounts = account_disagree = 0
     for _ in range(150):
         n = rnd.randint(2, 7)
         vlab = [rnd.randint(0, 1) for _ in range(n)]
         pairs = [(u, v) for u in range(n) for v in range(n) if u != v]
         edges = [(u, v, rnd.randint(0, 1)) for u, v in rnd.sample(pairs, rnd.randint(1, len(pairs)))]
         g = Graph(vlab, edges)
-        sup = brute_supports(vlab, edges, 4)
+        img = brute_images(vlab, edges, 4)
+        sup = {key: min(len(s) for s in v.values()) for key, v in img.items()}
         for m in range(1, 5):
             for vl in itertools.product((0, 1), repeat=m + 1):
                 for el in itertools.product((0, 1), repeat=m):
                     key = "O " + str(vl[0]) + "".join(f" >{el[i]} {vl[i + 1]}" for i in range(m))
                     s = sup.get(key, 0)
+                    pv, pe = parse_key(key)
+                    for i in range(m + 1):
+                        for x in range(n):
+                            accounts += 1
+                            if has_occurrence(g, pv, pe, i, x, Budget(10**7)) != (x in img.get(key, {}).get(i, ())):
+                                account_disagree += 1
                     for tau in (1, 2, 3):
                         freq, images, _ = images_at_least(g, key, tau, 10**7)
                         compared += 1
@@ -160,8 +184,8 @@ def self_test() -> None:
                         if freq != (s >= tau) or (not freq and not s <= images < tau):
                             disagree += 1
     print(f"self-test: {compared} (graph, chain, tau) cases compared with full enumeration ({frequent} frequent), "
-          f"{disagree} disagree")
-    if compared == 0 or frequent == 0 or frequent == compared or disagree:
+          f"{disagree} disagree; {accounts} (chain, position, account) cases, {account_disagree} disagree")
+    if compared == 0 or frequent == 0 or frequent == compared or disagree or accounts == 0 or account_disagree:
         sys.exit(1)
 
 

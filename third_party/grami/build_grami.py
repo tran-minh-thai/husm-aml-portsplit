@@ -8,6 +8,10 @@
     grami-path-sharedtimer          grami-path with one shared timer thread for the five-second stop of every
     grami-path-nocache-sharedtimer  search instead of a new java.util.Timer thread per search
                                     (grami-sharedtimer.patch); the stop and the output are unchanged
+    grami-path-nocache-sharedtimer-dump
+                                    the previous one that, with -Dgrami.dump=<edges>, also writes the values
+                                    left in the domain of every variable of each frequent pattern with that
+                                    many edges to grami-dump.txt (grami-dump.patch; diagnosis only, not timed)
 
 Applies the patches of this directory by exact replacement (no patch program needed; line endings of the
 checkout do not matter), refuses a GraMi checkout other than the pinned commit, and compiles each variant with
@@ -30,7 +34,9 @@ COMMIT = "d2875ae80afa2f141323a3f6b89a387787fcda38"
 SRC = "GRAMI_DIRECTED_SUBGRAPHS/src"
 VARIANTS = {"grami-path": ["grami-path.patch"], "grami-path-nocache": ["grami-path.patch", "grami-nocache.patch"],
             "grami-path-sharedtimer": ["grami-path.patch", "grami-sharedtimer.patch"],
-            "grami-path-nocache-sharedtimer": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch"]}
+            "grami-path-nocache-sharedtimer": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch"],
+            "grami-path-nocache-sharedtimer-dump": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch",
+                                                   "grami-dump.patch"]}
 
 
 def hunks(patch: Path):

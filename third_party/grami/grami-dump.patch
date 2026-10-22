@@ -1,0 +1,50 @@
+--- GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/dataStructures/DFSCode.java	2026-10-22 13:26:33
++++ GraMi-path-dump/GRAMI_DIRECTED_SUBGRAPHS/src/dataStructures/DFSCode.java	2026-10-22 13:26:33
+@@ -379,6 +379,7 @@
+ 				df.searchExistances();
+ 				currentVariables=df.getResultVariables();
+ 				int freq=df.getFrequencyOfPattern();
++				dumpPattern(me, currentVariables, freq, singleGraph.getFreqThreshold());
+ 				
+ 				if(Settings.CACHING)
+ 				{
+@@ -448,6 +449,7 @@
+ 				currentVariables=df.getResultVariables();
+ 				
+ 				int freq=df.getFrequencyOfPattern();
++				dumpPattern(me, currentVariables, freq, singleGraph.getFreqThreshold());
+ 				
+ 				if(Settings.CACHING)
+ 				{
+@@ -471,6 +473,31 @@
+ 	}
+ 	
+ 	
++	// diagnostic: with -Dgrami.dump=<edges>, append every frequent pattern of that many edges and the values left in
++	// the domain of each of its variables to grami-dump.txt (node label, edges a>b:label, then id:label:values)
++	private static java.io.PrintWriter dumpOut;
++	static synchronized void dumpPattern(HPListGraph<?, ?> g, Variable[] vars, int freq, int threshold) {
++		int edges = Integer.getInteger("grami.dump", -1);
++		if (edges < 0 || g.getEdgeCount() != edges || freq < threshold) return;
++		try {
++			if (dumpOut == null) dumpOut = new java.io.PrintWriter(new java.io.FileWriter("grami-dump.txt", true));
++			StringBuilder s = new StringBuilder("P");
++			for (int i = 0; i < g.getNodeCount(); i++) s.append(i == 0 ? " " : ",").append(g.getNodeLabel(i));
++			s.append(" |");
++			for (int e = 0; e < g.getEdgeCount(); e++)
++				s.append(" ").append(g.getNodeA(e)).append(g.getDirection(e) >= 0 ? ">" : "<").append(g.getNodeB(e)).append(":").append(g.getEdgeLabel(e));
++			for (Variable v : vars) {
++				s.append(" | ").append(v.getID()).append(":").append(v.getLabel()).append(":");
++				boolean first = true;
++				for (Integer id : new java.util.TreeSet<Integer>(v.getList().keySet())) { s.append(first ? "" : ",").append(id); first = false; }
++			}
++			dumpOut.println(s);
++			dumpOut.flush();
++		} catch (java.io.IOException ex) {
++			throw new RuntimeException(ex);
++		}
++	}
++
+ 	public Variable[] getCurrentVariables() {
+ 		return currentVariables;
+ 	}
