@@ -1,0 +1,27 @@
+[grami] prefix 10000: 13782 accounts, 9563 pairs
+[grami] prefix 10000 miner: ok; chains 100, missing 0, added 0
+[grami] prefix 10000 grami-path-sharedtimer: ok; chains 100, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache-sharedtimer: ok; chains 100, missing 0, added 0
+[grami] prefix 30000: 36490 accounts, 28571 pairs
+[grami] prefix 30000 miner: ok; chains 217, missing 0, added 0
+[grami] prefix 30000 grami-path-sharedtimer: ok; chains 217, missing 0, added 0
+[grami] prefix 30000 grami-path-nocache-sharedtimer: ok; chains 217, missing 0, added 0
+[grami] prefix 100000: 85305 accounts, 95007 pairs
+[grami] prefix 100000 miner: ok; chains 1899, missing 0, added 0
+[grami] prefix 100000 grami-path-sharedtimer: ok; chains 1899, missing 0, added 0
+[grami] prefix 100000 grami-path-nocache-sharedtimer: ok; chains 1899, missing 0, added 0
+[grami] prefix 300000: 100000 accounts, 147790 pairs
+[grami] prefix 300000 miner: ok; chains 11323, missing 0, added 0
+[grami] prefix 300000 grami-path-sharedtimer: ok; chains 11323, missing 0, added 0
+[grami] prefix 300000 grami-path-nocache-sharedtimer: ok; chains 11323, missing 0, added 0
+[grami] prefix 1000000: 100000 accounts, 159835 pairs
+[grami] prefix 1000000 miner: ok; chains 15650, missing 0, added 0
+[grami] prefix 1000000 grami-path-sharedtimer: ok; chains 15667, missing 0, added 17
+[grami] prefix 1000000 grami-path-nocache-sharedtimer: ok; chains 15667, missing 0, added 17
+[grami] OUTPUT DIFFERS on prefix 1000000, recorded and continued: grami-path-nocache-sharedtimer missing 0 added 17; grami-path-sharedtimer missing 0 added 17
+[grami] prefix 3000000: 100000 accounts, 185628 pairs
+[grami] prefix 3000000 miner: ok; chains 77558, missing 0, added 0
+[grami] prefix 3000000 grami-path-sharedtimer: ok; chains 77652, missing 0, added 94
+[grami] prefix 3000000 grami-path-nocache-sharedtimer: ok; chains 77652, missing 0, added 94
+[grami] OUTPUT DIFFERS on prefix 3000000, recorded and continued: grami-path-nocache-sharedtimer missing 0 added 94; grami-path-sharedtimer missing 0 added 94
+[grami] timing written to the paired measurement record
