@@ -1,0 +1,4 @@
+program,status,chains,missing,added,stopped_searches
+miner,ok,46839,0,0,
+grami-path-nocache-sharedtimer-acfix-limitedtime-true,ok,46839,0,0,0
+grami-path-nocache-sharedtimer-acfix-limitedtime-false,ok,46839,0,0,0

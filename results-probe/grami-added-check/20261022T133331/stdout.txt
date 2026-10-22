@@ -1,0 +1,7 @@
+self-test: 306000 (graph, chain, tau) cases compared with full enumeration (10990 frequent), 0 disagree; 2219248 (chain, position, account) cases, 0 disagree
+[added] sweden_100K_easy A prefix 1000000: 99994 accounts, 209126 pairs
+[added] grami-path-nocache-sharedtimer-acfix-limitedtime-true: ok; chains 46839, missing 0, added 0, stopped searches 0
+[added] grami-path-nocache-sharedtimer-acfix-limitedtime-false: ok; chains 46839, missing 0, added 0, stopped searches 0
+[added] grami-path-nocache-sharedtimer-acfix-limitedtime-true: agrees with the definition on 200 of 200 decided chains
+[added] grami-path-nocache-sharedtimer-acfix-limitedtime-false: agrees with the definition on 200 of 200 decided chains
+[added] checked 0 differing and 200 agreed chains: the definition contradicts the miner on 0, 0 undecided

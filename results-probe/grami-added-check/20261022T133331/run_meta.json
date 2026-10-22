@@ -1,0 +1,61 @@
+{
+  "run_id": "20261022T133331",
+  "note": "probe: does revising the arcs leaving a shrunk variable remove the 119 chains GraMi adds; sweden_100K_easy A prefix 1,000,000",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/grami_added_check.py",
+    "--dataset",
+    "sweden_100K_easy",
+    "--labeling",
+    "A",
+    "--prefix",
+    "1000000",
+    "--grami-build",
+    "<home>/work/grami-build-acfix",
+    "--engine",
+    "grami-path-nocache-sharedtimer-acfix",
+    "--heap",
+    "24g"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-independent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-22T13:33:31",
+  "git_commit": "606ac4f224f1e38292dbfac79e2ac9aac8a1b3a9",
+  "git_tree": "clean",
+  "code_sha256": "4ec665cb5b22cc66069a6efdccdbf615f952fc180a87994d1e8ece42ddc0a920",
+  "code_files": 139,
+  "engine_jar_sha256": "277a4879b5df7bf276ad920fbaa7d6667cb376382e4eb1bb7f148583d8a900b7",
+  "data": [
+    {
+      "path": "datasets/chain/sweden_100K_easy_A.tg",
+      "bytes": 34614563,
+      "sha256": "8c56530c0edf70e8ea5ef310a63ec4c1ae9a9b6d2465226e1d22240993e8912d"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (2 untracked result records)",
+  "paired_timing_record": "results-probe-timing/grami-added-check/20261022T133331"
+}
