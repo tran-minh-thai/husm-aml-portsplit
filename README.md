@@ -1,6 +1,6 @@
 # husm-aml-portsplit
 
-Exact mining of amount-conserving chains in transaction graphs: the chain miner, the scripts that
+Amount-conserving chain mining in transaction graphs: the chain miner, the scripts that
 build its inputs and run every experiment, and the record of every run.
 
 A chain is a directed path of transactions (open chain) or a directed cycle read from a marked origin
