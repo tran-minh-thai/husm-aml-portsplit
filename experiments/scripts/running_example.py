@@ -13,6 +13,7 @@ import csv
 import itertools
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -22,11 +23,12 @@ JAR = ROOT / "inchusm-miner" / "target" / "inchusm-miner-0.1.0-SNAPSHOT.jar"
 OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else ROOT / "experiments" / "results"
 THETA, TAU, MAX_LENGTH, MIN_CYCLE = 0.2, 2, 4, 3
 
-ACCOUNTS = "abcdefgh"
+ACCOUNTS = "abcdghmw"
 # (source, target, amount); one account label and one transaction label (labelling S)
 EDGES = [("a", "b", 100), ("b", "c", 95), ("c", "d", 90), ("d", "a", 75),
-         ("e", "f", 50), ("f", "c", 48), ("f", "g", 200), ("g", "h", 190),
-         ("b", "e", 40), ("h", "e", 30)]
+         ("g", "h", 50), ("h", "c", 48), ("h", "m", 200), ("m", "w", 190),
+         ("b", "g", 40), ("w", "g", 30)]
+FILTER_FROM = 3       # slot filter from this candidate length in the step-by-step run of the level-wise algorithm
 
 
 def cons(x: float, y: float) -> bool:
@@ -76,8 +78,170 @@ def slot_filter(prefix_images: list):
     return [sorted(d) for d in D], [sorted(b) for b in B], kept
 
 
+def level_wise_trace() -> dict:
+    """The level-wise algorithm on this graph, step by step, in the order the miner (ChainMiner) uses: positions by
+    increasing domain size then index, accounts by increasing id (the order of ACCOUNTS), the forward phase of a pinned
+    search before the backward one, transactions by increasing amount then id. One label, so every level holds one open
+    chain and every candidate joins it with itself. Returns every candidate with its domains, the accounts the slot
+    filter rejects, every pinned search with its result, and the outcome."""
+    idx = {v: i for i, v in enumerate(ACCOUNTS)}
+    order = lambda ids: sorted(ids, key=lambda e: (EDGES[e][2], e))
+    out_of = {v: order([e for e, x in enumerate(EDGES) if x[0] == v]) for v in ACCOUNTS}
+    into = {v: order([e for e, x in enumerate(EDGES) if x[1] == v]) for v in ACCOUNTS}
+    img = [sorted({s for s, _, _ in EDGES}, key=idx.get), sorted({t for _, t, _ in EDGES}, key=idx.get)]
+    levels, trace = [img], []
+    for k in range(1, MAX_LENGTH):
+        P = levels[-1]
+        found_open = None
+        for closed in (False, True):
+            if closed and k + 1 < MIN_CYCLE:
+                continue
+            m = k + 1
+            if closed:
+                dom = [sorted(set(P[0]) & set(P[k]), key=idx.get)] + [sorted(set(P[i]) & set(P[i - 1]), key=idx.get) for i in range(1, k + 1)]
+            else:
+                dom = [P[0]] + [sorted(set(P[i]) & set(P[i - 1]), key=idx.get) for i in range(1, k + 1)] + [P[k]]
+            pos = lambda s: 0 if closed and s == m else s
+            entry = {"length": m, "kind": "closed" if closed else "open", "domains": dom, "rejected": [], "searches": []}
+            trace.append(entry)
+            if min(len(d) for d in dom) < TAU:
+                entry["outcome"] = "domain"
+                continue
+            rejected = [set() for _ in dom]
+            slots = None
+            if m >= FILTER_FROM:
+                slots = [None] + [{e for e, (u, v, _) in enumerate(EDGES) if u in dom[s - 1] and v in dom[pos(s)]} for s in range(1, m + 1)]
+                entry["initial_slots"] = [None] + [sorted(slots[s]) for s in range(1, m + 1)]
+                step = lambda e, f: EDGES[e][1] == EDGES[f][0] and cons(EDGES[e][2], EDGES[f][2])
+                rounds = []
+                while True:
+                    before = [set(x) for x in slots[1:]]
+                    for s in range(2, m + 1):
+                        slots[s] = {f for f in slots[s] if any(step(e, f) for e in slots[s - 1])}
+                    after_forward = [sorted(x) for x in slots[1:]]
+                    for s in range(m - 1, 0, -1):
+                        slots[s] = {e for e in slots[s] if any(step(e, f) for f in slots[s + 1])}
+                    if closed:
+                        z = {EDGES[e][0] for e in slots[1]} & {EDGES[e][1] for e in slots[m]}
+                        slots[1] = {e for e in slots[1] if EDGES[e][0] in z}
+                        slots[m] = {e for e in slots[m] if EDGES[e][1] in z}
+                    rounds.append({"after_forward": after_forward})
+                    if [set(x) for x in slots[1:]] == before:
+                        break
+                entry["filter_rounds"] = rounds
+                kept = [{EDGES[e][0] for e in slots[1]}] + [{EDGES[e][1] for e in slots[q]} for q in range(1, len(dom))]
+                for q in range(len(dom)):
+                    rejected[q] = {v for v in dom[q] if v not in kept[q]}
+                entry["rejected"] = [sorted(r, key=idx.get) for r in rejected]
+                if any(len(dom[q]) - len(rejected[q]) < TAU for q in range(len(dom))):
+                    entry["outcome"] = "filter"
+                    continue
+            witnessed = [set() for _ in dom]
+
+            def find(pin, u):
+                vert = [None] * len(dom)
+                tx = [None] * (m + 1)
+                vert[pin] = u
+
+                def admissible(q, v):
+                    return v in dom[q] and v not in rejected[q] and v not in vert
+
+                def right(s):
+                    if s > m:
+                        return left(pin)
+                    for e in out_of[vert[s - 1]]:
+                        if s - 1 > pin and not cons(EDGES[tx[s - 1]][2], EDGES[e][2]):
+                            continue
+                        if slots is not None and e not in slots[s]:
+                            continue
+                        t, q = EDGES[e][1], pos(s)
+                        assign = vert[q] is None
+                        if (not admissible(q, t)) if assign else t != vert[q]:
+                            continue
+                        if assign:
+                            vert[q] = t
+                        tx[s] = e
+                        if right(s + 1):
+                            return True
+                        tx[s] = None
+                        if assign:
+                            vert[q] = None
+                    return False
+
+                def left(s):
+                    if s < 1:
+                        return True
+                    for e in into[vert[s]]:
+                        if s <= m - 1 and tx[s + 1] is not None and not cons(EDGES[e][2], EDGES[tx[s + 1]][2]):
+                            continue
+                        if slots is not None and e not in slots[s]:
+                            continue
+                        f, q = EDGES[e][0], s - 1
+                        assign = vert[q] is None
+                        if (not admissible(q, f)) if assign else f != vert[q]:
+                            continue
+                        if assign:
+                            vert[q] = f
+                        tx[s] = e
+                        if left(s - 1):
+                            return True
+                        tx[s] = None
+                        if assign:
+                            vert[q] = None
+                    return False
+
+                return list(vert) if right(pin + 1) else None
+
+            stopped = False
+            for q in sorted(range(len(dom)), key=lambda q: (len(dom[q]), q)):
+                for u in dom[q]:
+                    if u in witnessed[q] or u in rejected[q]:
+                        continue
+                    occ = find(q, u)
+                    entry["searches"].append({"position": q, "account": u, "occurrence": occ})
+                    if occ:
+                        for r, v in enumerate(occ):
+                            witnessed[r].add(v)
+                    else:
+                        rejected[q].add(u)
+                        if len(dom[q]) - len(rejected[q]) < TAU:
+                            stopped = True
+                            break
+                if stopped:
+                    break
+            if stopped:
+                entry["outcome"] = "search"
+                continue
+            entry["outcome"] = "frequent"
+            entry["images"] = [sorted(w, key=idx.get) for w in witnessed]
+            if not closed:
+                found_open = entry["images"]
+        if found_open is None:
+            break
+        levels.append(found_open)
+    return {"filter_from": FILTER_FROM, "level_one_images": img, "candidates": trace,
+            "searches": sum(len(c["searches"]) for c in trace),
+            "found": sum(1 for c in trace for x in c["searches"] if x["occurrence"]),
+            "failed": sum(1 for c in trace for x in c["searches"] if not x["occurrence"])}
+
+
+def miner_counters(graph: Path) -> dict:
+    """The miner's machine-independent counters on this graph with the slot filter from FILTER_FROM."""
+    out = subprocess.run(["java", "-cp", str(JAR), "edu.huflit.inchusm.chain.ChainMain", "--graph", str(graph), "--theta", str(THETA),
+                          "--min-support", str(TAU), "--max-length", str(MAX_LENGTH), "--min-cycle", str(MIN_CYCLE),
+                          "--consistency-from", str(FILTER_FROM), "--out", str(OUT / "patterns_running_example_level_wise.tsv")],
+                         check=True, capture_output=True, text=True).stdout
+    found = {}
+    for key in ("searches", "found", "failed"):
+        m = re.search(rf"\b{key}=(\d+)", out)
+        if not m:
+            sys.exit(f"miner output has no counter {key}")
+        found[key] = int(m.group(1))
+    return found
+
+
 def write_graph(path: Path) -> None:
-    lines = ["# running example of the manuscript: accounts a..h are 1..8, one label (labelling S)"]
+    lines = ["# running example of the manuscript: accounts " + ", ".join(ACCOUNTS) + " are 1..8, one label (labelling S)"]
     lines += [f"v {ACCOUNTS.index(v) + 1} 0" for v in ACCOUNTS]
     lines += [f"e {ACCOUNTS.index(s) + 1} {ACCOUNTS.index(t) + 1} 0 {a}" for s, t, a in EDGES]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -94,7 +258,7 @@ def main() -> None:
                         "--min-support", str(tau), "--max-length", str(MAX_LENGTH), "--min-cycle", str(MIN_CYCLE),
                         "--out", str(table)], check=True, stdout=subprocess.DEVNULL)
         mined_at[tau] = {(r["kind"], int(r["length"])): r for r in csv.DictReader(open(table), delimiter="\t")}
-    result = {"theta": THETA, "tau": TAU, "max_length": MAX_LENGTH, "min_cycle": MIN_CYCLE,
+    result = {"theta": THETA, "tau": TAU, "max_length": MAX_LENGTH, "min_cycle": MIN_CYCLE, "account_order": ACCOUNTS,
               "edges": [{"source": s, "target": t, "amount": a} for s, t, a in EDGES], "chains": []}
     for closed in (False, True):
         for m in range(MIN_CYCLE if closed else 1, MAX_LENGTH + 1):
@@ -125,12 +289,30 @@ def main() -> None:
             sys.exit(f"the filter removed an image account at position {p}: images {img3[p]}, kept {kept[p]}")
     result["filter_length_3"] = {"domains": domains, "slots": slots, "kept_accounts": kept,
                                  "removed": [[p, v] for p in range(4) for v in domains[p] if v not in kept[p]]}
+    lw = level_wise_trace()
+    counters = miner_counters(graph)
+    if {k: lw[k] for k in counters} != counters:
+        sys.exit(f"level-wise run: step-by-step {[lw[k] for k in counters]}, miner {counters}")
+    frequent_lw = {(c["kind"], c["length"]) for c in lw["candidates"] if c["outcome"] == "frequent"} | {("open", 1)}
+    if frequent_lw != frequent:
+        sys.exit(f"level-wise run reports {sorted(frequent_lw)}, the definitions {sorted(frequent)}")
+    for c in lw["candidates"]:
+        if c["outcome"] == "frequent":
+            ref = next(x for x in result["chains"] if x["kind"] == c["kind"] and x["length"] == c["length"])
+            if c["images"] != [sorted(x, key=ACCOUNTS.index) for x in ref["images"]]:
+                sys.exit(f"level-wise run: images of {c['kind']} {c['length']} differ from the definitions")
+    lw["miner_counters"] = counters
+    result["level_wise"] = lw
     (OUT / "running_example.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
     print(f"theta {THETA}, tau {TAU}; frequent chains, brute force = miner: {sorted(frequent)}; {compared} chain tables compared (tau {TAU} and 1)")
     for c in result["chains"]:
         valid = sum(o["valid"] for o in c["occurrences"])
         print(f"  {c['kind']} m={c['length']}: {len(c['occurrences'])} occurrences, {valid} valid, images {c['images']}, support {c['support']}")
     print(f"  slot filter, length 3: domains {domains}; kept {kept}; removed {result['filter_length_3']['removed']}")
+    print(f"  level-wise run (filter from length {FILTER_FROM}): {lw['searches']} pinned searches, {lw['found']} found, "
+          f"{lw['failed']} failed; the miner: {counters}")
+    for c in lw["candidates"]:
+        print(f"    {c['kind']} {c['length']}: {c['outcome']}, {len(c['searches'])} searches, rejected by the filter {c['rejected']}")
 
 
 if __name__ == "__main__":
