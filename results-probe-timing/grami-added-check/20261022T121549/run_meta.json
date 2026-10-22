@@ -1,0 +1,71 @@
+{
+  "run_id": "20261022T121549",
+  "note": "probe: which program is right where GraMi adds 119 chains; sweden_100K_easy A prefix 1,000,000; limitedtime true and false",
+  "command": [
+    "<home>/.venvs/husm-aml-portsplit/bin/python",
+    "experiments/scripts/grami_added_check.py",
+    "--dataset",
+    "sweden_100K_easy",
+    "--labeling",
+    "A",
+    "--prefix",
+    "1000000",
+    "--grami-build",
+    "<home>/work/grami-build-new",
+    "--heap",
+    "24g"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-22T12:15:49",
+  "git_commit": "ee8634b83b960afdab7471b4efdea83581bad1bb",
+  "git_tree": "clean",
+  "code_sha256": "3350b270497096b2fbf14b9a2caf6677e81a3b944197ee2a42f4fda164b8e6a7",
+  "code_files": 138,
+  "engine_jar_sha256": "277a4879b5df7bf276ad920fbaa7d6667cb376382e4eb1bb7f148583d8a900b7",
+  "data": [
+    {
+      "path": "datasets/chain/sweden_100K_easy_A.tg",
+      "bytes": 34614563,
+      "sha256": "8c56530c0edf70e8ea5ef310a63ec4c1ae9a9b6d2465226e1d22240993e8912d"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "3c560103fa9b",
+  "machine_description": {
+    "cpu": "Apple M5",
+    "memory": "34359738368",
+    "logical_cpus": 10
+  },
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.6",
+  "java": "openjdk version \"26.0.1\" 2026-04-21",
+  "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+  "git_tree_after_run": "clean (2 untracked result records)",
+  "timing_kind": "probe: development machine, decides whether a change is worth making, never cited",
+  "load_average_start": [
+    4.0,
+    9.85,
+    6.06
+  ],
+  "load_average_end": [
+    1.58,
+    1.6,
+    1.75
+  ],
+  "finished_at": "2026-10-22T13:07:44",
+  "paired_with": "results-probe/grami-added-check/20261022T121549"
+}

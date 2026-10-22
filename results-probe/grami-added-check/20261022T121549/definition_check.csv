@@ -1,0 +1,320 @@
+chain,kind,in_miner,in_grami-path-nocache-sharedtimer-limitedtime-true,in_grami-path-nocache-sharedtimer-limitedtime-false,frequent_by_definition,images,search_steps
+O 0 >0 1 >0 11 >0 3 >0 4,differing,False,True,True,False,9,62197
+O 0 >0 1 >0 3 >0 8 >0 10,differing,False,True,True,False,9,67369
+O 0 >0 1 >0 6 >0 4 >0 2,differing,False,True,True,False,9,71272
+O 0 >0 1 >0 8 >0 4 >0 6,differing,False,True,True,False,9,65025
+O 0 >0 10 >0 6 >0 9 >0 1,differing,False,True,True,False,9,62309
+O 0 >0 2 >0 3 >0 11 >0 7,differing,False,True,True,False,9,61667
+O 0 >0 3 >0 11 >0 8 >0 2,differing,False,True,True,False,9,64677
+O 0 >0 4 >0 10 >0 5 >0 3,differing,False,True,True,False,9,75019
+O 0 >0 4 >0 3 >0 11 >0 9,differing,False,True,True,False,9,72514
+O 0 >0 4 >0 9 >0 8 >0 7,differing,False,True,True,False,9,64548
+O 0 >0 5 >0 8 >0 7 >0 10,differing,False,True,True,False,9,73127
+O 0 >0 7 >0 8 >0 5 >0 1,differing,False,True,True,False,9,70586
+O 0 >0 9 >0 2 >0 5 >0 8,differing,False,True,True,False,9,73199
+O 1 >0 0 >0 2 >0 7 >0 4,differing,False,True,True,False,9,69336
+O 1 >0 10 >0 8 >0 4 >0 0,differing,False,True,True,False,8,64575
+O 1 >0 3 >0 7 >0 8 >0 4,differing,False,True,True,False,8,67451
+O 1 >0 3 >0 8 >0 4 >0 11,differing,False,True,True,False,9,70286
+O 1 >0 3 >0 9 >0 6 >0 5,differing,False,True,True,False,9,65419
+O 1 >0 9 >0 6 >0 0 >0 8,differing,False,True,True,False,9,75084
+O 10 >0 0 >0 5 >0 8 >0 6,differing,False,True,True,False,9,66031
+O 10 >0 1 >0 11 >0 2 >0 3,differing,False,True,True,False,9,66353
+O 10 >0 1 >0 11 >0 2 >0 6,differing,False,True,True,False,9,72160
+O 10 >0 1 >0 11 >0 9 >0 2,differing,False,True,True,False,9,63868
+O 10 >0 1 >0 8 >0 9 >0 3,differing,False,True,True,False,9,57515
+O 10 >0 2 >0 3 >0 6 >0 9,differing,False,True,True,False,9,63540
+O 10 >0 3 >0 6 >0 0 >0 2,differing,False,True,True,False,9,74928
+O 10 >0 3 >0 6 >0 0 >0 9,differing,False,True,True,False,9,62482
+O 10 >0 4 >0 5 >0 7 >0 9,differing,False,True,True,False,8,58685
+O 10 >0 4 >0 9 >0 3 >0 1,differing,False,True,True,False,9,75212
+O 10 >0 5 >0 0 >0 11 >0 3,differing,False,True,True,False,9,67098
+O 10 >0 5 >0 11 >0 3 >0 6,differing,False,True,True,False,8,75641
+O 10 >0 5 >0 11 >0 9 >0 0,differing,False,True,True,False,8,58916
+O 10 >0 5 >0 11 >0 9 >0 6,differing,False,True,True,False,9,51963
+O 10 >0 5 >0 11 >0 9 >0 7,differing,False,True,True,False,9,53499
+O 10 >0 5 >0 8 >0 4 >0 3,differing,False,True,True,False,9,69005
+O 10 >0 8 >0 6 >0 1 >0 0,differing,False,True,True,False,9,73513
+O 10 >0 9 >0 3 >0 8 >0 7,differing,False,True,True,False,9,63802
+O 11 >0 10 >0 0 >0 6 >0 9,differing,False,True,True,False,9,70778
+O 2 >0 1 >0 11 >0 0 >0 5,differing,False,True,True,False,9,66024
+O 2 >0 1 >0 6 >0 5 >0 8,differing,False,True,True,False,9,68713
+O 2 >0 1 >0 6 >0 5 >0 9,differing,False,True,True,False,9,72786
+O 2 >0 3 >0 6 >0 9 >0 7,differing,False,True,True,False,9,55355
+O 2 >0 4 >0 10 >0 6 >0 9,differing,False,True,True,False,9,76267
+O 2 >0 5 >0 11 >0 9 >0 10,differing,False,True,True,False,9,61120
+O 2 >0 5 >0 11 >0 9 >0 6,differing,False,True,True,False,9,67473
+O 2 >0 5 >0 6 >0 7 >0 0,differing,False,True,True,False,9,64863
+O 2 >0 8 >0 11 >0 0 >0 1,differing,False,True,True,False,9,59824
+O 2 >0 8 >0 11 >0 0 >0 5,differing,False,True,True,False,8,60035
+O 3 >0 0 >0 11 >0 8 >0 10,differing,False,True,True,False,9,67933
+O 3 >0 0 >0 5 >0 2 >0 9,differing,False,True,True,False,9,70747
+O 3 >0 1 >0 2 >0 9 >0 6,differing,False,True,True,False,9,74059
+O 3 >0 1 >0 8 >0 9 >0 7,differing,False,True,True,False,9,75335
+O 3 >0 10 >0 11 >0 7 >0 5,differing,False,True,True,False,9,64166
+O 3 >0 10 >0 2 >0 4 >0 1,differing,False,True,True,False,9,58048
+O 3 >0 10 >0 4 >0 6 >0 7,differing,False,True,True,False,9,65734
+O 3 >0 10 >0 6 >0 4 >0 8,differing,False,True,True,False,9,60111
+O 3 >0 4 >0 1 >0 9 >0 7,differing,False,True,True,False,9,63043
+O 3 >0 4 >0 5 >0 0 >0 11,differing,False,True,True,False,9,63774
+O 3 >0 4 >0 9 >0 0 >0 5,differing,False,True,True,False,9,66732
+O 3 >0 5 >0 8 >0 9 >0 4,differing,False,True,True,False,8,73575
+O 3 >0 7 >0 1 >0 5 >0 10,differing,False,True,True,False,9,67126
+O 3 >0 7 >0 8 >0 4 >0 6,differing,False,True,True,False,9,59292
+O 3 >0 7 >0 8 >0 6 >0 4,differing,False,True,True,False,9,63387
+O 3 >0 8 >0 11 >0 0 >0 1,differing,False,True,True,False,9,76373
+O 3 >0 8 >0 11 >0 0 >0 4,differing,False,True,True,False,9,69653
+O 3 >0 8 >0 7 >0 2 >0 5,differing,False,True,True,False,9,69438
+O 3 >0 8 >0 7 >0 6 >0 9,differing,False,True,True,False,8,73720
+O 3 >0 9 >0 0 >0 5 >0 10,differing,False,True,True,False,9,60422
+O 4 >0 0 >0 5 >0 7 >0 9,differing,False,True,True,False,9,62858
+O 4 >0 1 >0 2 >0 5 >0 0,differing,False,True,True,False,9,67685
+O 4 >0 1 >0 6 >0 7 >0 3,differing,False,True,True,False,9,74803
+O 4 >0 10 >0 6 >0 3 >0 7,differing,False,True,True,False,9,74113
+O 4 >0 2 >0 11 >0 3 >0 5,differing,False,True,True,False,9,75691
+O 4 >0 2 >0 11 >0 7 >0 10,differing,False,True,True,False,9,62930
+O 4 >0 3 >0 2 >0 9 >0 10,differing,False,True,True,False,9,68826
+O 4 >0 3 >0 9 >0 0 >0 6,differing,False,True,True,False,9,57446
+O 4 >0 5 >0 1 >0 2 >0 3,differing,False,True,True,False,9,66806
+O 5 >0 0 >0 7 >0 1 >0 9,differing,False,True,True,False,9,60630
+O 5 >0 0 >0 8 >0 4 >0 11,differing,False,True,True,False,7,71619
+O 5 >0 0 >0 8 >0 4 >0 6,differing,False,True,True,False,7,74040
+O 5 >0 10 >0 1 >0 7 >0 2,differing,False,True,True,False,9,65410
+O 5 >0 10 >0 4 >0 2 >0 6,differing,False,True,True,False,9,75334
+O 5 >0 10 >0 4 >0 2 >0 7,differing,False,True,True,False,9,73942
+O 5 >0 10 >0 8 >0 6 >0 11,differing,False,True,True,False,9,63587
+O 5 >0 11 >0 9 >0 6 >0 7,differing,False,True,True,False,9,65939
+O 5 >0 4 >0 8 >0 9 >0 1,differing,False,True,True,False,9,75997
+O 5 >0 4 >0 9 >0 8 >0 11,differing,False,True,True,False,9,70517
+O 5 >0 7 >0 2 >0 3 >0 6,differing,False,True,True,False,9,69941
+O 5 >0 7 >0 8 >0 4 >0 0,differing,False,True,True,False,9,71138
+O 5 >0 8 >0 11 >0 9 >0 6,differing,False,True,True,False,9,61868
+O 7 >0 1 >0 11 >0 2 >0 10,differing,False,True,True,False,9,65990
+O 7 >0 1 >0 11 >0 2 >0 3,differing,False,True,True,False,9,63683
+O 7 >0 1 >0 2 >0 4 >0 0,differing,False,True,True,False,9,62232
+O 7 >0 1 >0 2 >0 4 >0 8,differing,False,True,True,False,9,67716
+O 7 >0 1 >0 2 >0 5 >0 0,differing,False,True,True,False,9,84147
+O 7 >0 4 >0 2 >0 8 >0 6,differing,False,True,True,False,9,69113
+O 7 >0 4 >0 2 >0 9 >0 10,differing,False,True,True,False,9,72894
+O 7 >0 4 >0 2 >0 9 >0 6,differing,False,True,True,False,9,72086
+O 7 >0 5 >0 2 >0 3 >0 6,differing,False,True,True,False,9,68677
+O 8 >0 0 >0 7 >0 2 >0 1,differing,False,True,True,False,8,74296
+O 8 >0 0 >0 7 >0 2 >0 4,differing,False,True,True,False,9,63406
+O 8 >0 1 >0 6 >0 5 >0 11,differing,False,True,True,False,9,74973
+O 8 >0 10 >0 5 >0 2 >0 7,differing,False,True,True,False,9,77743
+O 8 >0 10 >0 7 >0 2 >0 9,differing,False,True,True,False,9,71752
+O 8 >0 3 >0 2 >0 4 >0 6,differing,False,True,True,False,9,72614
+O 8 >0 3 >0 2 >0 5 >0 6,differing,False,True,True,False,9,56959
+O 8 >0 7 >0 2 >0 3 >0 9,differing,False,True,True,False,9,66061
+O 8 >0 9 >0 4 >0 6 >0 7,differing,False,True,True,False,9,74059
+O 9 >0 0 >0 8 >0 4 >0 3,differing,False,True,True,False,7,62123
+O 9 >0 0 >0 8 >0 4 >0 5,differing,False,True,True,False,9,68633
+O 9 >0 0 >0 8 >0 6 >0 3,differing,False,True,True,False,9,62267
+O 9 >0 1 >0 10 >0 2 >0 7,differing,False,True,True,False,9,60050
+O 9 >0 10 >0 8 >0 0 >0 4,differing,False,True,True,False,8,70265
+O 9 >0 2 >0 11 >0 3 >0 5,differing,False,True,True,False,9,72271
+O 9 >0 3 >0 2 >0 1 >0 8,differing,False,True,True,False,9,76065
+O 9 >0 4 >0 3 >0 11 >0 0,differing,False,True,True,False,9,58762
+O 9 >0 7 >0 1 >0 10 >0 4,differing,False,True,True,False,9,55662
+O 9 >0 8 >0 2 >0 0 >0 6,differing,False,True,True,False,9,61157
+O 9 >0 8 >0 5 >0 2 >0 7,differing,False,True,True,False,8,65789
+O 0 >0 0 >0 5 >0 10 >0 11,agreed sample,True,True,True,True,10,61065
+O 0 >0 1 >0 0 >0 9,agreed sample,True,True,True,True,10,16111
+O 0 >0 1 >0 1 >0 10 >0 6,agreed sample,True,True,True,True,10,77231
+O 0 >0 1 >0 1 >0 9,agreed sample,True,True,True,True,10,16685
+O 0 >0 1 >0 5 >0 4 >0 3,agreed sample,True,True,True,True,10,74103
+O 0 >0 10 >0 10 >0 0,agreed sample,True,True,True,True,10,10155
+O 0 >0 10 >0 6 >0 5 >0 9,agreed sample,True,True,True,True,10,75749
+O 0 >0 10 >0 7 >0 9 >0 11,agreed sample,True,True,True,True,10,80203
+O 0 >0 11 >0 4 >0 0,agreed sample,True,True,True,True,10,27619
+O 0 >0 2 >0 0 >0 2,agreed sample,True,True,True,True,10,18658
+O 0 >0 2 >0 10 >0 4,agreed sample,True,True,True,True,10,18939
+O 0 >0 3 >0 3 >0 9 >0 4,agreed sample,True,True,True,True,10,60793
+O 0 >0 4 >0 1 >0 8,agreed sample,True,True,True,True,10,23314
+O 0 >0 5 >0 10 >0 4 >0 9,agreed sample,True,True,True,True,10,72692
+O 0 >0 5 >0 6 >0 5 >0 1,agreed sample,True,True,True,True,10,70127
+O 0 >0 6 >0 1 >0 7 >0 6,agreed sample,True,True,True,True,10,59312
+O 0 >0 6 >0 2 >0 9,agreed sample,True,True,True,True,10,24903
+O 0 >0 6 >0 8 >0 5,agreed sample,True,True,True,True,10,15568
+O 0 >0 7 >0 0 >0 9,agreed sample,True,True,True,True,10,22416
+O 0 >0 7 >0 4 >0 11 >0 1,agreed sample,True,True,True,True,10,76202
+O 0 >0 7 >0 8 >0 7 >0 9,agreed sample,True,True,True,True,10,72334
+O 0 >0 9 >0 0 >0 7 >0 9,agreed sample,True,True,True,True,10,85386
+O 0 >0 9 >0 1 >0 4,agreed sample,True,True,True,True,10,20685
+O 0 >0 9 >0 11 >0 5,agreed sample,True,True,True,True,10,23944
+O 0 >0 9 >0 5 >0 0 >0 2,agreed sample,True,True,True,True,10,58786
+O 0 >0 9 >0 6 >0 3,agreed sample,True,True,True,True,10,15227
+O 1 >0 0 >0 10 >0 0 >0 6,agreed sample,True,True,True,True,10,68175
+O 1 >0 0 >0 3 >0 10,agreed sample,True,True,True,True,10,19356
+O 1 >0 1 >0 0 >0 2 >0 1,agreed sample,True,True,True,True,10,80368
+O 1 >0 10 >0 1 >0 8 >0 10,agreed sample,True,True,True,True,10,87016
+O 1 >0 10 >0 5 >0 3 >0 5,agreed sample,True,True,True,True,10,92261
+O 1 >0 10 >0 7,agreed sample,True,True,True,True,10,2800
+O 1 >0 3 >0 7 >0 3 >0 11,agreed sample,True,True,True,True,10,86662
+O 1 >0 3 >0 8 >0 10 >0 6,agreed sample,True,True,True,True,10,83623
+O 1 >0 5 >0 0 >0 4 >0 10,agreed sample,True,True,True,True,10,58301
+O 1 >0 5 >0 10 >0 8,agreed sample,True,True,True,True,10,23139
+O 1 >0 6 >0 0 >0 9,agreed sample,True,True,True,True,10,20274
+O 1 >0 7 >0 1 >0 5,agreed sample,True,True,True,True,10,28508
+O 1 >0 7 >0 5 >0 10,agreed sample,True,True,True,True,10,13551
+O 1 >0 7 >0 7 >0 10 >0 3,agreed sample,True,True,True,True,10,75758
+O 1 >0 9 >0 0 >0 6,agreed sample,True,True,True,True,10,10858
+O 1 >0 9 >0 1 >0 4 >0 9,agreed sample,True,True,True,True,10,77236
+O 1 >0 9 >0 9 >0 0 >0 5,agreed sample,True,True,True,True,10,64256
+O 10 >0 0 >0 4 >0 7 >0 9,agreed sample,True,True,True,True,10,83429
+O 10 >0 1 >0 1 >0 7 >0 6,agreed sample,True,True,True,True,10,57650
+O 10 >0 10 >0 0 >0 10,agreed sample,True,True,True,True,10,18295
+O 10 >0 2 >0 1 >0 11 >0 3,agreed sample,True,True,True,True,10,85474
+O 10 >0 3 >0 2 >0 4,agreed sample,True,True,True,True,10,18024
+O 10 >0 3 >0 4 >0 9,agreed sample,True,True,True,True,10,17416
+O 10 >0 3 >0 6 >0 2 >0 9,agreed sample,True,True,True,True,10,79730
+O 10 >0 4 >0 1 >0 11 >0 3,agreed sample,True,True,True,True,10,80688
+O 10 >0 4 >0 11 >0 11,agreed sample,True,True,True,True,10,29481
+O 10 >0 4 >0 3 >0 3 >0 9,agreed sample,True,True,True,True,10,84581
+O 10 >0 4 >0 4 >0 2,agreed sample,True,True,True,True,10,17842
+O 10 >0 4 >0 4 >0 6 >0 9,agreed sample,True,True,True,True,10,93611
+O 10 >0 6 >0 2 >0 7 >0 5,agreed sample,True,True,True,True,10,68647
+O 10 >0 8 >0 7 >0 7 >0 0,agreed sample,True,True,True,True,10,72615
+O 11 >0 0,agreed sample,True,True,True,True,10,330
+O 11 >0 0 >0 1 >0 3 >0 5,agreed sample,True,True,True,True,10,84046
+O 11 >0 1 >0 2 >0 7 >0 6,agreed sample,True,True,True,True,10,90662
+O 11 >0 10 >0 6 >0 4 >0 10,agreed sample,True,True,True,True,10,69757
+O 11 >0 11 >0 1 >0 11 >0 9,agreed sample,True,True,True,True,10,68737
+O 11 >0 11 >0 1 >0 2 >0 2,agreed sample,True,True,True,True,10,64929
+O 11 >0 11 >0 6 >0 3 >0 11,agreed sample,True,True,True,True,10,78088
+O 11 >0 2 >0 4 >0 1 >0 0,agreed sample,True,True,True,True,10,65022
+O 11 >0 2 >0 9 >0 8 >0 10,agreed sample,True,True,True,True,10,77806
+O 11 >0 4 >0 4 >0 0,agreed sample,True,True,True,True,10,24419
+O 11 >0 6 >0 10 >0 4 >0 7,agreed sample,True,True,True,True,10,92576
+O 11 >0 7 >0 1 >0 2,agreed sample,True,True,True,True,10,12399
+O 11 >0 7 >0 9 >0 0 >0 6,agreed sample,True,True,True,True,10,76888
+O 11 >0 9 >0 2 >0 7 >0 1,agreed sample,True,True,True,True,10,87402
+O 11 >0 9 >0 3 >0 8 >0 0,agreed sample,True,True,True,True,10,76026
+O 2 >0 0 >0 3 >0 11 >0 5,agreed sample,True,True,True,True,10,77075
+O 2 >0 1 >0 1 >0 4 >0 2,agreed sample,True,True,True,True,10,67469
+O 2 >0 1 >0 7 >0 5 >0 11,agreed sample,True,True,True,True,10,68975
+O 2 >0 10 >0 7 >0 5 >0 4,agreed sample,True,True,True,True,10,84819
+O 2 >0 3 >0 5 >0 6 >0 0,agreed sample,True,True,True,True,10,88264
+O 2 >0 5 >0 11 >0 4,agreed sample,True,True,True,True,10,20052
+O 2 >0 5 >0 8 >0 0,agreed sample,True,True,True,True,10,16469
+O 2 >0 7 >0 3 >0 3 >0 4,agreed sample,True,True,True,True,10,63601
+O 2 >0 7 >0 5 >0 8,agreed sample,True,True,True,True,10,14889
+O 2 >0 8 >0 11 >0 3 >0 11,agreed sample,True,True,True,True,10,36652
+O 3 >0 0 >0 1 >0 11 >0 5,agreed sample,True,True,True,True,10,58137
+O 3 >0 0 >0 11 >0 1,agreed sample,True,True,True,True,10,19215
+O 3 >0 1 >0 10 >0 10 >0 9,agreed sample,True,True,True,True,10,72465
+O 3 >0 10 >0 5 >0 7 >0 5,agreed sample,True,True,True,True,10,58571
+O 3 >0 11 >0 3 >0 6,agreed sample,True,True,True,True,10,15844
+O 3 >0 11 >0 4 >0 9 >0 5,agreed sample,True,True,True,True,10,69029
+O 3 >0 2 >0 5 >0 6 >0 5,agreed sample,True,True,True,True,10,88193
+O 3 >0 3 >0 1 >0 1,agreed sample,True,True,True,True,10,14937
+O 3 >0 3 >0 11 >0 0,agreed sample,True,True,True,True,10,20169
+O 3 >0 6 >0 5 >0 1 >0 10,agreed sample,True,True,True,True,10,82750
+O 3 >0 7 >0 1 >0 1 >0 6,agreed sample,True,True,True,True,10,66480
+O 3 >0 7 >0 3 >0 7 >0 9,agreed sample,True,True,True,True,10,68600
+O 3 >0 9 >0 1 >0 3 >0 5,agreed sample,True,True,True,True,10,82736
+O 4 >0 0 >0 11 >0 8,agreed sample,True,True,True,True,10,18942
+O 4 >0 0 >0 7 >0 2 >0 10,agreed sample,True,True,True,True,10,77869
+O 4 >0 1 >0 11 >0 5 >0 6,agreed sample,True,True,True,True,10,56938
+O 4 >0 1 >0 3 >0 2,agreed sample,True,True,True,True,10,19740
+O 4 >0 10 >0 9 >0 2,agreed sample,True,True,True,True,10,25035
+O 4 >0 11 >0 2 >0 2 >0 7,agreed sample,True,True,True,True,10,76521
+O 4 >0 11 >0 8 >0 11,agreed sample,True,True,True,True,10,29724
+O 4 >0 2 >0 1 >0 5 >0 2,agreed sample,True,True,True,True,10,80951
+O 4 >0 2 >0 10 >0 5 >0 2,agreed sample,True,True,True,True,10,86881
+O 4 >0 3 >0 4 >0 0,agreed sample,True,True,True,True,10,28415
+O 4 >0 3 >0 5 >0 8,agreed sample,True,True,True,True,10,16514
+O 4 >0 4 >0 7 >0 4 >0 11,agreed sample,True,True,True,True,10,82066
+O 4 >0 4 >0 8 >0 6 >0 11,agreed sample,True,True,True,True,10,37650
+O 4 >0 5 >0 4 >0 2,agreed sample,True,True,True,True,10,16849
+O 4 >0 6 >0 4 >0 7,agreed sample,True,True,True,True,10,18216
+O 4 >0 7 >0 9 >0 2 >0 2,agreed sample,True,True,True,True,10,57184
+O 5 >0 0 >0 4,agreed sample,True,True,True,True,10,2530
+O 5 >0 10 >0 6 >0 2 >0 0,agreed sample,True,True,True,True,10,80228
+O 5 >0 11 >0 9 >0 3,agreed sample,True,True,True,True,10,13458
+O 5 >0 11 >0 9 >0 5,agreed sample,True,True,True,True,10,19573
+O 5 >0 2 >0 0,agreed sample,True,True,True,True,10,2598
+O 5 >0 3 >0 0 >0 1 >0 11,agreed sample,True,True,True,True,10,57645
+O 5 >0 5 >0 6 >0 1 >0 6,agreed sample,True,True,True,True,10,82466
+O 5 >0 5 >0 7 >0 0 >0 4,agreed sample,True,True,True,True,10,46065
+O 5 >0 6 >0 6 >0 10,agreed sample,True,True,True,True,10,18518
+O 5 >0 6 >0 7 >0 3,agreed sample,True,True,True,True,10,15493
+O 5 >0 7 >0 2 >0 5,agreed sample,True,True,True,True,10,12928
+O 5 >0 7 >0 2 >0 8 >0 6,agreed sample,True,True,True,True,10,81440
+O 5 >0 7 >0 3 >0 3 >0 5,agreed sample,True,True,True,True,10,57103
+O 5 >0 8 >0 5 >0 3 >0 6,agreed sample,True,True,True,True,10,76171
+O 5 >0 9 >0 1 >0 0 >0 6,agreed sample,True,True,True,True,10,73403
+O 6 >0 0 >0 3 >0 7 >0 6,agreed sample,True,True,True,True,10,66504
+O 6 >0 1 >0 10 >0 6 >0 1,agreed sample,True,True,True,True,10,91985
+O 6 >0 1 >0 11 >0 9 >0 4,agreed sample,True,True,True,True,10,76187
+O 6 >0 1 >0 3 >0 7,agreed sample,True,True,True,True,10,16662
+O 6 >0 10 >0 0 >0 2 >0 7,agreed sample,True,True,True,True,10,74128
+O 6 >0 10 >0 2 >0 1,agreed sample,True,True,True,True,10,27903
+O 6 >0 10 >0 5 >0 3 >0 4,agreed sample,True,True,True,True,10,86813
+O 6 >0 3 >0 2 >0 11,agreed sample,True,True,True,True,10,18921
+O 6 >0 3 >0 4 >0 7 >0 5,agreed sample,True,True,True,True,10,64681
+O 6 >0 3 >0 5 >0 0,agreed sample,True,True,True,True,10,17482
+O 6 >0 4 >0 0 >0 9,agreed sample,True,True,True,True,10,16863
+O 6 >0 4 >0 1 >0 1 >0 11,agreed sample,True,True,True,True,10,79700
+O 6 >0 4 >0 5 >0 8 >0 1,agreed sample,True,True,True,True,10,57504
+O 6 >0 5 >0 10 >0 4 >0 3,agreed sample,True,True,True,True,10,65309
+O 6 >0 5 >0 11 >0 10 >0 10,agreed sample,True,True,True,True,10,64653
+O 6 >0 5 >0 5 >0 6,agreed sample,True,True,True,True,10,15471
+O 6 >0 5 >0 6 >0 5 >0 5,agreed sample,True,True,True,True,10,79704
+O 6 >0 5 >0 7 >0 11 >0 11,agreed sample,True,True,True,True,10,66266
+O 6 >0 5 >0 8 >0 0,agreed sample,True,True,True,True,10,24749
+O 6 >0 5 >0 9 >0 2 >0 9,agreed sample,True,True,True,True,10,60108
+O 6 >0 6 >0 10 >0 0,agreed sample,True,True,True,True,10,17528
+O 6 >0 6 >0 11 >0 7 >0 4,agreed sample,True,True,True,True,10,75640
+O 6 >0 8 >0 7 >0 2,agreed sample,True,True,True,True,10,20575
+O 6 >0 8 >0 7 >0 3,agreed sample,True,True,True,True,10,19506
+O 6 >0 9 >0 4 >0 1 >0 11,agreed sample,True,True,True,True,10,86197
+O 6 >0 9 >0 7 >0 6,agreed sample,True,True,True,True,10,14360
+O 7 >0 0 >0 7 >0 8 >0 1,agreed sample,True,True,True,True,10,89018
+O 7 >0 10 >0 4 >0 3,agreed sample,True,True,True,True,10,15152
+O 7 >0 2 >0 3 >0 9,agreed sample,True,True,True,True,10,18731
+O 7 >0 3 >0 10,agreed sample,True,True,True,True,10,1884
+O 7 >0 3 >0 7 >0 5,agreed sample,True,True,True,True,10,17748
+O 7 >0 4 >0 1 >0 3 >0 8,agreed sample,True,True,True,True,10,84241
+O 7 >0 4 >0 6 >0 6,agreed sample,True,True,True,True,10,20563
+O 7 >0 5 >0 11,agreed sample,True,True,True,True,10,2417
+O 7 >0 5 >0 2 >0 1,agreed sample,True,True,True,True,10,16360
+O 7 >0 6 >0 5 >0 7 >0 6,agreed sample,True,True,True,True,10,45428
+O 7 >0 7 >0 1 >0 0 >0 1,agreed sample,True,True,True,True,10,82680
+O 7 >0 7 >0 5 >0 11 >0 4,agreed sample,True,True,True,True,10,84590
+O 7 >0 7 >0 9 >0 8 >0 0,agreed sample,True,True,True,True,10,74404
+O 7 >0 8 >0 3 >0 0,agreed sample,True,True,True,True,10,14900
+O 7 >0 9 >0 3 >0 11,agreed sample,True,True,True,True,10,22667
+O 7 >0 9 >0 7 >0 0 >0 6,agreed sample,True,True,True,True,10,62268
+O 7 >0 9 >0 7 >0 1 >0 11,agreed sample,True,True,True,True,10,46832
+O 8 >0 0 >0 11 >0 7 >0 10,agreed sample,True,True,True,True,10,77666
+O 8 >0 10 >0 0 >0 2 >0 2,agreed sample,True,True,True,True,10,61667
+O 8 >0 10 >0 1 >0 9,agreed sample,True,True,True,True,10,13971
+O 8 >0 10 >0 7 >0 1 >0 0,agreed sample,True,True,True,True,10,67149
+O 8 >0 10 >0 7 >0 11,agreed sample,True,True,True,True,10,20899
+O 8 >0 10 >0 7 >0 8 >0 7,agreed sample,True,True,True,True,10,77971
+O 8 >0 2 >0 11 >0 8 >0 2,agreed sample,True,True,True,True,10,75550
+O 8 >0 3 >0 7 >0 5 >0 6,agreed sample,True,True,True,True,10,74680
+O 8 >0 4 >0 11,agreed sample,True,True,True,True,10,2757
+O 8 >0 4 >0 3 >0 6 >0 6,agreed sample,True,True,True,True,10,70656
+O 8 >0 6 >0 5 >0 7 >0 2,agreed sample,True,True,True,True,10,76721
+O 8 >0 6 >0 7 >0 2 >0 9,agreed sample,True,True,True,True,10,77841
+O 8 >0 7 >0 0 >0 0 >0 0,agreed sample,True,True,True,True,10,85404
+O 8 >0 8 >0 4 >0 0,agreed sample,True,True,True,True,10,14364
+O 9 >0 0 >0 8 >0 10,agreed sample,True,True,True,True,10,19549
+O 9 >0 1 >0 9 >0 4 >0 4,agreed sample,True,True,True,True,10,64429
+O 9 >0 10 >0 2 >0 1,agreed sample,True,True,True,True,10,17562
+O 9 >0 10 >0 4 >0 3 >0 10,agreed sample,True,True,True,True,10,81138
+O 9 >0 11 >0 3 >0 9,agreed sample,True,True,True,True,10,17701
+O 9 >0 2 >0 1 >0 6 >0 5,agreed sample,True,True,True,True,10,93095
+O 9 >0 3 >0 11 >0 10,agreed sample,True,True,True,True,10,20036
+O 9 >0 4 >0 6 >0 5,agreed sample,True,True,True,True,10,26884
+O 9 >0 4 >0 7 >0 0 >0 2,agreed sample,True,True,True,True,10,72232
+O 9 >0 5 >0 0 >0 3,agreed sample,True,True,True,True,10,18946
+O 9 >0 5 >0 11 >0 11 >0 6,agreed sample,True,True,True,True,10,75201
+O 9 >0 5 >0 8,agreed sample,True,True,True,True,10,2587
+O 9 >0 7 >0 4 >0 2 >0 8,agreed sample,True,True,True,True,10,70879
+O 9 >0 7 >0 6 >0 9,agreed sample,True,True,True,True,10,14499
+O 9 >0 9 >0 0 >0 10 >0 1,agreed sample,True,True,True,True,10,82753
+O 9 >0 9 >0 11 >0 7 >0 0,agreed sample,True,True,True,True,10,78328
+O 9 >0 9 >0 7 >0 3,agreed sample,True,True,True,True,10,13770
