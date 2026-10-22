@@ -1,0 +1,1 @@
+work directory excluded: True; temp directory excluded: True; java.exe excluded: True
