@@ -1,0 +1,64 @@
+{
+  "run_id": "20261022T191017",
+  "note": "grami speed acfix sweden_100K_difficult A length 4",
+  "command": [
+    "<home>\\.venvs\\husm-aml-portsplit\\Scripts\\python.exe",
+    "experiments\\scripts\\grami_speed.py",
+    "--dataset",
+    "sweden_100K_difficult",
+    "--labeling",
+    "A",
+    "--max-length",
+    "4",
+    "--grami-build",
+    "<home>\\work\\grami-build-acfix",
+    "--engines",
+    "grami-path-nocache-sharedtimer-acfix",
+    "--continue-on-difference"
+  ],
+  "repository": "husm-aml-portsplit",
+  "working_directory": ".",
+  "tree_kind": "machine-dependent",
+  "timing_lines_redacted": 0,
+  "absolute_paths_scrubbed": 2,
+  "exit_code": 0,
+  "started_at": "2026-10-22T19:10:17",
+  "git_commit": "de7bda459d3d006d4e9e530ca674a4ad711ae5a2",
+  "git_tree": "clean",
+  "code_sha256": "49a7f6bee4ffa42555d7df50ea69ce5783391bdc903d6b83a83f9575788d64b1",
+  "code_files": 139,
+  "engine_jar_sha256": "97e3caea807450fd0c02a2905ade45e786e27dcdd0962ec85b734ccef0e3ba58",
+  "data": [
+    {
+      "path": "datasets/chain/sweden_100K_difficult_A.tg",
+      "bytes": 33265409,
+      "sha256": "5d4c246fc3ece67e3cbd626ba729b9b6ce75760a5f097622047de0a4d7db8652"
+    }
+  ],
+  "libraries": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "networkx": "3.7",
+    "matplotlib": "3.11.2",
+    "torch": null
+  },
+  "host_id": "5f434a5d45c5",
+  "machine_description": {
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "memory": "unavailable",
+    "logical_cpus": 32
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18 LTS",
+  "maven": "unavailable",
+  "git_tree_after_run": "clean (3 untracked result records)",
+  "timing_kind": "measurement",
+  "load_average_start": null,
+  "load_average_end": null,
+  "finished_at": "2026-10-22T19:27:21",
+  "paired_with": "results-invariant/grami-speed-acfix/20261022T191017"
+}
