@@ -51,7 +51,8 @@ OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") els
 TIMING = Path(os.environ["RUN_TIMING_DIR"]) if os.environ.get("RUN_TIMING_DIR") else None
 PROBE = os.environ.get("RUN_TIMING_KIND", "").startswith("probe")
 PREFIXES = "10000,30000,100000,300000,1000000,3000000,10000000,30000000"
-GRAMI = ("grami-path", "grami-path-nocache", "grami-path-sharedtimer", "grami-path-nocache-sharedtimer")
+GRAMI = ("grami-path", "grami-path-nocache", "grami-path-sharedtimer", "grami-path-nocache-sharedtimer",
+         "grami-path-nocache-sharedtimer-acfix")
 ENGINES = "grami-path,grami-path-nocache"
 ELAPSED = re.compile(r"mining elapsed ms: (\d+)")
 KEYS = ["dataset", "labeling", "prefix", "transactions_read", "accounts", "pairs", "tau", "max_length", "engine",

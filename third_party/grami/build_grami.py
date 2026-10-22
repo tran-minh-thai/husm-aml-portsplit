@@ -12,6 +12,11 @@
                                     the previous one that, with -Dgrami.dump=<edges>, also writes the values
                                     left in the domain of every variable of each frequent pattern with that
                                     many edges to grami-dump.txt (grami-dump.patch; diagnosis only, not timed)
+    grami-path-nocache-sharedtimer-acfix
+                                    grami-path-nocache-sharedtimer whose arc consistency (DFSSearch.AC_3_New) also
+                                    revises the arcs leaving a variable whose domain shrank, not only the arcs
+                                    entering it (grami-acfix.patch); GraMi decides patterns with distinct vertex
+                                    labels and no cycle by arc consistency alone
 
 Applies the patches of this directory by exact replacement (no patch program needed; line endings of the
 checkout do not matter), refuses a GraMi checkout other than the pinned commit, and compiles each variant with
@@ -36,7 +41,9 @@ VARIANTS = {"grami-path": ["grami-path.patch"], "grami-path-nocache": ["grami-pa
             "grami-path-sharedtimer": ["grami-path.patch", "grami-sharedtimer.patch"],
             "grami-path-nocache-sharedtimer": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch"],
             "grami-path-nocache-sharedtimer-dump": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch",
-                                                   "grami-dump.patch"]}
+                                                   "grami-dump.patch"],
+            "grami-path-nocache-sharedtimer-acfix": ["grami-path.patch", "grami-nocache.patch", "grami-sharedtimer.patch",
+                                                    "grami-acfix.patch"]}
 
 
 def hunks(patch: Path):

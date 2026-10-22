@@ -1,0 +1,38 @@
+--- GraMi-path/GRAMI_DIRECTED_SUBGRAPHS/src/CSP/DFSSearch.java	2026-10-22 13:32:32
++++ GraMi-path-acfix/GRAMI_DIRECTED_SUBGRAPHS/src/CSP/DFSSearch.java	2026-10-22 13:32:32
+@@ -175,6 +175,17 @@
+ 			if(oldV1Size!=v1.getListSize())
+ 			{
+ 				if(v1.getListSize()<freqThreshold) return;
++				// added: also revise the arcs leaving v1, whose other end may have lost its support in v1
++				ArrayList<MyPair<Integer, Double>> outv1=v1.getDistanceConstrainedWith();
++				for (int j = 0; j < outv1.size(); j++) 
++				{
++					vp =new VariablePair(v1,variables[outv1.get(j).getA()],outv1.get(j).getB());
++					if(!contains.contains(vp.getString()))
++					{
++						insertInOrder(Q, vp);
++						contains.add(vp.getString());
++					}
++				}
+ 				//add to queue
+ 				ArrayList<MyPair<Integer, Double>> list=v1.getDistanceConstrainedBy();
+ 				for (int j = 0; j < list.size(); j++) 
+@@ -193,6 +204,17 @@
+ 			if(oldV2Size!=v2.getListSize())
+ 			{
+ 				if(v2.getListSize()<freqThreshold) return;
++				// added: also revise the arcs leaving v2, whose other end may have lost its support in v2
++				ArrayList<MyPair<Integer, Double>> outv2=v2.getDistanceConstrainedWith();
++				for (int j = 0; j < outv2.size(); j++) 
++				{
++					vp =new VariablePair(v2,variables[outv2.get(j).getA()],outv2.get(j).getB());
++					if(!contains.contains(vp.getString()))
++					{
++						insertInOrder(Q, vp);
++						contains.add(vp.getString());
++					}
++				}
+ 				//add to queue
+ 				ArrayList<MyPair<Integer, Double>> list=v2.getDistanceConstrainedBy();
+ 				for (int j = 0; j < list.size(); j++) 
