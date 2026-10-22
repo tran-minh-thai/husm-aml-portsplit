@@ -20,7 +20,7 @@ import java.util.Set;
  *   EU(P)  = sum of the top-CMNI(P) of those maxima (Def. 13)
  *   CEU(P) = same but only vertices with label >= label(I0) count (Def. 14)
  *
- * Invariant (Lemma 3 + defs): u <= CEU <= EU <= IVU  -  asserted in tests.
+ * Invariant (HUSM paper, Lemma 3 and its definitions): u <= CEU <= EU <= IVU  -  asserted in tests.
  *
  * Split into {@link #segment} (one snapshot) and {@link #combine} (union of
  * disjoint snapshots): because snapshots share no vertex and no MER ball crosses

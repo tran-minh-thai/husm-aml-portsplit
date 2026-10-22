@@ -934,7 +934,7 @@ public final class ChainMiner {
             return false;
         }
 
-        /** Checks only: every assigned level is in its slot with a non-eliminated account (note 07b, check 12). */
+        /** Checks only: every assigned level is in its slot with a non-eliminated account. */
         private void checkPrefix() {
             for (int s = pin + 1; s <= m && tx[s] >= 0; s++) if (!validStep(s, s)) counters.invalidExpansions++;
             for (int s = pin; s >= 1 && tx[s] >= 0; s--) if (!validStep(s, s - 1)) counters.invalidExpansions++;

@@ -8,7 +8,7 @@ import edu.huflit.inchusm.mining.ValueCompute.Evaluation;
  *
  * UTILITY  -  value = u(P) (Def. 8), pruning bound = the chosen upper bound
  *           (IVU/EU/CEU). Utility is not anti-monotone, hence the separate bound.
- * SUPPORT  -  value = CMNI(P). CMNI IS anti-monotone (Lemma 2), so it is its own
+ * SUPPORT  -  value = CMNI(P). CMNI IS anti-monotone (HUSM paper, Lemma 2), so it is its own
  *           bound; this reduces IncHUSM to incremental frequent-subgraph mining
  *           (DyFSM-style) within the very same framework  -  the head-to-head that
  *           answers "does utility earn its keep?" (the support-vs-utility ablation).
