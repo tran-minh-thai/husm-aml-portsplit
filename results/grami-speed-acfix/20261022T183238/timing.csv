@@ -1,0 +1,13 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+sweden_100K_easy,A,10000,10000,17803,9751,10,4,miner,ok,0.127,0.021,119341056,1800.0,48g
+sweden_100K_easy,A,10000,10000,17803,9751,10,4,grami-path-nocache-sharedtimer-acfix,ok,0.726,0.676,639700992,1800.0,48g
+sweden_100K_easy,A,30000,30000,46947,29176,10,4,miner,ok,0.179,0.04,191172608,1800.0,48g
+sweden_100K_easy,A,30000,30000,46947,29176,10,4,grami-path-nocache-sharedtimer-acfix,ok,1.721,1.67,733798400,1800.0,48g
+sweden_100K_easy,A,100000,100000,97150,87972,10,4,miner,ok,0.428,0.225,491847680,1800.0,48g
+sweden_100K_easy,A,100000,100000,97150,87972,10,4,grami-path-nocache-sharedtimer-acfix,ok,44.67,44.613,841674752,1800.0,48g
+sweden_100K_easy,A,300000,300000,99294,132866,10,4,miner,ok,0.835,0.591,578875392,1800.0,48g
+sweden_100K_easy,A,300000,300000,99294,132866,10,4,grami-path-nocache-sharedtimer-acfix,ok,290.531,290.456,1268678656,1800.0,48g
+sweden_100K_easy,A,1000000,1000000,99994,209126,10,4,miner,ok,3.384,3.081,734531584,1800.0,48g
+sweden_100K_easy,A,1000000,1000000,99994,209126,10,4,grami-path-nocache-sharedtimer-acfix,ok,954.737,954.633,1478901760,1800.0,48g
+sweden_100K_easy,A,3000000,1037081,99995,212523,10,4,miner,ok,3.697,3.39,732389376,1800.0,48g
+sweden_100K_easy,A,3000000,1037081,99995,212523,10,4,grami-path-nocache-sharedtimer-acfix,ok,947.83,947.723,1450647552,1800.0,48g

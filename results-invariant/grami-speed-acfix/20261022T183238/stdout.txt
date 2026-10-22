@@ -1,0 +1,19 @@
+[grami] prefix 10000: 17803 accounts, 9751 pairs
+[grami] prefix 10000 miner: ok; chains 144, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache-sharedtimer-acfix: ok; chains 144, missing 0, added 0
+[grami] prefix 30000: 46947 accounts, 29176 pairs
+[grami] prefix 30000 miner: ok; chains 164, missing 0, added 0
+[grami] prefix 30000 grami-path-nocache-sharedtimer-acfix: ok; chains 164, missing 0, added 0
+[grami] prefix 100000: 97150 accounts, 87972 pairs
+[grami] prefix 100000 miner: ok; chains 1874, missing 0, added 0
+[grami] prefix 100000 grami-path-nocache-sharedtimer-acfix: ok; chains 1874, missing 0, added 0
+[grami] prefix 300000: 99294 accounts, 132866 pairs
+[grami] prefix 300000 miner: ok; chains 9853, missing 0, added 0
+[grami] prefix 300000 grami-path-nocache-sharedtimer-acfix: ok; chains 9853, missing 0, added 0
+[grami] prefix 1000000: 99994 accounts, 209126 pairs
+[grami] prefix 1000000 miner: ok; chains 46839, missing 0, added 0
+[grami] prefix 1000000 grami-path-nocache-sharedtimer-acfix: ok; chains 46839, missing 0, added 0
+[grami] prefix 3000000: 99995 accounts, 212523 pairs
+[grami] prefix 3000000 miner: ok; chains 55572, missing 0, added 0
+[grami] prefix 3000000 grami-path-nocache-sharedtimer-acfix: ok; chains 55572, missing 0, added 0
+[grami] timing written to the paired measurement record
