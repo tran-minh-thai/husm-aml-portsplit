@@ -1,0 +1,33 @@
+[grami] prefix 10000: 10357 accounts, 6157 pairs
+[grami] prefix 10000 miner: ok; chains 14, missing 0, added 0
+[grami] prefix 10000 grami-path-sharedtimer: ok; chains 14, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache-sharedtimer: ok; chains 14, missing 0, added 0
+[grami] prefix 30000: 30900 accounts, 18388 pairs
+[grami] prefix 30000 miner: ok; chains 25, missing 0, added 0
+[grami] prefix 30000 grami-path-sharedtimer: ok; chains 23, missing 2, added 0
+[grami] prefix 30000 grami-path-nocache-sharedtimer: ok; chains 25, missing 0, added 0
+[grami] prefix 100000: 101008 accounts, 61667 pairs
+[grami] prefix 100000 miner: ok; chains 47, missing 0, added 0
+[grami] prefix 100000 grami-path-sharedtimer: ok; chains 44, missing 3, added 0
+[grami] prefix 100000 grami-path-nocache-sharedtimer: ok; chains 47, missing 0, added 0
+[grami] prefix 300000: 305144 accounts, 187927 pairs
+[grami] prefix 300000 miner: ok; chains 67, missing 0, added 0
+[grami] prefix 300000 grami-path-sharedtimer: ok; chains 67, missing 0, added 0
+[grami] prefix 300000 grami-path-nocache-sharedtimer: ok; chains 67, missing 0, added 0
+[grami] prefix 1000000: 697180 accounts, 541722 pairs
+[grami] prefix 1000000 miner: ok; chains 148, missing 0, added 0
+[grami] prefix 1000000 grami-path-sharedtimer: ok; chains 144, missing 4, added 0
+[grami] prefix 1000000 grami-path-nocache-sharedtimer: ok; chains 148, missing 0, added 0
+[grami] prefix 3000000: 1192165 accounts, 1420669 pairs
+[grami] prefix 3000000 miner: ok; chains 279, missing 0, added 0
+[grami] prefix 3000000 grami-path-sharedtimer: ok; chains 277, missing 2, added 0
+[grami] prefix 3000000 grami-path-nocache-sharedtimer: timeout; chains , missing , added 
+[grami] prefix 10000000: 1632200 accounts, 2287097 pairs
+[grami] prefix 10000000 miner: ok; chains 375, missing 0, added 0
+[grami] prefix 10000000 grami-path-sharedtimer: timeout; chains , missing , added 
+[grami] prefix 10000000 grami-path-nocache-sharedtimer: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 30000000: 1758597 accounts, 2998917 pairs
+[grami] prefix 30000000 miner: ok; chains 403, missing 0, added 0
+[grami] prefix 30000000 grami-path-sharedtimer: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] prefix 30000000 grami-path-nocache-sharedtimer: skipped (timeout on a smaller prefix); chains , missing , added 
+[grami] timing written to the paired measurement record
