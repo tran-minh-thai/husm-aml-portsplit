@@ -1,0 +1,16 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,wall_s,reported_s,peak_bytes,limit_s,heap
+sweden_100K_difficult,A,10000,10000,17862,9708,10,4,miner,ok,0.122,0.021,119209984,1800.0,48g
+sweden_100K_difficult,A,10000,10000,17862,9708,10,4,grami-path-sharedtimer,ok,0.72,0.664,650731520,1800.0,48g
+sweden_100K_difficult,A,10000,10000,17862,9708,10,4,grami-path-nocache-sharedtimer,ok,0.71,0.658,642469888,1800.0,48g
+sweden_100K_difficult,A,30000,30000,47347,29098,10,4,miner,ok,0.181,0.042,192069632,1800.0,48g
+sweden_100K_difficult,A,30000,30000,47347,29098,10,4,grami-path-sharedtimer,ok,1.877,1.825,767258624,1800.0,48g
+sweden_100K_difficult,A,30000,30000,47347,29098,10,4,grami-path-nocache-sharedtimer,ok,1.703,1.653,734908416,1800.0,48g
+sweden_100K_difficult,A,100000,100000,97102,86467,10,4,miner,ok,0.426,0.224,487514112,1800.0,48g
+sweden_100K_difficult,A,100000,100000,97102,86467,10,4,grami-path-sharedtimer,ok,39.667,39.588,1589854208,1800.0,48g
+sweden_100K_difficult,A,100000,100000,97102,86467,10,4,grami-path-nocache-sharedtimer,ok,38.549,38.491,845238272,1800.0,48g
+sweden_100K_difficult,A,300000,300000,99261,122531,10,4,miner,ok,0.658,0.429,573272064,1800.0,48g
+sweden_100K_difficult,A,300000,300000,99261,122531,10,4,grami-path-sharedtimer,ok,133.005,132.867,4397727744,1800.0,48g
+sweden_100K_difficult,A,300000,300000,99261,122531,10,4,grami-path-nocache-sharedtimer,ok,124.423,124.353,1199718400,1800.0,48g
+sweden_100K_difficult,A,1000000,996335,99995,168847,10,4,miner,ok,1.717,1.443,697724928,1800.0,48g
+sweden_100K_difficult,A,1000000,996335,99995,168847,10,4,grami-path-sharedtimer,ok,919.935,919.31,26189201408,1800.0,48g
+sweden_100K_difficult,A,1000000,996335,99995,168847,10,4,grami-path-nocache-sharedtimer,ok,848.297,848.211,1366892544,1800.0,48g
