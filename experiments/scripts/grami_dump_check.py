@@ -8,8 +8,9 @@ some occurrence of the chain (grami_added_check.has_occurrence)?
 
 Machine-independent output (the record directory):
   dump_check.csv  one row per (chain, position) for every chain GraMi reports and the miner does not, and for a
-                  fixed random sample of the chains both report: values GraMi kept, values without an occurrence
-                  at that position, up to five of them, and the label check of the values
+                  fixed random sample of the chains both report: the number and the full list of the values
+                  GraMi kept, of those without an occurrence at that position, and of those with one (the
+                  images), so that every count can be traced to accounts
 The dump is written by GraMi with limitedtime=false, so no search is stopped and the output does not depend on
 the speed of the machine.
 
@@ -147,15 +148,18 @@ def main() -> None:
                 for i, values in enumerate(domains[key]):
                     label_mismatch += sum(1 for x in values if vlab[x] != vl[i])
                     without = [x for x in values if not ac.has_occurrence(g, vl, el, i, x, budget)]
+                    images = sorted(set(values) - set(without))
                     rows.append(dict(chain=key, kind=kind, position=i, grami_values=len(values),
-                                     values_without_occurrence=len(without),
-                                     examples=" ".join(str(x) for x in without[:5])))
+                                     values_without_occurrence=len(without), images=len(images),
+                                     grami_value_ids=" ".join(str(x) for x in sorted(values)),
+                                     without_occurrence_ids=" ".join(str(x) for x in sorted(without)),
+                                     image_ids=" ".join(str(x) for x in images)))
     except TimeoutError:
         print(f"[dump] the check passed {args.budget} search steps", flush=True)
         sys.exit(2)
     with open(OUT / "dump_check.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["chain", "kind", "position", "grami_values", "values_without_occurrence",
-                                          "examples"])
+                                          "images", "grami_value_ids", "without_occurrence_ids", "image_ids"])
         w.writeheader()
         w.writerows(rows)
     for kind in ("added by GraMi", "both report, sample"):
