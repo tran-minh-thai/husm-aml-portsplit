@@ -1,0 +1,6 @@
+self-test: 306000 (graph, chain, tau) cases compared with full enumeration (10990 frequent), 0 disagree; 2219248 (chain, position, account) cases, 0 disagree
+[dump] sweden_100K_easy A prefix 1000000: 99994 accounts, 209126 pairs
+[dump] miner 46839 chains, GraMi 46958 (24350 of length 4); dumped patterns 24350 directed paths, 0 other
+[dump] added by GraMi: 119 chains, 119 with values that have no occurrence; 7460 such values over 595 positions
+[dump] both report, sample: 50 chains, 4 with values that have no occurrence; 255 such values over 250 positions
+[dump] chains GraMi adds with no dumped domains: 0; values whose label differs from their variable: 0
