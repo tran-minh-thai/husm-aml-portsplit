@@ -1,0 +1,29 @@
+[grami] prefix 10000: 10307 accounts, 6136 pairs
+[grami] prefix 10000 miner: ok; chains 12, missing 0, added 0
+[grami] prefix 10000 grami-path-sharedtimer: ok; chains 12, missing 0, added 0
+[grami] prefix 10000 grami-path-nocache-sharedtimer: ok; chains 12, missing 0, added 0
+[grami] prefix 30000: 30445 accounts, 18509 pairs
+[grami] prefix 30000 miner: ok; chains 24, missing 0, added 0
+[grami] prefix 30000 grami-path-sharedtimer: ok; chains 24, missing 0, added 0
+[grami] prefix 30000 grami-path-nocache-sharedtimer: ok; chains 24, missing 0, added 0
+[grami] prefix 100000: 102199 accounts, 62965 pairs
+[grami] prefix 100000 miner: ok; chains 47, missing 0, added 0
+[grami] prefix 100000 grami-path-sharedtimer: ok; chains 46, missing 1, added 0
+[grami] prefix 100000 grami-path-nocache-sharedtimer: ok; chains 47, missing 0, added 0
+[grami] prefix 300000: 220836 accounts, 164783 pairs
+[grami] prefix 300000 miner: ok; chains 93, missing 0, added 0
+[grami] prefix 300000 grami-path-sharedtimer: ok; chains 91, missing 2, added 0
+[grami] prefix 300000 grami-path-nocache-sharedtimer: ok; chains 93, missing 0, added 0
+[grami] prefix 1000000: 403008 accounts, 478489 pairs
+[grami] prefix 1000000 miner: ok; chains 216, missing 0, added 0
+[grami] prefix 1000000 grami-path-sharedtimer: ok; chains 211, missing 5, added 0
+[grami] prefix 1000000 grami-path-nocache-sharedtimer: ok; chains 216, missing 0, added 0
+[grami] prefix 3000000: 551628 accounts, 755610 pairs
+[grami] prefix 3000000 miner: ok; chains 292, missing 0, added 0
+[grami] prefix 3000000 grami-path-sharedtimer: ok; chains 286, missing 6, added 0
+[grami] prefix 3000000 grami-path-nocache-sharedtimer: ok; chains 292, missing 0, added 0
+[grami] prefix 10000000: 576781 accounts, 880800 pairs
+[grami] prefix 10000000 miner: ok; chains 322, missing 0, added 0
+[grami] prefix 10000000 grami-path-sharedtimer: ok; chains 318, missing 4, added 0
+[grami] prefix 10000000 grami-path-nocache-sharedtimer: ok; chains 322, missing 0, added 0
+[grami] timing written to the paired measurement record
