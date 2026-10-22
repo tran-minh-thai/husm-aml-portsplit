@@ -17,6 +17,8 @@ Built by third_party/grami/build_grami.py. The frequent chains of every program 
 with the miner's: a nocache variant must report the same set (a difference stops the tool with exit status 1);
 for the others the chains they miss and the chains they add are counted (an added chain also stops the tool),
 and a shared-timer variant must report the same set as its variant with a thread per search when both ran.
+With --continue-on-difference a missing or added chain is only recorded (columns missing and added) and the
+larger prefixes still run; a shared-timer variant that disagrees with its base still stops the tool.
 A GraMi variant that reaches the time limit is not run on the larger prefixes of the same data set.
 
 Machine-independent output (the record directory): grami_speed.csv, one row per prefix and program, with the
@@ -26,7 +28,7 @@ graph size, status, number of frequent chains, and missing and added chains. Mac
 
 Run: python experiments/scripts/grami_speed.py --dataset HI-Small --labeling A --grami-build <dir> \\
          [--prefixes 10000,30000,...] [--tau 10] [--max-length 4] [--limit 1800] [--heap 48g] \\
-         [--engines grami-path,grami-path-nocache]
+         [--engines grami-path,grami-path-nocache] [--continue-on-difference]
 """
 from __future__ import annotations
 
@@ -128,6 +130,8 @@ def main() -> None:
     ap.add_argument("--limit", type=float, default=1800.0, help="seconds per run")
     ap.add_argument("--heap", default="48g")
     ap.add_argument("--engines", default=ENGINES, help="GraMi variants to run, in this order, comma separated")
+    ap.add_argument("--continue-on-difference", action="store_true",
+                    help="record chains GraMi misses or adds and go on with the larger prefixes")
     args = ap.parse_args()
 
     identity = cp.jvm_identity()
@@ -204,8 +208,11 @@ def main() -> None:
         timer = [f"{g} and {g.replace('-sharedtimer', '')} report different chains" for g in engines
                  if g.endswith("-sharedtimer") and found.get(g) is not None
                  and found.get(g.replace("-sharedtimer", "")) is not None and found[g] != found[g.replace("-sharedtimer", "")]]
-        if bad or added or timer:
+        if timer or ((bad or added) and not args.continue_on_difference):
             sys.exit(f"OUTPUT DIFFERS on prefix {k}: {bad + added + timer}")
+        if bad or added:
+            print(f"[grami] OUTPUT DIFFERS on prefix {k}, recorded and continued: "
+                  + "; ".join(f"{x['engine']} missing {x['missing']} added {x['added']}" for x in bad + added), flush=True)
         if last:
             break
     if TIMING is not None:
