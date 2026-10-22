@@ -69,9 +69,11 @@ The datasets are public and are not redistributed here.
 | AMLworld HI-Large, LI-Large | same; `python experiments/provenance/fetch_amlworld_large.py` downloads and checks them | `datasets/amlworld/{HI,LI}-Large_{Trans.csv,Patterns.txt}` |
 | AMLGentex sweden_100K_easy, sweden_100K_difficult, us_100K_difficult | Hugging Face, `datasets/AMLGentex` | `datasets/amlgentex/<name>/tx_log.csv` |
 
-Check the files against the recorded sizes and sha256 with
-`python experiments/provenance/verify_datasets.py` (manifests in `docs/reproduce/`). Then write the
-miner's input for every dataset and labelling:
+Check the files against the recorded sizes and sha256: `python experiments/provenance/verify_datasets.py`
+prints OK, MISSING, SIZE or HASH for every file of `docs/reproduce/datasets.sha256` (the files under
+`datasets/amlworld/` and `datasets/amlgentex/` are the ones used here; the others belong to the port-splitting
+study), and `python experiments/provenance/fetch_amlworld_large.py --check-only` checks the Large files against
+`docs/reproduce/datasets_large.sha256`. Then write the miner's input for every dataset and labelling:
 
 ```bash
 python experiments/scripts/export_chain_input.py --source amlworld --dataset HI-Small --labeling A
