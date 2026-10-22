@@ -1,0 +1,13 @@
+dataset,labeling,prefix,transactions_read,accounts,pairs,tau,max_length,engine,status,chains,missing,added
+us_100K_difficult,A,10000,10000,13782,9563,10,4,miner,ok,100,0,0
+us_100K_difficult,A,10000,10000,13782,9563,10,4,grami-path-nocache-sharedtimer-acfix,ok,100,0,0
+us_100K_difficult,A,30000,30000,36490,28571,10,4,miner,ok,217,0,0
+us_100K_difficult,A,30000,30000,36490,28571,10,4,grami-path-nocache-sharedtimer-acfix,ok,217,0,0
+us_100K_difficult,A,100000,100000,85305,95007,10,4,miner,ok,1899,0,0
+us_100K_difficult,A,100000,100000,85305,95007,10,4,grami-path-nocache-sharedtimer-acfix,ok,1899,0,0
+us_100K_difficult,A,300000,300000,100000,147790,10,4,miner,ok,11323,0,0
+us_100K_difficult,A,300000,300000,100000,147790,10,4,grami-path-nocache-sharedtimer-acfix,ok,11323,0,0
+us_100K_difficult,A,1000000,1000000,100000,159835,10,4,miner,ok,15650,0,0
+us_100K_difficult,A,1000000,1000000,100000,159835,10,4,grami-path-nocache-sharedtimer-acfix,ok,15650,0,0
+us_100K_difficult,A,3000000,1766449,100000,185628,10,4,miner,ok,77558,0,0
+us_100K_difficult,A,3000000,1766449,100000,185628,10,4,grami-path-nocache-sharedtimer-acfix,ok,77558,0,0
