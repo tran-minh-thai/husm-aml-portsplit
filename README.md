@@ -3,13 +3,18 @@
 Amount-conserving chain mining in transaction graphs: the chain miner, the scripts that
 build its inputs and run every experiment, and the record of every run.
 
-A chain is a directed path of transactions (open chain) or a directed cycle read from a marked origin
+A chain is a directed path of transactions (open chain) or a directed cycle read from a marked root
 (closed chain), with account and transaction labels. An occurrence is valid when every intermediate
 account forwards an amount within a relative tolerance of the amount it received,
-`(1 - theta) a_in <= a_out <= (1 + theta) a_in`; the pair at the origin of a closed chain is not
+`(1 - theta) a_in <= a_out <= (1 + theta) a_in`; the pair at the root of a closed chain is not
 constrained. The support of a chain is the size of its smallest image set over valid occurrences
 (minimum image based support). The miner reports every chain up to a maximum length whose support
 reaches a threshold, with the exact image set of every position.
+
+In the paper the miner is called PaCoMine. Its command line is `edu.huflit.inchusm.chain.ChainMain`, whose defaults
+are the configuration used in the paper (slot filter from candidate length 4, the computation of each filter pass
+chosen from operation counts); `--consistency-from 2` gives PaCoMine-Always (filter on every candidate) and
+`--no-consistency` gives PaCoMine-NoFilter. `--engine enumerate` runs the enumerator it is compared with.
 
 The repository also holds the pipeline of a high-utility subgraph mining study (port-splitting),
 documented in [docs/reproduce/paper3.md](docs/reproduce/paper3.md); it shares the Java engine but no
@@ -111,7 +116,13 @@ python experiments/provenance/run_and_record.py --into results-invariant/<tree> 
 ```
 
 Timed runs add `--timing-into results/<tree>`; the wrapper refuses them on any machine other than the
-one declared in `results/MEASUREMENT_MACHINE.txt`. The script of every record tree:
+one declared in `results/MEASUREMENT_MACHINE.txt`.
+
+A few records made on the measurement machine cite a local commit that was replaced when the results were pushed
+with `git pull --rebase`, so the commit is not in this repository. `results/COMMIT_EQUIVALENCE.tsv` maps each of them
+to a commit with the same source code (equal `code_sha256`), written by
+`python experiments/provenance/commit_equivalence.py`, which first checks its hashing against records whose commit is
+present. The script of every record tree:
 
 | Question | Script | Record tree |
 |---|---|---|

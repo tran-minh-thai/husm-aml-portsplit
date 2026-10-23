@@ -7,6 +7,8 @@
 # cpu_physical_cores: 16
 # cpu_logical_threads: 32
 # ram_gb: 61.6
+# ram_installed_gb: 64
+## ram_installed_gb is the installed memory, declared by the author on 2026-10-23; ram_gb is what the operating system reports.
 # gpu: NVIDIA GeForce RTX 5060 Ti; AMD Radeon(TM) Graphics
 # os: Windows 11 (10.0.26300) Education
 # architecture: AMD64
