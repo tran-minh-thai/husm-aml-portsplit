@@ -1,0 +1,1846 @@
+{
+ "theta": 0.2,
+ "tau": 2,
+ "max_length": 4,
+ "min_cycle": 3,
+ "account_order": "nbzdghqw",
+ "edges": [
+  {
+   "source": "n",
+   "target": "b",
+   "amount": 100
+  },
+  {
+   "source": "b",
+   "target": "z",
+   "amount": 95
+  },
+  {
+   "source": "z",
+   "target": "d",
+   "amount": 90
+  },
+  {
+   "source": "d",
+   "target": "n",
+   "amount": 75
+  },
+  {
+   "source": "g",
+   "target": "h",
+   "amount": 50
+  },
+  {
+   "source": "h",
+   "target": "z",
+   "amount": 48
+  },
+  {
+   "source": "h",
+   "target": "q",
+   "amount": 200
+  },
+  {
+   "source": "q",
+   "target": "w",
+   "amount": 190
+  },
+  {
+   "source": "b",
+   "target": "g",
+   "amount": 40
+  },
+  {
+   "source": "w",
+   "target": "g",
+   "amount": 30
+  }
+ ],
+ "chains": [
+  {
+   "kind": "open",
+   "length": 1,
+   "occurrences": [
+    {
+     "accounts": [
+      "n",
+      "b"
+     ],
+     "edges": [
+      0
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "b",
+      "z"
+     ],
+     "edges": [
+      1
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "z",
+      "d"
+     ],
+     "edges": [
+      2
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "d",
+      "n"
+     ],
+     "edges": [
+      3
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "g",
+      "h"
+     ],
+     "edges": [
+      4
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "h",
+      "z"
+     ],
+     "edges": [
+      5
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "h",
+      "q"
+     ],
+     "edges": [
+      6
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "q",
+      "w"
+     ],
+     "edges": [
+      7
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "b",
+      "g"
+     ],
+     "edges": [
+      8
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "w",
+      "g"
+     ],
+     "edges": [
+      9
+     ],
+     "valid": true,
+     "violations": []
+    }
+   ],
+   "images": [
+    [
+     "b",
+     "d",
+     "g",
+     "h",
+     "n",
+     "q",
+     "w",
+     "z"
+    ],
+    [
+     "b",
+     "d",
+     "g",
+     "h",
+     "n",
+     "q",
+     "w",
+     "z"
+    ]
+   ],
+   "support": 8
+  },
+  {
+   "kind": "open",
+   "length": 2,
+   "occurrences": [
+    {
+     "accounts": [
+      "n",
+      "b",
+      "z"
+     ],
+     "edges": [
+      0,
+      1
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "n",
+      "b",
+      "g"
+     ],
+     "edges": [
+      0,
+      8
+     ],
+     "valid": false,
+     "violations": [
+      [
+       100,
+       40,
+       "b"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "z",
+      "d"
+     ],
+     "edges": [
+      1,
+      2
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "z",
+      "d",
+      "n"
+     ],
+     "edges": [
+      2,
+      3
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "d",
+      "n",
+      "b"
+     ],
+     "edges": [
+      3,
+      0
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "z"
+     ],
+     "edges": [
+      4,
+      5
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "q"
+     ],
+     "edges": [
+      4,
+      6
+     ],
+     "valid": false,
+     "violations": [
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "z",
+      "d"
+     ],
+     "edges": [
+      5,
+      2
+     ],
+     "valid": false,
+     "violations": [
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "q",
+      "w"
+     ],
+     "edges": [
+      6,
+      7
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "q",
+      "w",
+      "g"
+     ],
+     "edges": [
+      7,
+      9
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "g",
+      "h"
+     ],
+     "edges": [
+      8,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       40,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "w",
+      "g",
+      "h"
+     ],
+     "edges": [
+      9,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       30,
+       50,
+       "g"
+      ]
+     ]
+    }
+   ],
+   "images": [
+    [
+     "b",
+     "g",
+     "h",
+     "n",
+     "z"
+    ],
+    [
+     "b",
+     "d",
+     "h",
+     "q",
+     "z"
+    ],
+    [
+     "d",
+     "n",
+     "w",
+     "z"
+    ]
+   ],
+   "support": 4
+  },
+  {
+   "kind": "open",
+   "length": 3,
+   "occurrences": [
+    {
+     "accounts": [
+      "n",
+      "b",
+      "z",
+      "d"
+     ],
+     "edges": [
+      0,
+      1,
+      2
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "n",
+      "b",
+      "g",
+      "h"
+     ],
+     "edges": [
+      0,
+      8,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       100,
+       40,
+       "b"
+      ],
+      [
+       40,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "z",
+      "d",
+      "n"
+     ],
+     "edges": [
+      1,
+      2,
+      3
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "z",
+      "d",
+      "n",
+      "b"
+     ],
+     "edges": [
+      2,
+      3,
+      0
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "d",
+      "n",
+      "b",
+      "z"
+     ],
+     "edges": [
+      3,
+      0,
+      1
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "d",
+      "n",
+      "b",
+      "g"
+     ],
+     "edges": [
+      3,
+      0,
+      8
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ],
+      [
+       100,
+       40,
+       "b"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "z",
+      "d"
+     ],
+     "edges": [
+      4,
+      5,
+      2
+     ],
+     "valid": false,
+     "violations": [
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "q",
+      "w"
+     ],
+     "edges": [
+      4,
+      6,
+      7
+     ],
+     "valid": false,
+     "violations": [
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "z",
+      "d",
+      "n"
+     ],
+     "edges": [
+      5,
+      2,
+      3
+     ],
+     "valid": false,
+     "violations": [
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "q",
+      "w",
+      "g"
+     ],
+     "edges": [
+      6,
+      7,
+      9
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "q",
+      "w",
+      "g",
+      "h"
+     ],
+     "edges": [
+      7,
+      9,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ],
+      [
+       30,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "g",
+      "h",
+      "z"
+     ],
+     "edges": [
+      8,
+      4,
+      5
+     ],
+     "valid": false,
+     "violations": [
+      [
+       40,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "g",
+      "h",
+      "q"
+     ],
+     "edges": [
+      8,
+      4,
+      6
+     ],
+     "valid": false,
+     "violations": [
+      [
+       40,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "w",
+      "g",
+      "h",
+      "z"
+     ],
+     "edges": [
+      9,
+      4,
+      5
+     ],
+     "valid": false,
+     "violations": [
+      [
+       30,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "w",
+      "g",
+      "h",
+      "q"
+     ],
+     "edges": [
+      9,
+      4,
+      6
+     ],
+     "valid": false,
+     "violations": [
+      [
+       30,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    }
+   ],
+   "images": [
+    [
+     "b",
+     "n"
+    ],
+    [
+     "b",
+     "z"
+    ],
+    [
+     "d",
+     "z"
+    ],
+    [
+     "d",
+     "n"
+    ]
+   ],
+   "support": 2
+  },
+  {
+   "kind": "open",
+   "length": 4,
+   "occurrences": [
+    {
+     "accounts": [
+      "n",
+      "b",
+      "g",
+      "h",
+      "z"
+     ],
+     "edges": [
+      0,
+      8,
+      4,
+      5
+     ],
+     "valid": false,
+     "violations": [
+      [
+       100,
+       40,
+       "b"
+      ],
+      [
+       40,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "n",
+      "b",
+      "g",
+      "h",
+      "q"
+     ],
+     "edges": [
+      0,
+      8,
+      4,
+      6
+     ],
+     "valid": false,
+     "violations": [
+      [
+       100,
+       40,
+       "b"
+      ],
+      [
+       40,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "z",
+      "d",
+      "n",
+      "b",
+      "g"
+     ],
+     "edges": [
+      2,
+      3,
+      0,
+      8
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ],
+      [
+       100,
+       40,
+       "b"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "d",
+      "n",
+      "b",
+      "g",
+      "h"
+     ],
+     "edges": [
+      3,
+      0,
+      8,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ],
+      [
+       100,
+       40,
+       "b"
+      ],
+      [
+       40,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "z",
+      "d",
+      "n"
+     ],
+     "edges": [
+      4,
+      5,
+      2,
+      3
+     ],
+     "valid": false,
+     "violations": [
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "z",
+      "d",
+      "n",
+      "b"
+     ],
+     "edges": [
+      5,
+      2,
+      3,
+      0
+     ],
+     "valid": false,
+     "violations": [
+      [
+       48,
+       90,
+       "z"
+      ],
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "q",
+      "w",
+      "g",
+      "h",
+      "z"
+     ],
+     "edges": [
+      7,
+      9,
+      4,
+      5
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ],
+      [
+       30,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "g",
+      "h",
+      "z",
+      "d"
+     ],
+     "edges": [
+      8,
+      4,
+      5,
+      2
+     ],
+     "valid": false,
+     "violations": [
+      [
+       40,
+       50,
+       "g"
+      ],
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "b",
+      "g",
+      "h",
+      "q",
+      "w"
+     ],
+     "edges": [
+      8,
+      4,
+      6,
+      7
+     ],
+     "valid": false,
+     "violations": [
+      [
+       40,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "w",
+      "g",
+      "h",
+      "z",
+      "d"
+     ],
+     "edges": [
+      9,
+      4,
+      5,
+      2
+     ],
+     "valid": false,
+     "violations": [
+      [
+       30,
+       50,
+       "g"
+      ],
+      [
+       48,
+       90,
+       "z"
+      ]
+     ]
+    }
+   ],
+   "images": [
+    [],
+    [],
+    [],
+    [],
+    []
+   ],
+   "support": 0
+  },
+  {
+   "kind": "closed",
+   "length": 3,
+   "occurrences": [],
+   "images": [
+    [],
+    [],
+    []
+   ],
+   "support": 0
+  },
+  {
+   "kind": "closed",
+   "length": 4,
+   "occurrences": [
+    {
+     "accounts": [
+      "n",
+      "b",
+      "z",
+      "d",
+      "n"
+     ],
+     "edges": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "valid": true,
+     "violations": []
+    },
+    {
+     "accounts": [
+      "b",
+      "z",
+      "d",
+      "n",
+      "b"
+     ],
+     "edges": [
+      1,
+      2,
+      3,
+      0
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "z",
+      "d",
+      "n",
+      "b",
+      "z"
+     ],
+     "edges": [
+      2,
+      3,
+      0,
+      1
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "d",
+      "n",
+      "b",
+      "z",
+      "d"
+     ],
+     "edges": [
+      3,
+      0,
+      1,
+      2
+     ],
+     "valid": false,
+     "violations": [
+      [
+       75,
+       100,
+       "n"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "g",
+      "h",
+      "q",
+      "w",
+      "g"
+     ],
+     "edges": [
+      4,
+      6,
+      7,
+      9
+     ],
+     "valid": false,
+     "violations": [
+      [
+       50,
+       200,
+       "h"
+      ],
+      [
+       190,
+       30,
+       "w"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "h",
+      "q",
+      "w",
+      "g",
+      "h"
+     ],
+     "edges": [
+      6,
+      7,
+      9,
+      4
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ],
+      [
+       30,
+       50,
+       "g"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "q",
+      "w",
+      "g",
+      "h",
+      "q"
+     ],
+     "edges": [
+      7,
+      9,
+      4,
+      6
+     ],
+     "valid": false,
+     "violations": [
+      [
+       190,
+       30,
+       "w"
+      ],
+      [
+       30,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    },
+    {
+     "accounts": [
+      "w",
+      "g",
+      "h",
+      "q",
+      "w"
+     ],
+     "edges": [
+      9,
+      4,
+      6,
+      7
+     ],
+     "valid": false,
+     "violations": [
+      [
+       30,
+       50,
+       "g"
+      ],
+      [
+       50,
+       200,
+       "h"
+      ]
+     ]
+    }
+   ],
+   "images": [
+    [
+     "n"
+    ],
+    [
+     "b"
+    ],
+    [
+     "z"
+    ],
+    [
+     "d"
+    ]
+   ],
+   "support": 1
+  }
+ ],
+ "filter_length_3": {
+  "domains": [
+   [
+    "b",
+    "g",
+    "h",
+    "n",
+    "z"
+   ],
+   [
+    "b",
+    "h",
+    "z"
+   ],
+   [
+    "d",
+    "z"
+   ],
+   [
+    "d",
+    "n",
+    "w",
+    "z"
+   ]
+  ],
+  "slots": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "kept_accounts": [
+   [
+    "b",
+    "n"
+   ],
+   [
+    "b",
+    "z"
+   ],
+   [
+    "d",
+    "z"
+   ],
+   [
+    "d",
+    "n"
+   ]
+  ],
+  "removed": [
+   [
+    0,
+    "g"
+   ],
+   [
+    0,
+    "h"
+   ],
+   [
+    0,
+    "z"
+   ],
+   [
+    1,
+    "h"
+   ],
+   [
+    3,
+    "w"
+   ],
+   [
+    3,
+    "z"
+   ]
+  ]
+ },
+ "level_wise": {
+  "filter_from": 3,
+  "level_one_images": [
+   [
+    "n",
+    "b",
+    "z",
+    "d",
+    "g",
+    "h",
+    "q",
+    "w"
+   ],
+   [
+    "n",
+    "b",
+    "z",
+    "d",
+    "g",
+    "h",
+    "q",
+    "w"
+   ]
+  ],
+  "candidates": [
+   {
+    "length": 2,
+    "kind": "open",
+    "domains": [
+     [
+      "n",
+      "b",
+      "z",
+      "d",
+      "g",
+      "h",
+      "q",
+      "w"
+     ],
+     [
+      "n",
+      "b",
+      "z",
+      "d",
+      "g",
+      "h",
+      "q",
+      "w"
+     ],
+     [
+      "n",
+      "b",
+      "z",
+      "d",
+      "g",
+      "h",
+      "q",
+      "w"
+     ]
+    ],
+    "rejected": [],
+    "searches": [
+     {
+      "position": 0,
+      "account": "n",
+      "occurrence": [
+       "n",
+       "b",
+       "z"
+      ]
+     },
+     {
+      "position": 0,
+      "account": "b",
+      "occurrence": [
+       "b",
+       "z",
+       "d"
+      ]
+     },
+     {
+      "position": 0,
+      "account": "z",
+      "occurrence": [
+       "z",
+       "d",
+       "n"
+      ]
+     },
+     {
+      "position": 0,
+      "account": "d",
+      "occurrence": null
+     },
+     {
+      "position": 0,
+      "account": "g",
+      "occurrence": [
+       "g",
+       "h",
+       "z"
+      ]
+     },
+     {
+      "position": 0,
+      "account": "h",
+      "occurrence": [
+       "h",
+       "q",
+       "w"
+      ]
+     },
+     {
+      "position": 0,
+      "account": "q",
+      "occurrence": null
+     },
+     {
+      "position": 0,
+      "account": "w",
+      "occurrence": null
+     },
+     {
+      "position": 1,
+      "account": "n",
+      "occurrence": null
+     },
+     {
+      "position": 1,
+      "account": "g",
+      "occurrence": null
+     },
+     {
+      "position": 1,
+      "account": "w",
+      "occurrence": null
+     },
+     {
+      "position": 2,
+      "account": "b",
+      "occurrence": null
+     },
+     {
+      "position": 2,
+      "account": "g",
+      "occurrence": null
+     },
+     {
+      "position": 2,
+      "account": "h",
+      "occurrence": null
+     },
+     {
+      "position": 2,
+      "account": "q",
+      "occurrence": null
+     }
+    ],
+    "outcome": "frequent",
+    "images": [
+     [
+      "n",
+      "b",
+      "z",
+      "g",
+      "h"
+     ],
+     [
+      "b",
+      "z",
+      "d",
+      "h",
+      "q"
+     ],
+     [
+      "n",
+      "z",
+      "d",
+      "w"
+     ]
+    ]
+   },
+   {
+    "length": 3,
+    "kind": "open",
+    "domains": [
+     [
+      "n",
+      "b",
+      "z",
+      "g",
+      "h"
+     ],
+     [
+      "b",
+      "z",
+      "h"
+     ],
+     [
+      "z",
+      "d"
+     ],
+     [
+      "n",
+      "z",
+      "d",
+      "w"
+     ]
+    ],
+    "rejected": [
+     [
+      "z",
+      "g",
+      "h"
+     ],
+     [
+      "h"
+     ],
+     [],
+     [
+      "z",
+      "w"
+     ]
+    ],
+    "searches": [
+     {
+      "position": 2,
+      "account": "z",
+      "occurrence": [
+       "n",
+       "b",
+       "z",
+       "d"
+      ]
+     },
+     {
+      "position": 2,
+      "account": "d",
+      "occurrence": [
+       "b",
+       "z",
+       "d",
+       "n"
+      ]
+     }
+    ],
+    "initial_slots": [
+     null,
+     [
+      0,
+      1,
+      4,
+      5
+     ],
+     [
+      1,
+      2,
+      5
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "filter_rounds": [
+     {
+      "after_forward": [
+       [
+        0,
+        1,
+        4,
+        5
+       ],
+       [
+        1,
+        2,
+        5
+       ],
+       [
+        2,
+        3
+       ]
+      ]
+     },
+     {
+      "after_forward": [
+       [
+        0,
+        1
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        2,
+        3
+       ]
+      ]
+     }
+    ],
+    "outcome": "frequent",
+    "images": [
+     [
+      "n",
+      "b"
+     ],
+     [
+      "b",
+      "z"
+     ],
+     [
+      "z",
+      "d"
+     ],
+     [
+      "n",
+      "d"
+     ]
+    ]
+   },
+   {
+    "length": 3,
+    "kind": "closed",
+    "domains": [
+     [
+      "n",
+      "z"
+     ],
+     [
+      "b",
+      "z",
+      "h"
+     ],
+     [
+      "z",
+      "d"
+     ]
+    ],
+    "rejected": [
+     [
+      "n",
+      "z"
+     ],
+     [
+      "b",
+      "z",
+      "h"
+     ],
+     [
+      "z",
+      "d"
+     ]
+    ],
+    "searches": [],
+    "initial_slots": [
+     null,
+     [
+      0
+     ],
+     [
+      1,
+      2,
+      5
+     ],
+     [
+      3
+     ]
+    ],
+    "filter_rounds": [
+     {
+      "after_forward": [
+       [
+        0
+       ],
+       [
+        1
+       ],
+       []
+      ]
+     },
+     {
+      "after_forward": [
+       [],
+       [],
+       []
+      ]
+     }
+    ],
+    "outcome": "filter"
+   },
+   {
+    "length": 4,
+    "kind": "open",
+    "domains": [
+     [
+      "n",
+      "b"
+     ],
+     [
+      "b"
+     ],
+     [
+      "z"
+     ],
+     [
+      "d"
+     ],
+     [
+      "n",
+      "d"
+     ]
+    ],
+    "rejected": [],
+    "searches": [],
+    "outcome": "domain"
+   },
+   {
+    "length": 4,
+    "kind": "closed",
+    "domains": [
+     [
+      "n"
+     ],
+     [
+      "b"
+     ],
+     [
+      "z"
+     ],
+     [
+      "d"
+     ]
+    ],
+    "rejected": [],
+    "searches": [],
+    "outcome": "domain"
+   }
+  ],
+  "searches": 17,
+  "found": 7,
+  "failed": 10,
+  "miner_counters": {
+   "searches": 17,
+   "found": 7,
+   "failed": 10
+  }
+ }
+}

@@ -1,0 +1,14 @@
+theta 0.2, tau 2; frequent chains, brute force = miner: [('open', 1), ('open', 2), ('open', 3)]; 7 chain tables compared (tau 2 and 1)
+  open m=1: 10 occurrences, 10 valid, images [['b', 'd', 'g', 'h', 'n', 'q', 'w', 'z'], ['b', 'd', 'g', 'h', 'n', 'q', 'w', 'z']], support 8
+  open m=2: 12 occurrences, 5 valid, images [['b', 'g', 'h', 'n', 'z'], ['b', 'd', 'h', 'q', 'z'], ['d', 'n', 'w', 'z']], support 4
+  open m=3: 15 occurrences, 2 valid, images [['b', 'n'], ['b', 'z'], ['d', 'z'], ['d', 'n']], support 2
+  open m=4: 10 occurrences, 0 valid, images [[], [], [], [], []], support 0
+  closed m=3: 0 occurrences, 0 valid, images [[], [], []], support 0
+  closed m=4: 8 occurrences, 1 valid, images [['n'], ['b'], ['z'], ['d']], support 1
+  slot filter, length 3: domains [['b', 'g', 'h', 'n', 'z'], ['b', 'h', 'z'], ['d', 'z'], ['d', 'n', 'w', 'z']]; kept [['b', 'n'], ['b', 'z'], ['d', 'z'], ['d', 'n']]; removed [[0, 'g'], [0, 'h'], [0, 'z'], [1, 'h'], [3, 'w'], [3, 'z']]
+  level-wise run (filter from length 3): 17 pinned searches, 7 found, 10 failed; the miner: {'searches': 17, 'found': 7, 'failed': 10}
+    open 2: frequent, 15 searches, rejected by the filter []
+    open 3: frequent, 2 searches, rejected by the filter [['z', 'g', 'h'], ['h'], [], ['z', 'w']]
+    closed 3: filter, 0 searches, rejected by the filter [['n', 'z'], ['b', 'z', 'h'], ['z', 'd']]
+    open 4: domain, 0 searches, rejected by the filter []
+    closed 4: domain, 0 searches, rejected by the filter []
