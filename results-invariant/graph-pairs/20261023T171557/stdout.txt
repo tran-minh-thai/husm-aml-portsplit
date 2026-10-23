@@ -1,0 +1,5 @@
+graph sweden_100K_easy_S.tg: 99995 accounts, 1037081 transactions (0 self-transactions dropped), 212523 distinct ordered pairs
+strongly connected part: 59785 accounts, 115166 pairs
+params: min_length=3 max_length=3 min_support=1 orientation=auto
+length 3: 28 accounts on a simple cycle (support 28, reported); searches=59767 found=10 examined=138537
+[timing redacted: machine-dependent, not kept in this tree]
