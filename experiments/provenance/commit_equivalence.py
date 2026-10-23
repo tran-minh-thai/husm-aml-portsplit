@@ -36,7 +36,8 @@ def git(*args: str) -> str:
 
 
 def present(commit: str) -> bool:
-    return subprocess.run(["git", "-C", str(ROOT), "cat-file", "-e", commit + "^{commit}"],
+    """The commit is in the published history (an ancestor of HEAD), not only a stray object of this clone."""
+    return subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", commit, "HEAD"],
                           capture_output=True).returncode == 0
 
 
