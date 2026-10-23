@@ -1,0 +1,43 @@
+amlgentex us_100K_difficult
+  rows 8,599,468; dropped 6,833,019 rows with the income source or spending sink; 0 flagged rows outside any attempt
+  1,766,449 transactions spanning 111.00 days; 210 attempts, 2,959 attempt transactions
+
+[order] head-to-tail pairs (t1 <= t2 is in order)
+          type  n_attempts  n_attempts_with_pair  n_pairs_a1  in_order_a1  n_pairs_a2  in_order_a2  n_back_and_forth  attempts_V_le_0_a1  attempts_V_le_1_a1  attempts_V_le_2_a1  attempts_V_le_3_a1  attempts_V_max_a1  attempts_V_le_0_a2  attempts_V_le_1_a2  attempts_V_le_2_a2  attempts_V_le_3_a2  attempts_V_max_a2
+     BIPARTITE          30                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+         CYCLE          30                    30         213        0.859         213        0.859                 0               0.000               1.000               1.000               1.000                  1               0.000               1.000               1.000               1.000                  1
+        FAN-IN          30                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+       FAN-OUT          30                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+GATHER-SCATTER          30                    30        1565        1.000        1565        1.000                 0               1.000               1.000               1.000               1.000                  0               1.000               1.000               1.000               1.000                  0
+SCATTER-GATHER          30                    30         246        1.000         246        1.000                 0               1.000               1.000               1.000               1.000                  0               1.000               1.000               1.000               1.000                  0
+         STACK          30                    18         992        0.487         992        0.487                 0               0.000               0.000               0.000               0.000                 55               0.000               0.000               0.000               0.000                 55
+    H4 on this set (a2 pair-level in-order >= 0.90 each): GATHER-SCATTER: 1.000 of 1565; SCATTER-GATHER: 1.000 of 246; STACK: 0.487 of 992; RANDOM: 0 pairs < 30, not counted; holds here: False
+    BIPARTITE: no head-to-tail pair in any attempt
+    CYCLE: smallest k with >= 90% of attempts at V <= k (a2): 1
+    FAN-IN: no head-to-tail pair in any attempt
+    FAN-OUT: no head-to-tail pair in any attempt
+    GATHER-SCATTER: smallest k with >= 90% of attempts at V <= k (a2): 0
+    SCATTER-GATHER: smallest k with >= 90% of attempts at V <= k (a2): 0
+    STACK: smallest k with >= 90% of attempts at V <= k (a2): > 3
+
+[window] attempt durations in days
+          type  n_attempts  duration_days_q1  duration_days_median  duration_days_q3  duration_days_max  pair_gap_days_median  within_1d  within_2d  within_3d  within_5d  within_7d  within_10d
+     BIPARTITE          30            89.250                98.000           104.000            110.000                   NaN      0.000      0.000      0.000      0.000      0.000       0.000
+         CYCLE          30           111.000               111.000           111.000            111.000                15.000      0.000      0.000      0.000      0.000      0.000       0.000
+        FAN-IN          30            90.000                96.000            98.750            100.000                   NaN      0.000      0.000      0.000      0.000      0.000       0.000
+       FAN-OUT          30            81.500                90.500            99.750            110.000                   NaN      0.000      0.000      0.000      0.000      0.000       0.000
+GATHER-SCATTER          30            91.250                99.000           104.000            110.000                56.000      0.000      0.000      0.000      0.000      0.000       0.000
+SCATTER-GATHER          30            91.000                99.500           103.000            109.000                57.500      0.000      0.000      0.000      0.000      0.000       0.000
+         STACK          30           100.000               103.500           107.750            110.000                34.000      0.000      0.000      0.000      0.000      0.000       0.000
+    H5 on this set (>= 95% of every typology within delta, delta <= 55.50 days): deltas none; holds here: False
+
+[amount, exploratory: not pre-registered for this source] vs 1,763,490 background transactions
+                   type  n_transactions  n_attempts  auc_vs_background  bottleneck_pct_q1  bottleneck_pct_median  bottleneck_pct_q3
+              BIPARTITE             434      30.000              0.475              0.009                  0.026              0.040
+                  CYCLE             213      30.000              0.298              0.066                  0.115              0.294
+                 FAN-IN             226      30.000              0.482              0.036                  0.074              0.151
+                FAN-OUT             242      30.000              0.506              0.046                  0.080              0.201
+         GATHER-SCATTER             421      30.000              0.305              0.007                  0.012              0.027
+         SCATTER-GATHER             495      30.000              0.518              0.037                  0.080              0.128
+                  STACK             928      30.000              0.564              0.009                  0.015              0.033
+ALL (Is Laundering = 1)            2959         NaN              0.476                NaN                    NaN                NaN

@@ -1,0 +1,34 @@
+amlworld LI-Small
+  6,924,049 transactions spanning 16.64 days; 117 attempts, 1,023 attempt transactions
+
+[order] head-to-tail pairs (t1 <= t2 is in order)
+          type  n_attempts  n_attempts_with_pair  n_pairs_a1  in_order_a1  n_pairs_a2  in_order_a2  n_back_and_forth  attempts_V_le_0_a1  attempts_V_le_1_a1  attempts_V_le_2_a1  attempts_V_le_3_a1  attempts_V_max_a1  attempts_V_le_0_a2  attempts_V_le_1_a2  attempts_V_le_2_a2  attempts_V_le_3_a2  attempts_V_max_a2
+     BIPARTITE          16                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+         CYCLE          12                    12          83        0.855          79        0.873                 4               0.000               1.000               1.000               1.000                  1               0.167               1.000               1.000               1.000                  1
+        FAN-IN          12                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+       FAN-OUT          19                     0           0          NaN           0          NaN                 0                 NaN                 NaN                 NaN                 NaN                  0                 NaN                 NaN                 NaN                 NaN                  0
+GATHER-SCATTER          11                     9         615        0.990         613        0.992                 2               0.556               0.889               0.889               1.000                  3               0.667               0.889               0.889               1.000                  3
+        RANDOM          15                    13          62        0.952          62        0.952                 0               0.846               0.923               1.000               1.000                  2               0.846               0.923               1.000               1.000                  2
+SCATTER-GATHER          13                    13          96        0.948          86        1.000                10               0.615               1.000               1.000               1.000                  1               1.000               1.000               1.000               1.000                  0
+         STACK          18                    18          96        0.938          86        0.988                10               0.667               1.000               1.000               1.000                  1               0.944               1.000               1.000               1.000                  1
+    H4 on this set (a2 pair-level in-order >= 0.90 each): GATHER-SCATTER: 0.992 of 613; SCATTER-GATHER: 1.000 of 86; STACK: 0.988 of 86; RANDOM: 0.952 of 62; holds here: True
+    BIPARTITE: no head-to-tail pair in any attempt
+    CYCLE: smallest k with >= 90% of attempts at V <= k (a2): 1
+    FAN-IN: no head-to-tail pair in any attempt
+    FAN-OUT: no head-to-tail pair in any attempt
+    GATHER-SCATTER: smallest k with >= 90% of attempts at V <= k (a2): 3
+    RANDOM: smallest k with >= 90% of attempts at V <= k (a2): 1
+    SCATTER-GATHER: smallest k with >= 90% of attempts at V <= k (a2): 0
+    STACK: smallest k with >= 90% of attempts at V <= k (a2): 0
+
+[window] attempt durations in days
+          type  n_attempts  duration_days_q1  duration_days_median  duration_days_q3  duration_days_max  pair_gap_days_median  within_1d  within_2d  within_3d  within_5d  within_7d  within_10d
+     BIPARTITE          16             1.395                 1.635             1.707              1.985                   NaN      0.188      1.000      1.000      1.000      1.000       1.000
+         CYCLE          12             2.229                 3.701             3.916              3.970                 0.415      0.000      0.167      0.417      1.000      1.000       1.000
+        FAN-IN          12             2.741                 3.647             3.900              3.981                   NaN      0.167      0.167      0.333      1.000      1.000       1.000
+       FAN-OUT          19             2.980                 3.462             3.830              3.983                   NaN      0.105      0.105      0.263      1.000      1.000       1.000
+GATHER-SCATTER          11             2.862                 7.028             7.467              7.956                 3.461      0.273      0.273      0.273      0.273      0.455       1.000
+        RANDOM          15             1.613                 1.951             3.410              3.648                 0.482      0.133      0.533      0.600      1.000      1.000       1.000
+SCATTER-GATHER          13             1.797                 3.753             3.936              4.014                 2.123      0.154      0.308      0.308      1.000      1.000       1.000
+         STACK          18             1.547                 2.838             3.801              4.445                 1.439      0.222      0.333      0.500      1.000      1.000       1.000
+    H5 on this set (>= 95% of every typology within delta, delta <= 8.32 days): deltas none; holds here: False

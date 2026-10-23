@@ -1,0 +1,8 @@
+type,n_attempts,n_attempts_with_pair,n_pairs_a1,in_order_a1,n_pairs_a2,in_order_a2,n_back_and_forth,attempts_V_le_0_a1,attempts_V_le_1_a1,attempts_V_le_2_a1,attempts_V_le_3_a1,attempts_V_max_a1,attempts_V_le_0_a2,attempts_V_le_1_a2,attempts_V_le_2_a2,attempts_V_le_3_a2,attempts_V_max_a2
+BIPARTITE,30,0,0,,0,,0,,,,,0,,,,,0
+CYCLE,30,30,215,0.8604651162790697,215,0.8604651162790697,0,0.0,1.0,1.0,1.0,1,0.0,1.0,1.0,1.0,1
+FAN-IN,30,0,0,,0,,0,,,,,0,,,,,0
+FAN-OUT,30,0,0,,0,,0,,,,,0,,,,,0
+GATHER-SCATTER,30,30,1479,1.0,1479,1.0,0,1.0,1.0,1.0,1.0,0,1.0,1.0,1.0,1.0,0
+SCATTER-GATHER,30,30,227,1.0,227,1.0,0,1.0,1.0,1.0,1.0,0,1.0,1.0,1.0,1.0,0
+STACK,30,20,942,0.5,942,0.5,0,0.0,0.0,0.0,0.0,54,0.0,0.0,0.0,0.0,54
