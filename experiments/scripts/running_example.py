@@ -23,10 +23,12 @@ JAR = ROOT / "inchusm-miner" / "target" / "inchusm-miner-0.1.0-SNAPSHOT.jar"
 OUT = Path(os.environ["RUN_RECORD_DIR"]) if os.environ.get("RUN_RECORD_DIR") else ROOT / "experiments" / "results"
 THETA, TAU, MAX_LENGTH, MIN_CYCLE = 0.2, 2, 4, 3
 
-ACCOUNTS = "abcdghmw"
-# (source, target, amount); one account label and one transaction label (labelling S)
-EDGES = [("a", "b", 100), ("b", "c", 95), ("c", "d", 90), ("d", "a", 75),
-         ("g", "h", 50), ("h", "c", 48), ("h", "m", 200), ("m", "w", 190),
+# account names avoid letters the manuscript uses for other objects (a for amounts, c for the minimum closed length, m for
+# the length of a chain); the order of ACCOUNTS gives the account ids, unchanged from the earlier names a, b, c, d, g, h, m, w
+ACCOUNTS = "nbzdghqw"
+# (source, target, amount); one account label and one transaction label (labeling S)
+EDGES = [("n", "b", 100), ("b", "z", 95), ("z", "d", 90), ("d", "n", 75),
+         ("g", "h", 50), ("h", "z", 48), ("h", "q", 200), ("q", "w", 190),
          ("b", "g", 40), ("w", "g", 30)]
 FILTER_FROM = 3       # slot filter from this candidate length in the step-by-step run of the level-wise algorithm
 
